@@ -6,6 +6,10 @@ A função tenta remover erros no nome do arquivo ants de abrir.
 Se não conseguir abrir, retorna uma mensagem de erro
 '''
 
+# Importando bibliotecas necessárias para a função:
+import gspread
+# A autorização "client" j´deve ter sido configurada no notebook
+
 def abertura_do_arquivo(nome_do_arquivo, # string com o nome do arquivo sheets a ser aberto
                        sheets_aberto,    # Booleano indicando se o sheets já foi aberto
                        sheets,           # Arquivo sheets já aberto
@@ -38,7 +42,7 @@ def abertura_do_arquivo(nome_do_arquivo, # string com o nome do arquivo sheets a
       if len(nome_do_arquivo) < len(nome_do_arquivo_original):
         mensagem = mensagem+'\n\nO nome do arquivo sheets "'+colored(nome_do_arquivo_original,'blue')+'" possui espaços em branco.\nOs mesmos foram removidos e será aberto o arquivo "'+colored(nome_do_arquivo,'blue')+'"'
       
-      dados_sheets = gc.open(nome_do_arquivo)
+      dados_sheets = client.open(nome_do_arquivo)
       mensagem = mensagem+'\n\n'+colored('Sheets Aberto','green')
     except Exception as e:
       if str(e) == '':
