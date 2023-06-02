@@ -24,10 +24,10 @@ def abertura_do_arquivo(nome_do_arquivo, # string com o nome do arquivo sheets a
       nome_do_arquivo_original = nome_do_arquivo
 
       if "https://" in nome_do_arquivo:
-        nome_do_arquivo = nome_do_arquivo.split("/")[5]
+        id_do_arquivo = nome_do_arquivo.split("/")[5]
 
         # Abrindo o arquivo pelo ID
-        dados_sheets = client.open_by_key(nome_do_arquivo)
+        dados_sheets = client.open_by_key(id_do_arquivo)
 
       else:
         if "'" in nome_do_arquivo:
@@ -124,7 +124,7 @@ def abertura_das_bases(lista_de_nomes_das_bases,  # lista de strings com os nome
       # Caso exista "/" no nome do arquivo, vamos considerar que se trata de um caminho para
       # uma pasta do google drive onde se encontra um csv que vamos tentar abrir:
       #-----------------------------------------------------------------------------------------------
-      if '/' in lista_de_arquivos_das_bases[i]:
+      if '/' in lista_de_arquivos_das_bases[i] and "https://" not in lista_de_arquivos_das_bases[i]:
         
         # iniciamos uma flag para indicar se conseguimos abrir a base
         flag_abriu = False
