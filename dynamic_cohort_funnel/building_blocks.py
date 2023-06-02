@@ -2,6 +2,7 @@
 
 #Importando funções necessárias para rodar "building_blocks":
 import * from planning_cohort_funnel_auxiliary_functions
+from gerador_baseline_conversoes_v2 import gerador_baseline_conversoes_v2
 
 
 def building_blocks(inputs_df,
