@@ -60,18 +60,6 @@ import difflib
 from difflib import SequenceMatcher
 
 
-from google.colab import auth
-auth.authenticate_user()
-
-import gspread
-from google.auth import default
-creds, _ = default()
-
-gc = gspread.authorize(creds)
-
-from google.colab import drive
-drive.mount('/content/drive')
-
 # Abaixo vamos definir alguns marcadores para garantir mensagens
 # de erro legíveis caso o usuário não rode o programa na ordem certa ou
 # tentar rodar células depois de receber mensagens de erro em blocos
