@@ -12,7 +12,8 @@ from colored import colored
 def abertura_do_arquivo(nome_do_arquivo, # string com o nome do arquivo sheets a ser aberto
                        sheets_aberto,    # Booleano indicando se o sheets já foi aberto
                        sheets,           # Arquivo sheets já aberto
-                       nome_da_aba):     # string com o nome da aba a ser aberta
+                       nome_da_aba,      # string com o nome da aba a ser aberta
+                       client = 'client'):          # Autorização de acesso
   
   mensagem = ''
 
@@ -83,7 +84,8 @@ def abertura_das_bases(lista_de_nomes_das_bases,  # lista de strings com os nome
                        colunas_para_dropar,       # lista de listas de inteiros, indicando a posição das colunas a serem excluídas de cada base (lista vazia caso nenhuma coluna a ser excluída)
                        lista_obrigatoria,         # lista de booleanos indicando se a existência daquela base é obrigatória
                        nome_do_painel_de_controle,           # string com o nome do arquivo sheets onde se encontra o painel de controle (somente para imprimir mensagens de erro)
-                       sheets_painel_de_controle):           # arquivo sheets do painel de controle aberto
+                       sheets_painel_de_controle,           # arquivo sheets do painel de controle aberto
+                       client = 'client'):                  # Autorização de acesso
   
 
   numero_de_bases = len(lista_de_nomes_das_bases)
@@ -162,14 +164,16 @@ def abertura_das_bases(lista_de_nomes_das_bases,  # lista de strings com os nome
           dados_sheets,base,mensagem,flag_abriu,nome_do_arquivo = abertura_do_arquivo(nome_do_arquivo = nome_do_painel_de_controle,
                                                                                       sheets_aberto = True,
                                                                                       sheets = sheets_painel_de_controle,
-                                                                                      nome_da_aba = nome_da_base)
+                                                                                      nome_da_aba = nome_da_base,
+                                                                                      client = client)
         # Caso contrário, procuramos um outro sheets:
         else:
 
           dados_sheets,base,mensagem,flag_abriu,nome_do_arquivo = abertura_do_arquivo(nome_do_arquivo = lista_de_arquivos_das_bases[i],
                                                                                       sheets_aberto = False,
                                                                                       sheets = [],
-                                                                                      nome_da_aba = nome_da_base)
+                                                                                      nome_da_aba = nome_da_base,
+                                                                                      client = client)
         
         # Caso conseguimos abrir o sheets e a aba dentro dele, vamos transformar em DataFrame:
         if flag_abriu:
