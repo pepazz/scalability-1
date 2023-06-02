@@ -5,7 +5,8 @@ Essa função serve para abrir um arquivo sheets.
 A função tenta remover erros no nome do arquivo ants de abrir.
 Se não conseguir abrir, retorna uma mensagem de erro
 '''
-
+# Importando funções auxiliares:
+from colored import colored
 # A autorização "client" já deve ter sido configurada no notebook
 
 def abertura_do_arquivo(nome_do_arquivo, # string com o nome do arquivo sheets a ser aberto
