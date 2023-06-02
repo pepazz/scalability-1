@@ -2,17 +2,17 @@
 
 import numpy as np
 from numpy.ma.core import flatten_structured_array
-from google.colab import files
+#from google.colab import files
 import datetime
 from datetime import datetime 
 from datetime import timedelta
 import math
 from IPython.display import clear_output
 import timeit
-import os
+#import os
 import pandas as pd
 pd.options.mode.chained_assignment = None  # default='warn'
-from gspread_dataframe import set_with_dataframe
+#from gspread_dataframe import set_with_dataframe
 import io
 import scipy
 from scipy import stats
@@ -20,10 +20,10 @@ from scipy.stats import pearsonr
 from scipy.spatial import distance
 from scipy.stats import chi2
 from sklearn.ensemble import IsolationForest
-import matplotlib as mpl
-import matplotlib.pyplot as plt
-from matplotlib.pyplot import figure
-import seaborn as sns
+#import matplotlib as mpl
+#import matplotlib.pyplot as plt
+#from matplotlib.pyplot import figure
+#import seaborn as sns
 from itertools import combinations
 from itertools import product
 import re
@@ -54,7 +54,7 @@ from statistics import mode
 import itertools
 from itertools import compress
 
-from tabulate import tabulate
+#from tabulate import tabulate
 
 import difflib
 from difflib import SequenceMatcher
