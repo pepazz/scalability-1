@@ -1,5 +1,8 @@
 #@title Def building_blocks
 
+#Importando funções necessárias para rodar "building_blocks":
+import * from planning_cohort_funnel_auxiliary_functions
+
 
 def building_blocks(inputs_df,
                     baseline_cohort,
