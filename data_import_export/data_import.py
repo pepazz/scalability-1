@@ -6,9 +6,7 @@ A função tenta remover erros no nome do arquivo ants de abrir.
 Se não conseguir abrir, retorna uma mensagem de erro
 '''
 
-# Importando bibliotecas necessárias para a função:
-import gspread
-# A autorização "client" j´deve ter sido configurada no notebook
+# A autorização "client" já deve ter sido configurada no notebook
 
 def abertura_do_arquivo(nome_do_arquivo, # string com o nome do arquivo sheets a ser aberto
                        sheets_aberto,    # Booleano indicando se o sheets já foi aberto
