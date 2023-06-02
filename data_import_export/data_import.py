@@ -22,27 +22,36 @@ def abertura_do_arquivo(nome_do_arquivo, # string com o nome do arquivo sheets a
   if not sheets_aberto:
     try:
       nome_do_arquivo_original = nome_do_arquivo
-      
-      if "'" in nome_do_arquivo:
-        nome_do_arquivo = nome_do_arquivo.replace("'",'')
-      
-      if len(nome_do_arquivo) < len(nome_do_arquivo_original):
-        mensagem = mensagem+'\n\nO nome do arquivo sheets "'+colored(nome_do_arquivo_original,'blue')+'" possui aspas simples.\nAs mesmas foram removidas e será aberto o arquivo "'+colored(nome_do_arquivo,'blue')+'"'
-        nome_do_arquivo_original = nome_do_arquivo
 
-      if "\"" in nome_do_arquivo:
-        nome_do_arquivo = nome_do_arquivo.replace("\"",'')
+      if "https://" in nome_do_arquivo:
+        nome_do_arquivo = nome_do_arquivo.split("/")[5]
 
-      if len(nome_do_arquivo) < len(nome_do_arquivo_original):
-        mensagem = mensagem+'\n\nO nome do arquivo sheets "'+colored(nome_do_arquivo_original,'blue')+'" possui aspas duplas.\nAs mesmas foram removidas e será aberto o arquivo "'+colored(nome_do_arquivo,'blue')+'"'
-        nome_do_arquivo_original = nome_do_arquivo
+        # Abrindo o arquivo pelo ID
+        dados_sheets = client.open_by_key(nome_do_arquivo)
 
-      nome_do_arquivo = nome_do_arquivo.strip()
+      else:
+        if "'" in nome_do_arquivo:
+          nome_do_arquivo = nome_do_arquivo.replace("'",'')
+        
+        if len(nome_do_arquivo) < len(nome_do_arquivo_original):
+          mensagem = mensagem+'\n\nO nome do arquivo sheets "'+colored(nome_do_arquivo_original,'blue')+'" possui aspas simples.\nAs mesmas foram removidas e será aberto o arquivo "'+colored(nome_do_arquivo,'blue')+'"'
+          nome_do_arquivo_original = nome_do_arquivo
+
+        if "\"" in nome_do_arquivo:
+          nome_do_arquivo = nome_do_arquivo.replace("\"",'')
+
+        if len(nome_do_arquivo) < len(nome_do_arquivo_original):
+          mensagem = mensagem+'\n\nO nome do arquivo sheets "'+colored(nome_do_arquivo_original,'blue')+'" possui aspas duplas.\nAs mesmas foram removidas e será aberto o arquivo "'+colored(nome_do_arquivo,'blue')+'"'
+          nome_do_arquivo_original = nome_do_arquivo
+
+        nome_do_arquivo = nome_do_arquivo.strip()
+        
+        if len(nome_do_arquivo) < len(nome_do_arquivo_original):
+          mensagem = mensagem+'\n\nO nome do arquivo sheets "'+colored(nome_do_arquivo_original,'blue')+'" possui espaços em branco.\nOs mesmos foram removidos e será aberto o arquivo "'+colored(nome_do_arquivo,'blue')+'"'
+        
+        # Abrindo o arquivo pelo nome
+        dados_sheets = client.open(nome_do_arquivo)
       
-      if len(nome_do_arquivo) < len(nome_do_arquivo_original):
-        mensagem = mensagem+'\n\nO nome do arquivo sheets "'+colored(nome_do_arquivo_original,'blue')+'" possui espaços em branco.\nOs mesmos foram removidos e será aberto o arquivo "'+colored(nome_do_arquivo,'blue')+'"'
-      
-      dados_sheets = client.open(nome_do_arquivo)
       mensagem = mensagem+'\n\n'+colored('Sheets Aberto','green')
     except Exception as e:
       if str(e) == '':
@@ -213,4 +222,3 @@ def abertura_das_bases(lista_de_nomes_das_bases,  # lista de strings com os nome
     flag_abriu = False
   
   return lista_de_bases,flag_abriu
-
