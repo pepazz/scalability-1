@@ -7,6 +7,7 @@ Se não conseguir abrir, retorna uma mensagem de erro
 '''
 # Importando funções auxiliares:
 from colored import colored
+import pandas as pd
 # A autorização "client" já deve ter sido configurada no notebook
 
 def abertura_do_arquivo(nome_do_arquivo, # string com o nome do arquivo sheets a ser aberto
