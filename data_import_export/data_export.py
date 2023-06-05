@@ -27,6 +27,10 @@ def exportar_base(base_df,                     # DataFrame
     lista_nomea_das_abas = [nome_da_aba]
 
   if len(lista_nomea_das_abas) != len(lista_arquivos_destino):
+    try:
+      nome_base = base_df.name
+    except:
+      nome_base = 'base'
     print('\n\nNão foi possível exportar a base '+colored(nome_base,'yellow')+' para a aba '+colored(nome_da_aba,'blue')+' do arquivo '+colored(nome_do_arquivo,'blue')+'\nParece que existe mais de um arquivo/aba de destino, mas a quantidade de arquivos e abas de destino informados são distintos.'+'\n\nSerá feita uma tentativa de baixar os dados no formato CSV.')
     base_exportada = False
 
