@@ -2,7 +2,7 @@
 
 # Importando Bibliotecas necessárias:
 import numpy as np
-import colored as colored
+from colored import colored
 
 def check_etapas_do_funil(lista_etapas_conversao, # lista com todas as etapas de conversão definidas pelo usuário no painel de controle
                           lista_topos_de_funil,   # lista com os ToF's definida pelo usuário no painel de controle
