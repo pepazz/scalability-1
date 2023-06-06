@@ -10,6 +10,7 @@ import itertools
 from itertools import compress
 import datetime
 
+
 def check_etapas_do_funil(lista_etapas_conversao, # lista com todas as etapas de conversão definidas pelo usuário no painel de controle
                           lista_topos_de_funil,   # lista com os ToF's definida pelo usuário no painel de controle
                           df_on_top_ratio,
@@ -1593,7 +1594,7 @@ def check_feriados(df_feriados,
   else:
     zero = ''
   date_time_str = str(ano)+'-'+zero+str(mes)+'-01'
-  ultima_data_tof = datetime.fromisoformat(date_time_str)
+  ultima_data_tof = datetime.strptime(date_time_str, "%yyyy-%mm-%dd")
 
   ano = df_tof_mensal['ano'].astype(int).min()
   mes = df_tof_mensal.loc[df_tof_mensal['ano'] == str(ano),['mês']].astype(int).min().values[0]
@@ -1602,7 +1603,7 @@ def check_feriados(df_feriados,
   else:
     zero = ''
   date_time_str = str(ano)+'-'+zero+str(mes)+'-01'
-  primeira_data_tof = datetime.fromisoformat(date_time_str)
+  primeira_data_tof = datetime.strptime(date_time_str, "%yyyy-%mm-%dd")
 
 
   if ultima_data_tof.year == primeira_data_tof.year:
