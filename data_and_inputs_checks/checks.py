@@ -5,6 +5,10 @@ import numpy as np
 from colored import colored
 import pandas as pd
 from tabulate import tabulate
+from difflib import SequenceMatcher
+import itertools
+from itertools import compress
+import datetime
 
 def check_etapas_do_funil(lista_etapas_conversao, # lista com todas as etapas de conversão definidas pelo usuário no painel de controle
                           lista_topos_de_funil,   # lista com os ToF's definida pelo usuário no painel de controle
@@ -934,7 +938,7 @@ def check_chaves(lista_df,                   # lista de DataFrames já devem ter
         erro = erro+1
 
       if len(chaves_2_1) > 0 and not lista_comparacao_parcial_atualizada[indice_1]:
-        mensagem = mensagem + '\n\nAs chaves '+colored(str(chaves_2_1),'red')+' da abertura '+colored(col,'red')+' da base '+colored(nome_df_2,'yellow')+' do arquivo' + colored(nome_do_arquivo_2,'blue') +  ' não estão presentes na base '+colored(nome_df_1,'yellow')+' do arquivo' + colored(nome_do_arquivo_1,'blue') + 
+        mensagem = mensagem + '\n\nAs chaves '+colored(str(chaves_2_1),'red')+' da abertura '+colored(col,'red')+' da base '+colored(nome_df_2,'yellow')+' do arquivo' + colored(nome_do_arquivo_2,'blue') +  ' não estão presentes na base '+colored(nome_df_1,'yellow')+' do arquivo' + colored(nome_do_arquivo_1,'blue') 
         erro = erro+1
 
 
@@ -1042,10 +1046,10 @@ def check_colunas_bases_especificas(nome_do_arquivo,
 
       if len(colunas_1_2) > 0:
         erro_aux = erro_aux+1
-        mensagem_aux='\n\nA base '+colored(str(df1.name),'yellow')+' no arquivo '+colored(nome_do_arquivo[0],'blue')+' contém as seguintes colunas que não existem na base '+colored(str(df2.name),'yellow')+' no arquivo '+colored(nome_do_arquivo[1],'blue')':\n'+colored(str(colunas_1_2),'red')+'\nAs colunas de valores devem ser as mesmas entre essas bases.'
+        mensagem_aux='\n\nA base '+colored(str(df1.name),'yellow')+' no arquivo '+colored(nome_do_arquivo[0],'blue')+' contém as seguintes colunas que não existem na base '+colored(str(df2.name),'yellow')+' no arquivo '+colored(nome_do_arquivo[1],'blue')+':\n'+colored(str(colunas_1_2),'red')+'\nAs colunas de valores devem ser as mesmas entre essas bases.'
       if len(colunas_2_1) > 0:
         erro_aux = erro_aux+1
-        mensagem_aux='\n\nA base '+colored(str(df2.name),'yellow')+' no arquivo '+colored(nome_do_arquivo[1],'blue')' contém as seguintes colunas que não existem na base '+colored(str(df1.name),'yellow')+' no arquivo '+colored(nome_do_arquivo[0],'blue')':\n'+colored(str(colunas_2_1),'red')+'\nAs colunas de valores devem ser as mesmas entre essas bases.'
+        mensagem_aux='\n\nA base '+colored(str(df2.name),'yellow')+' no arquivo '+colored(nome_do_arquivo[1],'blue')+' contém as seguintes colunas que não existem na base '+colored(str(df1.name),'yellow')+' no arquivo '+colored(nome_do_arquivo[0],'blue')+':\n'+colored(str(colunas_2_1),'red')+'\nAs colunas de valores devem ser as mesmas entre essas bases.'
 
       return erro_aux,mensagem_aux
     #-------------------------------------------------------------------------------------------------
@@ -1197,7 +1201,7 @@ def check_colunas_bases_especificas(nome_do_arquivo,
           etapa_nova = c.split('/')[1]
 
           if etapa_existente not in etapas_volume:
-            mensagem = mensagem + '\n\nNo arquivo '+colored(nome_do_arquivo_modeloo,'blue')+tipo_de_base+colored(str(nome_da_base),'yellow')+' devem iniciar com uma etapa cujos valores podem e já foram gerados pelas conversões cohort. \nA primeira etapa na coluna '+colored(str(c),'red')+' é '+colored(str(etapa_existente),'red')+'. Esta etapa não consta na lista de etapas possíveis de serem calculadas pelo funil via cohort: '+colored(str(etapas_volume),'red')
+            mensagem = mensagem + '\n\nNo arquivo '+colored(nome_do_arquivo_modelo,'blue')+tipo_de_base+colored(str(nome_da_base),'yellow')+' devem iniciar com uma etapa cujos valores podem e já foram gerados pelas conversões cohort. \nA primeira etapa na coluna '+colored(str(c),'red')+' é '+colored(str(etapa_existente),'red')+'. Esta etapa não consta na lista de etapas possíveis de serem calculadas pelo funil via cohort: '+colored(str(etapas_volume),'red')
             erro = erro+1
         '''
           if etapa_nova not in ordem_final:
@@ -1623,9 +1627,9 @@ def check_feriados(df_feriados,
 
   # Verificar se os meses de tof estão contemplados nos feriados:
   if primeira_data_tof < primeira_data_feriados:
-    mensagem = mensagem+'\n\nNo arquivo '+colored(nome_do_arquivo,'blue')+', a primeira data da base '+colored(df_tof_mensal.name,'yellow')+' ('+str(primeira_data_tof)+'), é anterior à primeira data da base '+colored(df_feriados.name,'yellow')+' ('+str(primeira_data_tferiados)+').'
+    mensagem = mensagem+'\n\nNo arquivo '+colored(nome_do_arquivo,'blue')+', a primeira data da base '+colored(df_tof_mensal.name,'yellow')+' ('+str(primeira_data_tof)+'), é anterior à primeira data da base '+colored(df_feriados.name,'yellow')+' ('+str(primeira_data_feriados)+').'
   if ultima_data_tof > ultima_data_feriados:
-    mensagem = mensagem+'\n\nNo arquivo '+colored(nome_do_arquivo,'blue')+', a ultima data da base '+colored(df_tof_mensal.name,'yellow')+' ('+str(ultima_data_tof)+'), é posterior à ultima data da base '+colored(df_feriados.name,'yellow')+' ('+str(ultima_data_tferiados)+').'
+    mensagem = mensagem+'\n\nNo arquivo '+colored(nome_do_arquivo,'blue')+', a ultima data da base '+colored(df_tof_mensal.name,'yellow')+' ('+str(ultima_data_tof)+'), é posterior à ultima data da base '+colored(df_feriados.name,'yellow')+' ('+str(ultima_data_feriados)+').'
   if numero_de_meses_feriados < numero_de_meses_tof:
     mensagem = mensagem+'\n\nNo arquivo '+colored(nome_do_arquivo,'blue')+', parece que existem mais meses na base '+colored(df_tof_mensal.name,'yellow')+' do que meses na base '+colored(df_feriados.name,'yellow')+'.\nIsso pode significar que a base de feriados está incompleta em relação às datas da base de ToF'
 
@@ -2061,7 +2065,7 @@ def check_geral(lista_de_bases,                 # Lista de bases que vamos verif
   cabecalho_dos_erros = '\n\n\nErros na comparação de chaves entre as bases:\n__________________________________________________________________________________________________________________________________________\n'                          
 
 
-  if not flag_erro_valores and not flag_erro_colunas and not flag_erro_etapas: 
+  if not flag_erro_valores and not flag_erro_colunas: 
 
 
     lista_de_bases_chaves = list(compress(lista_de_bases, lista_de_bases_checar_chaves))
