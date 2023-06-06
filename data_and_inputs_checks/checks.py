@@ -9,6 +9,7 @@ from difflib import SequenceMatcher
 import itertools
 from itertools import compress
 import datetime
+from datetime import datetime 
 
 
 def check_etapas_do_funil(lista_etapas_conversao, # lista com todas as etapas de conversão definidas pelo usuário no painel de controle
