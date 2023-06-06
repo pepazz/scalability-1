@@ -2015,7 +2015,7 @@ def check_geral(lista_de_bases,                 # Lista de bases que vamos verif
         lista_de_bases[b], mensagem_local, erro_local = check_valores(df = lista_de_bases[b],                   # DataFrame já deve ter checado a existencia das colunas de valores
                                                                         colunas_de_valores = lista_colunas_de_valores[b],    # lista com as colunas que contém valores
                                                                         check_valores_vazios = lista_check_vazios[b],                # Boleano que, caso seja verdadeiro, verifica se existem blocos de valores vazios nas colunas
-                                                                        nome_do_arquivo = Nome_do_arquivo_sheets)
+                                                                        nome_do_arquivo = Nome_do_arquivo_sheets[b])
 
 
         contador_de_erros = contador_de_erros+erro_local
@@ -2070,13 +2070,14 @@ def check_geral(lista_de_bases,                 # Lista de bases que vamos verif
 
     lista_de_bases_chaves = list(compress(lista_de_bases, lista_de_bases_checar_chaves))
     lista_comparacao_parcial = list(compress(lista_comparacao_parcial, lista_de_bases_checar_chaves))
+    lista_nomes_arquivos_chaves = list(compress(Nome_do_arquivo_sheets, lista_de_bases_checar_chaves))
 
     lista_de_bases_chaves, mensagem_local, erro_local = check_chaves(lista_df = lista_de_bases_chaves,                   # lista de DataFrames já devem ter as colunas de valores formatadas
                                                                     aberturas_compartilhadas = aberturas_das_bases,   # lista com as aberturas que devem estar presentes em todas as bases da lista de dataframes
                                                                     aberturas_especificas = aberturas_especificas,      # lista com as aberturas que não precisam estar presentes em todas as bases
                                                                     lista_comparacao_parcial = lista_comparacao_parcial,   # lista de booleanos indicando quais bases serão checadas se contém todas as aberturas de todas as bases ou se contém aberturas que outras bases não tem
                                                                     chaves_ignoradas = chaves_ignoradas,           # lista de chaves a serem ignoradas se encontradas, como chaves globais "Todos" por exemplo                                                                 
-                                                                    nome_do_arquivo = Nome_do_arquivo_sheets,
+                                                                    nome_do_arquivo = lista_nomes_arquivos_chaves,
                                                                     agrupar_duplicados = True)
 
     contador_de_erros = contador_de_erros+erro_local
@@ -2106,7 +2107,7 @@ def check_geral(lista_de_bases,                 # Lista de bases que vamos verif
 
       if len(lista_de_bases[b]) > 0:
 
-        lista_de_bases[b], erro_local, mensagem_local = ajusta_formato_data(nome_do_arquivo= Nome_do_arquivo_sheets,
+        lista_de_bases[b], erro_local, mensagem_local = ajusta_formato_data(nome_do_arquivo= Nome_do_arquivo_sheets[b],
                                                                             dataframe = lista_de_bases[b],
                                                                               lista_colunas_datas = lista_lista_colunas_datas[b])
 
@@ -2114,7 +2115,7 @@ def check_geral(lista_de_bases,                 # Lista de bases que vamos verif
         mensagens_locais = mensagens_locais+mensagem_local
 
 
-        lista_de_bases[b], erro_local, mensagem_local = verifica_frequencia_datas(nome_do_arquivo= Nome_do_arquivo_sheets,
+        lista_de_bases[b], erro_local, mensagem_local = verifica_frequencia_datas(nome_do_arquivo= Nome_do_arquivo_sheets[b],
                                                                                   dataframe = lista_de_bases[b],
                                                                                   lista_colunas_datas = lista_lista_colunas_datas[b],
                                                                                   lista_frequencia = lista_lista_frequencia[b])
