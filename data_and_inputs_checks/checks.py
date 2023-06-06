@@ -1594,8 +1594,8 @@ def check_feriados(df_feriados,
     zero = '0'
   else:
     zero = ''
-  date_time_str = str(ano)+'-'+zero+str(mes)+'-01'
-  ultima_data_tof = datetime.strptime(date_time_str, "%y-%m-%d")
+  date_time_str = str(mes)+'/01/'+str(ano)
+  ultima_data_tof = datetime.strptime(date_time_str, '%m/%d/%Y')
 
   ano = df_tof_mensal['ano'].astype(int).min()
   mes = df_tof_mensal.loc[df_tof_mensal['ano'] == str(ano),['mês']].astype(int).min().values[0]
@@ -1603,8 +1603,8 @@ def check_feriados(df_feriados,
     zero = '0'
   else:
     zero = ''
-  date_time_str = str(ano)+'-'+zero+str(mes)+'-01'
-  primeira_data_tof = datetime.strptime(date_time_str, "%y-%m-%d")
+  date_time_str = str(mes)+'/01/'+str(ano)
+  primeira_data_tof = datetime.strptime(date_time_str, '%m/%d/%Y')
 
 
   if ultima_data_tof.year == primeira_data_tof.year:
