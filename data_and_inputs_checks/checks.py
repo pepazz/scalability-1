@@ -4,6 +4,7 @@
 import numpy as np
 from colored import colored
 import pandas as pd
+from tabulate import tabulate
 
 def check_etapas_do_funil(lista_etapas_conversao, # lista com todas as etapas de conversão definidas pelo usuário no painel de controle
                           lista_topos_de_funil,   # lista com os ToF's definida pelo usuário no painel de controle
@@ -856,13 +857,13 @@ def check_chaves(lista_df,                   # lista de DataFrames já devem ter
         # Caso existam aberturas repetidas, atualizamos uma mensagem de aviso, mas não aumentamos a contagem de erros
         if len(chaves_repetidas) > 0:
           if len(chaves_repetidas) == len(df):
-            mensagem = mensagem + '\n\nNo arquivo '+colored(nome_do_arquivo,'blue')+', na base '+colored(nome,'yellow')+' parece que todas as aberturas estão repetidas:' + '\n' +str(chaves)+'\nAs aberturas repetidas foram agrupadas e os valores foram somados.'
+            mensagem = mensagem + '\n\nNo arquivo '+colored(nome_do_arquivo[c],'blue')+', na base '+colored(nome,'yellow')+' parece que todas as aberturas estão repetidas:' + '\n' +str(chaves)+'\nAs aberturas repetidas foram agrupadas e os valores foram somados.'
           elif len(chaves_repetidas) > 100:
             total_linhas = len(chaves_repetidas)
             chaves_repetidas = chaves_repetidas.head(100)
-            mensagem = mensagem + '\n\nNo arquivo '+colored(nome_do_arquivo,'blue')+', na base '+colored(nome,'yellow')+' parece que existem as seguintes aberturas repetidas:' + '\n' + tabulate(chaves_repetidas, headers='keys', tablefmt='psql')+'\nMais outras '+str(total_linhas-100)+' linhas.\nAs aberturas repetidas foram agrupadas e os valores foram somados.'
+            mensagem = mensagem + '\n\nNo arquivo '+colored(nome_do_arquivo[c],'blue')+', na base '+colored(nome,'yellow')+' parece que existem as seguintes aberturas repetidas:' + '\n' + tabulate(chaves_repetidas, headers='keys', tablefmt='psql')+'\nMais outras '+str(total_linhas-100)+' linhas.\nAs aberturas repetidas foram agrupadas e os valores foram somados.'
           else:
-            mensagem = mensagem + '\n\nNo arquivo '+colored(nome_do_arquivo,'blue')+', na base '+colored(nome,'yellow')+' parece que existem as seguintes aberturas repetidas:' + '\n' + tabulate(chaves_repetidas, headers='keys', tablefmt='psql')+'\nAs aberturas repetidas foram agrupadas e os valores foram somados.'
+            mensagem = mensagem + '\n\nNo arquivo '+colored(nome_do_arquivo[c],'blue')+', na base '+colored(nome,'yellow')+' parece que existem as seguintes aberturas repetidas:' + '\n' + tabulate(chaves_repetidas, headers='keys', tablefmt='psql')+'\nAs aberturas repetidas foram agrupadas e os valores foram somados.'
         df = df.drop(columns=['idx'])
 
 
@@ -909,6 +910,9 @@ def check_chaves(lista_df,                   # lista de DataFrames já devem ter
     aberturas_1 = lista_aberturas[indice_1]
     aberturas_2 = lista_aberturas[indice_2]
 
+    nome_do_arquivo_1 = nome_do_arquivo[indice_1]
+    nome_do_arquivo_2 = nome_do_arquivo[indice_2]
+
     # Verificamos a existência de chaves entre as bases abertura por abertura:
     for col in list(aberturas_1.columns.values):
       chaves_unicas_1 = list(np.unique(aberturas_1[col].values))
@@ -926,11 +930,11 @@ def check_chaves(lista_df,                   # lista de DataFrames já devem ter
 
 
       if len(chaves_1_2) > 0 and not lista_comparacao_parcial_atualizada[indice_2]:
-        mensagem = mensagem + '\n\nNo arquivo '+colored(nome_do_arquivo,'blue') +' as chaves '+colored(str(chaves_1_2),'red')+' da abertura '+colored(col,'red')+' da base '+colored(nome_df_1,'yellow') + ' não estão presentes na base '+colored(nome_df_2,'yellow')
+        mensagem = mensagem + '\n\nAs chaves '+colored(str(chaves_1_2),'red')+' da abertura '+colored(col,'red')+' da base '+colored(nome_df_1,'yellow')+' do arquivo' + colored(nome_do_arquivo_1,'blue') + ' não estão presentes na base '+colored(nome_df_2,'yellow')+' do arquivo' + colored(nome_do_arquivo_2,'blue')
         erro = erro+1
 
       if len(chaves_2_1) > 0 and not lista_comparacao_parcial_atualizada[indice_1]:
-        mensagem = mensagem + '\n\nNo arquivo '+colored(nome_do_arquivo,'blue') +' as chaves '+colored(str(chaves_2_1),'red')+' da abertura '+colored(col,'red')+' da base '+colored(nome_df_2,'yellow') + ' não estão presentes na base '+colored(nome_df_1,'yellow')
+        mensagem = mensagem + '\n\nAs chaves '+colored(str(chaves_2_1),'red')+' da abertura '+colored(col,'red')+' da base '+colored(nome_df_2,'yellow')+' do arquivo' + colored(nome_do_arquivo_2,'blue') +  ' não estão presentes na base '+colored(nome_df_1,'yellow')+' do arquivo' + colored(nome_do_arquivo_1,'blue') + 
         erro = erro+1
 
 
@@ -953,10 +957,10 @@ def check_chaves(lista_df,                   # lista de DataFrames já devem ter
 
     # Verificamos as combinações de chaves entre as bases:
     if len(aberturas_nao_existentes_1) > 0 and not lista_comparacao_parcial_atualizada[indice_1]:
-      mensagem = mensagem + '\n\nNo arquivo '+colored(nome_do_arquivo,'blue') +' as seguintes combinações de aberturas da base '+colored(nome_df_2,'yellow') + ' não estão presentes na base '+colored(nome_df_1,'yellow') + ': \n' + tabulate(aberturas_nao_existentes_1, headers='keys', tablefmt='psql')
+      mensagem = mensagem + '\n\nAs seguintes combinações de aberturas da base '+colored(nome_df_2,'yellow')+' do arquivo' + colored(nome_do_arquivo_2,'blue') + ' não estão presentes na base '+colored(nome_df_1,'yellow')+' do arquivo' + colored(nome_do_arquivo_1,'blue') +  ': \n' + tabulate(aberturas_nao_existentes_1, headers='keys', tablefmt='psql')
       erro = erro+1
     if len(aberturas_nao_existentes_2) > 0 and not lista_comparacao_parcial_atualizada[indice_2]:
-      mensagem = mensagem + '\n\nNo arquivo '+colored(nome_do_arquivo,'blue') +' as seguintes combinações de aberturas da base '+colored(nome_df_1,'yellow') + ' não estão presentes na base '+colored(nome_df_2,'yellow') + ': \n' + tabulate(aberturas_nao_existentes_2, headers='keys', tablefmt='psql')
+      mensagem = mensagem + '\n\nAs seguintes combinações de aberturas da base '+colored(nome_df_1,'yellow')+' do arquivo' + colored(nome_do_arquivo_1,'blue') +  ' não estão presentes na base '+colored(nome_df_2,'yellow')+' do arquivo' + colored(nome_do_arquivo_2,'blue') +  ': \n' + tabulate(aberturas_nao_existentes_2, headers='keys', tablefmt='psql')
       erro = erro+1
 
       
@@ -1002,16 +1006,18 @@ def check_colunas_bases_especificas(nome_do_arquivo,
     if len(col_valores_share) == 0:
       lista_colunas = [col_valores_feriados,col_valores_city_share]
       nomes = [df_impacto_feraidos.name,df_city_share.name]
+      nomes_dos_arquivos = [nome_do_arquivo[2],nome_do_arquivo[3]]
     else:
       lista_colunas = [col_valores_share,col_valores_feriados,col_valores_city_share]
       nomes = [df_share_diario.name,df_impacto_feraidos.name,df_city_share.name]
+      nomes_dos_arquivos = [nome_do_arquivo[1],nome_do_arquivo[2],nome_do_arquivo[3]]
     n=0
     for coluna in lista_colunas:
       diferenca_1 = list(set(coluna)-set(etapas_volume))
       diferenca_2 = list(set(etapas_volume)-set(coluna))
       if len(diferenca_1) != 0 or len(diferenca_2) != 0:
         erro = erro+1
-        mensagem=mensagem+'\n\nNo arquivo '+colored(nome_do_arquivo,'blue')+' a base '+colored(str(nomes[n]),'yellow')+' não contém colunas de volume diferentes das obrigatórias. \nAs colunas de volume obrigatórias são: '+colored(str(etapas_volume),'red')+'.\nAs colunas de volume encontradas na base são: '+colored(str(coluna),'red')+'.\nComo não foi declarada uma base de "On Top Ratios", é necessário que todas as colunas de volumes sejam idêndicas às etapas presentes na lista de conversões declarada no painel de controle.'       
+        mensagem=mensagem+'\n\nNo arquivo '+colored(nomes_dos_arquivos[n],'blue')+' a base '+colored(str(nomes[n]),'yellow')+' não contém colunas de volume diferentes das obrigatórias. \nAs colunas de volume obrigatórias são: '+colored(str(etapas_volume),'red')+'.\nAs colunas de volume encontradas na base são: '+colored(str(coluna),'red')+'.\nComo não foi declarada uma base de "On Top Ratios", é necessário que todas as colunas de volumes sejam idêndicas às etapas presentes na lista de conversões declarada no painel de controle.'       
       n += 1
 
   # Checar se todas as colunas de valores são as mesmas entre as bases de share diário, impacto de feriados
@@ -1036,10 +1042,10 @@ def check_colunas_bases_especificas(nome_do_arquivo,
 
       if len(colunas_1_2) > 0:
         erro_aux = erro_aux+1
-        mensagem_aux='\n\nNo arquivo '+colored(nome_do_arquivo,'blue')+' a base '+colored(str(df1.name),'yellow')+' contém as seguintes colunas que não existem na base '+colored(str(df2.name),'yellow')+':\n'+colored(str(colunas_1_2),'red')+'\nAs colunas de valores devem ser as mesmas entre essas bases.'
+        mensagem_aux='\n\nA base '+colored(str(df1.name),'yellow')+' no arquivo '+colored(nome_do_arquivo[0],'blue')+' contém as seguintes colunas que não existem na base '+colored(str(df2.name),'yellow')+' no arquivo '+colored(nome_do_arquivo[1],'blue')':\n'+colored(str(colunas_1_2),'red')+'\nAs colunas de valores devem ser as mesmas entre essas bases.'
       if len(colunas_2_1) > 0:
         erro_aux = erro_aux+1
-        mensagem_aux='\n\nNo arquivo '+colored(nome_do_arquivo,'blue')+' a base '+colored(str(df2.name),'yellow')+' contém as seguintes colunas que não existem na base '+colored(str(df1.name),'yellow')+':\n'+colored(str(colunas_2_1),'red')+'\nAs colunas de valores devem ser as mesmas entre essas bases.'
+        mensagem_aux='\n\nA base '+colored(str(df2.name),'yellow')+' no arquivo '+colored(nome_do_arquivo[1],'blue')' contém as seguintes colunas que não existem na base '+colored(str(df1.name),'yellow')+' no arquivo '+colored(nome_do_arquivo[0],'blue')':\n'+colored(str(colunas_2_1),'red')+'\nAs colunas de valores devem ser as mesmas entre essas bases.'
 
       return erro_aux,mensagem_aux
     #-------------------------------------------------------------------------------------------------
@@ -1050,9 +1056,11 @@ def check_colunas_bases_especificas(nome_do_arquivo,
     if len(col_valores_share) == 0:
       lista_colunas = [col_valores_feriados,col_valores_city_share]
       lista_df = [df_impacto_feraidos,df_city_share]
+      nomes_dos_arquivos = [nome_do_arquivo[2],nome_do_arquivo[3]]
     else:
       lista_colunas = [col_valores_share,col_valores_feriados,col_valores_city_share]
       lista_df = [df_share_diario,df_impacto_feraidos,df_city_share]
+      nomes_dos_arquivos = [nome_do_arquivo[1],nome_do_arquivo[2],nome_do_arquivo[3]]
 
     # Vamos gerar uma lista com as combinações de pares de índices das listas:
     indices = list(range(len(lista_df)))
@@ -1063,12 +1071,13 @@ def check_colunas_bases_especificas(nome_do_arquivo,
 
       indice_1 = list(combinacoes[i])[0]
       indice_2 = list(combinacoes[i])[1]
+      lista_nomes_dos_arquivos = [nomes_dos_arquivos[indice_1],nomes_dos_arquivos[indice_2]]
 
       erro_out,mensagem_out = aux_check(df1 = lista_df[indice_1],
                                         df2 = lista_df[indice_2],
                                         col1 = lista_colunas[indice_1],
                                         col2 = lista_colunas[indice_2],
-                                        nome_do_arquivo = nome_do_arquivo)
+                                        nome_do_arquivo = lista_nomes_dos_arquivos)
       
       erro = erro+erro_out
       mensagem = mensagem+mensagem_out
@@ -1086,7 +1095,7 @@ def check_colunas_bases_especificas(nome_do_arquivo,
 
         if len(colunas_faltantes) > 0:
           erro = erro+1
-          mensagem=mensagem+'\n\nNo arquivo '+colored(nome_do_arquivo,'blue')+' a base '+colored(str(lista_df[i].name),'yellow')+' não contém todas as colunas de volume obrigatórias. \nAs colunas que estão faltando na base são: '+colored(str(colunas_faltantes),'red')
+          mensagem=mensagem+'\n\nNo arquivo '+colored(nomes_dos_arquivos[i],'blue')+' a base '+colored(str(lista_df[i].name),'yellow')+' não contém todas as colunas de volume obrigatórias. \nAs colunas que estão faltando na base são: '+colored(str(colunas_faltantes),'red')
         i=i+1
   
 
@@ -1097,9 +1106,11 @@ def check_colunas_bases_especificas(nome_do_arquivo,
       if len(col_valores_share) == 0:
         col_valores_modelo = col_valores_feriados
         nome_modelo = df_impacto_feraidos.name
+        nome_do_arquivo_modelo = nome_do_arquivo[2]
       else:
         col_valores_modelo = col_valores_share
         nome_modelo = df_share_diario.name
+        nome_do_arquivo_modelo = nome_do_arquivo[1]
 
       # Determinar a ordem final das colunas
       col_anterior = []
@@ -1120,7 +1131,7 @@ def check_colunas_bases_especificas(nome_do_arquivo,
           index_anterior = col_valores_modelo.index(col_extra)-1
           if index_anterior < 0:
             erro = erro+1
-            mensagem=mensagem+'\n\nNo arquivo '+colored(nome_do_arquivo,'blue')+' a base '+colored(str(nome_modelo),'yellow')+' possui uma coluna de volume que não existe nas colunas obrigatorias e é a primeira que aparece na base, indicando, pela sua ordem, que é anterior à primeira etapa do funil. \nA coluna em questão é: '+colored(str(col_valores_share[0]),'red')+'\nA base '+colored(str(df_share_diario.name),'yellow')+' é usada como referência para a ordem das etapas de volume que não constam no funil cohort.'
+            mensagem=mensagem+'\n\nNo arquivo '+colored(nome_do_arquivo_modelo,'blue')+' a base '+colored(str(nome_modelo),'yellow')+' possui uma coluna de volume que não existe nas colunas obrigatorias e é a primeira que aparece na base, indicando, pela sua ordem, que é anterior à primeira etapa do funil. \nA coluna em questão é: '+colored(str(col_valores_share[0]),'red')+'\nA base '+colored(str(df_share_diario.name),'yellow')+' é usada como referência para a ordem das etapas de volume que não constam no funil cohort.'
           else:
             col_anterior = col_anterior+[col_valores_modelo[index_anterior]]
         
@@ -1153,6 +1164,7 @@ def check_colunas_bases_especificas(nome_do_arquivo,
       if len(df_on_top_ratios) == 0:
         nome_da_base = 'Racional On Top Ratio'
         tipo_de_base = ' os inputs no Painel de Controle '
+        nome_do_arquivo_modelo = nome_do_arquivo[0]
 
         col_valores_on_top_formatada = []
         try:
@@ -1177,7 +1189,7 @@ def check_colunas_bases_especificas(nome_do_arquivo,
       for c in col_valores_on_top:
 
         if '/' not in c:
-          mensagem = mensagem + '\n\nNo arquivo '+colored(nome_do_arquivo,'blue')+tipo_de_base+colored(str(nome_da_base),'yellow')+' devem todas conter o caractere "/" para separar as etapas. \nColunas de valores encontradas: n\ '+colored(str(col_valores_on_top),'red')
+          mensagem = mensagem + '\n\nNo arquivo '+colored(nome_do_arquivo_modelo,'blue')+tipo_de_base+colored(str(nome_da_base),'yellow')+' devem todas conter o caractere "/" para separar as etapas. \nColunas de valores encontradas: n\ '+colored(str(col_valores_on_top),'red')
           erro = erro+1
         
         if erro == 0:
@@ -1185,7 +1197,7 @@ def check_colunas_bases_especificas(nome_do_arquivo,
           etapa_nova = c.split('/')[1]
 
           if etapa_existente not in etapas_volume:
-            mensagem = mensagem + '\n\nNo arquivo '+colored(nome_do_arquivo,'blue')+tipo_de_base+colored(str(nome_da_base),'yellow')+' devem iniciar com uma etapa cujos valores podem e já foram gerados pelas conversões cohort. \nA primeira etapa na coluna '+colored(str(c),'red')+' é '+colored(str(etapa_existente),'red')+'. Esta etapa não consta na lista de etapas possíveis de serem calculadas pelo funil via cohort: '+colored(str(etapas_volume),'red')
+            mensagem = mensagem + '\n\nNo arquivo '+colored(nome_do_arquivo_modeloo,'blue')+tipo_de_base+colored(str(nome_da_base),'yellow')+' devem iniciar com uma etapa cujos valores podem e já foram gerados pelas conversões cohort. \nA primeira etapa na coluna '+colored(str(c),'red')+' é '+colored(str(etapa_existente),'red')+'. Esta etapa não consta na lista de etapas possíveis de serem calculadas pelo funil via cohort: '+colored(str(etapas_volume),'red')
             erro = erro+1
         '''
           if etapa_nova not in ordem_final:
@@ -1443,12 +1455,12 @@ def confere_aberturas_zerados(nome_do_arquivo, df_tof, df_baseline, lista_chaves
     
     if len(df_aux_1.index) > 0:
       df_aux_1 = df_aux_1.drop(columns=['verifica','sum']+lista_etapas)
-      mensagem = mensagem + f'\n\n Atenção! Existem valores de \033[1;33mToF\033[0;0;0m porém o \033[1;33mbaseline\033[0;0;0m está zerado no arquivo \033[1;34m{nome_do_arquivo}\033[0;0;0m.\n {tabulate(df_aux_1, headers=list(df_aux_1.columns), tablefmt="psql")}' #adicionar na mensagem as chaves do dataframe aux #tabulate(aberturas_nao_existentes_1, headers='keys', tablefmt='psql')
+      mensagem = mensagem + f'\n\n Atenção! No arquivo \033[1;34m{nome_do_arquivo[0]}\033[0;0;0m existem valores de \033[1;33mToF\033[0;0;0m porém, no arquivo \033[1;34m{nome_do_arquivo[1]}\033[0;0;0m o \033[1;33mbaseline\033[0;0;0m está zerado.\n {tabulate(df_aux_1, headers=list(df_aux_1.columns), tablefmt="psql")}' #adicionar na mensagem as chaves do dataframe aux #tabulate(aberturas_nao_existentes_1, headers='keys', tablefmt='psql')
       contagem_de_erros += 1
       break
     if len(df_aux_2.index) > 0:
       df_aux_2 = df_aux_2.drop(columns=['verifica','sum']+lista_etapas)
-      mensagem = mensagem + f'\n\n Atenção! Existem valores de \033[1;33mbaseline\033[0;0;0m porém o \033[1;33mToF\033[0;0;0m está zerado no arquivo \033[1;34m{nome_do_arquivo}\033[0;0;0m.\n {tabulate(df_aux_2, headers=list(df_aux_2.columns), tablefmt="psql")}'
+      mensagem = mensagem + f'\n\n Atenção! No arquivo \033[1;34m{nome_do_arquivo[1]}\033[0;0;0m existem valores de \033[1;33mbaseline\033[0;0;0m porém, no arquivo \033[1;34m{nome_do_arquivo[0]}\033[0;0;0m o \033[1;33mToF\033[0;0;0m está zerado no arquivo \033[1;34m{nome_do_arquivo}\033[0;0;0m.\n {tabulate(df_aux_2, headers=list(df_aux_2.columns), tablefmt="psql")}'
       contagem_de_erros += 1
       break
 
@@ -1741,7 +1753,7 @@ def verifica_datas_tofs(nome_do_arquivo,
       lista_aux.append(elemento+pd.to_timedelta(i,unit="D"))
       
   if not set(lista_datas_tof_mensal).issubset(lista_aux):
-    mensagem = mensagem + f'\n\n Atenção! As datas presentes no \033[1;33mToF Mensal\033[0;0;0m. não batem com as do \033[1;33mToF Semanal\033[0;0;0m do arquivo \033[1;34m{nome_do_arquivo}\033[0;0;0m'
+    mensagem = mensagem + f'\n\n Atenção! As datas presentes no \033[1;33mToF Mensal\033[0;0;0m do arquivo \033[1;34m{nome_do_arquivo[1]}\033[0;0;0m não batem com as do \033[1;33mToF Semanal\033[0;0;0m do arquivo \033[1;34m{nome_do_arquivo[0]}\033[0;0;0m'
     contador_erros += 1
   #print(set(lista_datas_tof_mensal).issubset(lista_aux))
 
@@ -1800,11 +1812,11 @@ def verifica_datas_tofs(nome_do_arquivo,
   df_erro_data_maxima = df_merged.loc[df_merged['data_dif_max'] < pd.to_timedelta(0,unit="D")]
 
   if len(df_erro_data_minima) > 0:
-    mensagem = mensagem + f'\n\n Atenção! As datas presentes no \033[1;33mToF Mensal\033[0;0;0m. se iniciam em meses posteriores às primeiras semanas na base \033[1;33mToF Semanal\033[0;0;0m do arquivo \033[1;34m{nome_do_arquivo}\033[0;0;0m nas seguintes aberturas' + '\n' + tabulate(df_erro_data_minima, headers='keys', tablefmt='psql')
+    mensagem = mensagem + f'\n\n Atenção! As datas presentes no \033[1;33mToF Mensal\033[0;0;0m do arquivo \033[1;34m{nome_do_arquivo[0]}\033[0;0;0m se iniciam em meses posteriores às primeiras semanas na base \033[1;33mToF Semanal\033[0;0;0m do arquivo \033[1;34m{nome_do_arquivo[1]}\033[0;0;0m nas seguintes aberturas' + '\n' + tabulate(df_erro_data_minima, headers='keys', tablefmt='psql')
     contador_erros += 1    
 
   if len(df_erro_data_maxima) > 0:
-    mensagem = mensagem + f'\n\n Atenção! As datas presentes no \033[1;33mToF Mensal\033[0;0;0m. terminam em meses anteriores às últimas semanas na base \033[1;33mToF Semanal\033[0;0;0m do arquivo \033[1;34m{nome_do_arquivo}\033[0;0;0m nas seguintes aberturas' + '\n' + tabulate(df_erro_data_maxima, headers='keys', tablefmt='psql')
+    mensagem = mensagem + f'\n\n Atenção! As datas presentes no \033[1;33mToF Mensal\033[0;0;0m do arquivo \033[1;34m{nome_do_arquivo[0]}\033[0;0;0m terminam em meses anteriores às últimas semanas na base \033[1;33mToF Semanal\033[0;0;0m do arquivo \033[1;34m{nome_do_arquivo[1]}\033[0;0;0m nas seguintes aberturas' + '\n' + tabulate(df_erro_data_maxima, headers='keys', tablefmt='psql')
     contador_erros += 1  
 
 
@@ -1966,7 +1978,7 @@ def check_geral(lista_de_bases,                 # Lista de bases que vamos verif
                                                                                     dict_renames = dict_renames,
                                                                                     coluna_de_conversoes = coluna_de_conversoes,
                                                                                     colunas_datas = lista_lista_colunas_datas[b],
-                                                                                    nome_do_arquivo = Nome_do_arquivo_sheets)
+                                                                                    nome_do_arquivo = Nome_do_arquivo_sheets[b])
       
       if lista_do_retorno_de_valores[b]:
         lista_colunas_de_valores[b] = colunas_de_valores
@@ -2253,11 +2265,11 @@ def check_building_blocks(base_tof_semanal,
     lista_baselines = [i for i in list_building_blocks_tof if i in baselines]
 
     if len(lista_baselines) == 0:
-      mensagem_bb = mensagem_bb+'\n\nNo arquivo '+colored(nome_do_arquivo,'blue')+' a base '+colored(base_tof_mensal.name,'yellow')+' não contém "baseline" na coluna "Building Block ToF".\nPara rodar o planning é necessária a existência de volumes de ToF de baseline, que pode ser indicados pelos seguintes nomes: '+colored(str(baselines),'blue')+'\nPorém, foi encontrada somente esta lista de Building Blocks ToF: '+colored(str(list_building_blocks_tof),'red')
+      mensagem_bb = mensagem_bb+'\n\nNo arquivo '+colored(nome_do_arquivo[0],'blue')+' a base '+colored(base_tof_mensal.name,'yellow')+' não contém "baseline" na coluna "Building Block ToF".\nPara rodar o planning é necessária a existência de volumes de ToF de baseline, que pode ser indicados pelos seguintes nomes: '+colored(str(baselines),'blue')+'\nPorém, foi encontrada somente esta lista de Building Blocks ToF: '+colored(str(list_building_blocks_tof),'red')
       erro_bb += 1
 
     if len(lista_baselines) > 1:
-      mensagem_bb = mensagem_bb+'\n\nNo arquivo '+colored(nome_do_arquivo,'blue')+' a base '+colored(base_tof_mensal.name,'yellow')+' possui mais de um "baseline" na coluna "Building Block ToF".\nPara rodar o planning é necessária a existência de um único baseline, que pode ser indicados pelos seguintes nomes: '+colored(str(baselines),'blue')+'\nForam encontrados os seguintes Building Blocks ToF que podem ser interpretados como "baseline": '+colored(str(lista_baselines),'red')
+      mensagem_bb = mensagem_bb+'\n\nNo arquivo '+colored(nome_do_arquivo[0],'blue')+' a base '+colored(base_tof_mensal.name,'yellow')+' possui mais de um "baseline" na coluna "Building Block ToF".\nPara rodar o planning é necessária a existência de um único baseline, que pode ser indicados pelos seguintes nomes: '+colored(str(baselines),'blue')+'\nForam encontrados os seguintes Building Blocks ToF que podem ser interpretados como "baseline": '+colored(str(lista_baselines),'red')
       erro_bb += 1
 
   # Formatando o conteúdo das colunas de Building Blocks ToF:
