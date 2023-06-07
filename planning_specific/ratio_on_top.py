@@ -1,4 +1,9 @@
 #@title Def Ratio on top
+
+# Importando bibliotecas necessárias
+import pandas as pd
+import numpy as np
+
 def ratio_on_top(df_parametro, #df que será a base de cálculo
                  df_planning, #combinações que serão calculadas, conforme o planning
                  data_inicio, #data inicial do filtro
