@@ -3,6 +3,9 @@
 #Importando funções necessárias para rodar "building_blocks":
 from planning_cohort_funnel_auxiliary_functions import *
 from gerador_baseline_conversoes_v2 import gerador_baseline_conversoes_v2
+import pandas as pd
+from IPython.display import clear_output
+from redutor_de_base import *
 
 
 def building_blocks(inputs_df,
@@ -226,5 +229,4 @@ def building_blocks(inputs_df,
   output_coincident_final_final = output_coincident_final_final[[chaves_coincident[0]]+['building block cohort','building block tof']+chaves_coincident[1:]+etapas_coincident]
 
   return output_cohort_final_final,output_coincident_final_final,etapas_coincident,etapas_cohort
-
 
