@@ -2,6 +2,8 @@
 
 # Importando funções auxiliares para rodar o funil:
 from dynamic_cohort_funnel_functions import * 
+import pandas as pd
+import numpy as np
 
 # Separa a primeira etapa "A" de uma lista de conversoes "A2B"
 
