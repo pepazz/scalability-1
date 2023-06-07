@@ -1,3 +1,6 @@
+# Importando bibliotecas necessárias
+import pandas as pd
+
 # Deslocar colunas de datas pela conversão
 
 # Dado uma tabela de dados contendo os volumes das cohorts e suas respectivas datas,
