@@ -1,5 +1,9 @@
 #@title Def Data Studio Mensal
 
+# Importando bibliotecas necessárias
+import pandas as pd
+import numpy as np
+from datetime import datetime
 
 def data_studio_mensal(df_actual_mensal,
                       df_planning_diario,
