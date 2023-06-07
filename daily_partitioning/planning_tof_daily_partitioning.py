@@ -1,5 +1,8 @@
 #@title Def recalcula_share_diario
 
+# Importando bibliotecas necessárias
+from planning_daily_partitioning import *
+
 def recalcula_share_diario(ToF_diarizado, topos_de_funil):
   '''
   Função auxiliar que fornece novos weekdayshares a partir da base diarizada já com
