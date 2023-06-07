@@ -1,5 +1,8 @@
 #@title def calcula_shares_historicos
 
+# Importando bibliotecas necessárias
+import pandas as pd
+
 def calcula_shares_historicos(df_act_historico, df_parametro, nome_coluna_datas, data_piso_formatada, data_teto_formatada, lista_topos, aberturas_das_bases):
   '''
   Esta função calcula os shares das aberturas da base histórica no período 
