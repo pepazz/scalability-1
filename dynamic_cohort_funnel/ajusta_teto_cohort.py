@@ -1,5 +1,7 @@
 #@title Def ajusta_teto_cohort
 
+import pandas as pd
+
 def ajusta_teto_cohort(df_cohort,nome_coluna_week_origin):
   '''
   Esta função tem como intuito limitar o teto das cohorts abertas, evitando que 
