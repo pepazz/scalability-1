@@ -6,6 +6,7 @@ from gerador_baseline_conversoes_v2 import gerador_baseline_conversoes_v2
 import pandas as pd
 from IPython.display import clear_output
 from redutor_de_base import *
+from ajusta_teto_cohort import *
 
 
 def building_blocks(inputs_df,
