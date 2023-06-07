@@ -1,7 +1,7 @@
 #@title Def separa_conv
 
 # Importando funções auxiliares para rodar o funil:
-import * from dynamic_cohort_funnel_functions
+from dynamic_cohort_funnel_functions import * 
 
 # Separa a primeira etapa "A" de uma lista de conversoes "A2B"
 
