@@ -1,7 +1,7 @@
 #@title Def building_blocks
 
 #Importando funções necessárias para rodar "building_blocks":
-import * from planning_cohort_funnel_auxiliary_functions
+from planning_cohort_funnel_auxiliary_functions import *
 from gerador_baseline_conversoes_v2 import gerador_baseline_conversoes_v2
 
 
