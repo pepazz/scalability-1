@@ -1,5 +1,8 @@
 #@title Def City Share
 
+# Importando bibliotecas necessárias
+import pandas as pd
+
 def city_share(df_parametro, #df que será a base de cálculo
                coluna_semanas, #week_start
                etapas_vol, #nome das etapas que serão buscadas. Ex: vb/visits_booked, etc
