@@ -1,5 +1,10 @@
 #@title Def gerador_base_diaria
 
+# Importar bibliotecas necessárias
+import pandas as pd
+import numpy as np
+from redutor_de_base import *
+
 # Gera uma proxi de base diária a partir da base semanal
 
 # O primeiro passo de quebrar as metas semanais numa base diária é definir os dias dessa base.
