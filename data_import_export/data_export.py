@@ -1,6 +1,9 @@
 
 #@title Def exportar_base
 
+# Importando funções auxiliares:
+from colored import colored
+import pandas as pd
 
 def exportar_base(base_df,                     # DataFrame
                   nome_do_painel_de_controle,  # String com o nome do arquivo sheets com o painel de controle
@@ -21,12 +24,12 @@ def exportar_base(base_df,                     # DataFrame
     lista_arquivos_destino = [arquivo_de_destino]
 
   if "," in nome_da_aba:
-    lista_nomea_das_abas = nome_da_aba.split(",")
-    lista_nomea_das_abas = [l.strip() for l in lista_nomea_das_abas]
+    lista_nome_das_abas = nome_da_aba.split(",")
+    lista_nome_das_abas = [l.strip() for l in lista_nome_das_abas]
   else:
-    lista_nomea_das_abas = [nome_da_aba]
+    lista_nome_das_abas = [nome_da_aba]
 
-  if len(lista_nomea_das_abas) != len(lista_arquivos_destino):
+  if len(lista_nome_das_abas) != len(lista_arquivos_destino):
     try:
       nome_base = base_df.name
     except:
@@ -35,9 +38,9 @@ def exportar_base(base_df,                     # DataFrame
     base_exportada = False
 
   if base_exportada:
-    for i in range(len(lista_nomea_das_abas)):
+    for i in range(len(lista_nome_das_abas)):
       arquivo_de_destino = lista_arquivos_destino[i]
-      nome_da_aba = lista_nomea_das_abas[i]
+      nome_da_aba = lista_nome_das_abas[i]
       
 
       
@@ -82,7 +85,7 @@ def exportar_base(base_df,                     # DataFrame
 
       # Caso exista "/" no nome do arquivo, vamos considerar que se trata de um caminho para
       # uma pasta do google drive onde vamos salvar um arquivo CSV.
-      if '/' in arquivo_de_destino:
+      if '/' in arquivo_de_destino and 'https://' not in arquivo_de_destino:
 
         print('\n\nExportando a base '+colored(nome_base,'yellow')+' na forma de CSV para '+colored(arquivo_de_destino,'blue'))
 
