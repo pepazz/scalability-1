@@ -5,6 +5,8 @@
 from colored import colored
 from data_import import *
 import pandas as pd
+import time
+import numpy as np
 
 def exportar_base(base_df,                     # DataFrame
                   nome_do_painel_de_controle,  # String com o nome do arquivo sheets com o painel de controle
