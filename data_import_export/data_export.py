@@ -3,6 +3,7 @@
 
 # Importando funções auxiliares:
 from colored import colored
+from data_import import *
 import pandas as pd
 
 def exportar_base(base_df,                     # DataFrame
