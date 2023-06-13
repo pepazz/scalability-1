@@ -1685,7 +1685,7 @@ def verifica_baseline(nome_do_arquivo,df_baseline,lista_chaves,colunas_conversoe
   #------------------
   df_baseline_sem_ajuste = df_baseline[df_baseline[coluna_idx_cohort] != 'Coincident']
   df_group = df_baseline_sem_ajuste.groupby(lista_chaves, as_index=False)[colunas_conversoes].sum()
-  df1 = df_group[(df_group.filter(like='2') > 1.0001).any(axis=1)]
+  df1 = df_group[(df_group[colunas_conversoes] > 1.0001).any(axis=1)]
 
   # passando de float pra porcentagem pro print ficar bonitinho
   for coluna in colunas_conversoes:
