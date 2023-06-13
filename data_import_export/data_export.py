@@ -151,8 +151,13 @@ def exportar_base(base_df,                     # DataFrame
   # Caso a tentativa de exportar a base tenha falhado, vamos tentar baixar o CSV
   if not base_exportada:
     try:
+      '''
+      Código antigo p/ Colab:
       base_df.to_csv(nome_base+'.csv', index=False)
       files.download(nome_base+'.csv')  
+      '''
+      print("\n\nBaixe manualmente a base ",colored(nome_base,'yellow')," mostrada abaixo:\n")
+      display(base_df)
       base_exportada = True 
     except Exception as e:
       base_exportada = False
