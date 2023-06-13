@@ -128,14 +128,13 @@ def quebra_diaria_ToF_2(df_ToF_semanal,     # Dataframe com os volumes semanais 
     # definimos os cabeçalhos das outras bases
     cb_share_diario = list(df_share_diario.columns)
     cb_impactos_feriados = list(df_impactos_feriados.columns)
-    cb_share_cidades = list(df_share_cidades.columns)
     cb_base_cohort = list(df_base_cohort.columns)
 
     # definimos onde começam os dados de todas as bases com base na posição da coluna "Week Origin"
     # na base cohort
     posi_share_diario = cb_share_diario.index("dia da semana")+1
     posi_impactos_feriados = cb_impactos_feriados.index("dia da semana")+1
-    posi_share_cidades = cb_share_cidades.index("cidade")+1
+
 
     # Definimos os topos de funil
     topos_de_funil = topos
@@ -144,12 +143,19 @@ def quebra_diaria_ToF_2(df_ToF_semanal,     # Dataframe com os volumes semanais 
     # Definimos novos cabeçalhos somente com o topo de funil
     n_cb_share_diario = cb_share_diario[:posi_share_diario]+topos_de_funil
     n_cb_impactos_feriados = cb_impactos_feriados[:posi_impactos_feriados]+topos_de_funil
-    n_cb_share_cidades = cb_share_cidades[:posi_share_cidades]+topos_de_funil
+    
 
     # Redefinimos as bases somente com o ToF:
     n_share_diario_df = df_share_diario[n_cb_share_diario] #np.append(np.array([n_cb_share_diario]),pd.DataFrame(share_diario[1:,:], columns = cb_share_diario)[n_cb_share_diario].to_numpy(),0)
     n_impactos_feriados_df = df_impactos_feriados[n_cb_impactos_feriados] #np.append(np.array([n_cb_impactos_feriados]),pd.DataFrame(impactos_feriados[1:,:], columns = cb_impactos_feriados)[n_cb_impactos_feriados].to_numpy(),0)
-    n_share_cidades_df = df_share_cidades[n_cb_share_cidades] #np.append(np.array([n_cb_share_cidades]),pd.DataFrame(share_cidades[1:,:], columns = cb_share_cidades)[n_cb_share_cidades].to_numpy(),0)
+
+    if len(df_share_cidades) > 0:
+      cb_share_cidades = list(df_share_cidades.columns)
+      posi_share_cidades = cb_share_cidades.index("cidade")+1 
+      n_cb_share_cidades = cb_share_cidades[:posi_share_cidades]+topos_de_funil
+      n_share_cidades_df = df_share_cidades[n_cb_share_cidades] #np.append(np.array([n_cb_share_cidades]),pd.DataFrame(share_cidades[1:,:], columns = cb_share_cidades)[n_cb_share_cidades].to_numpy(),0)
+    else:
+      n_share_cidades_df = df_share_cidades
 
     # Diarizamos o ToF semanal
     ToF_diarizado = quebra_diaria(volumes_semanais = df_ToF_semanal,  # DataFrame com os volumes semanais coincident
@@ -167,24 +173,6 @@ def quebra_diaria_ToF_2(df_ToF_semanal,     # Dataframe com os volumes semanais 
     # Calculamos um nova share diário baseado na diarização inicial, que aplica impactos de feriados.
     share_diario_recalculado = recalcula_share_diario(ToF_diarizado,topos_de_funil)
 
-    '''
-    # Primeiramente, vamos definir o primeiro e último mês da base diária, pois os mesmos não serão
-    # considerados na redistribuição.
-    primeiro_ano = np.min(ToF_diarizado['ano'].values)
-    primeiro_mes = np.min(ToF_diarizado.loc[(ToF_diarizado['ano'] == primeiro_ano),['mês']].values)
-    
-    ultimo_ano = np.max(ToF_diarizado['ano'].values)
-    ultimo_mes = np.max(ToF_diarizado.loc[(ToF_diarizado['ano'] == ultimo_ano),['mês']].values)
-
-    # Vamos identificar todas as semanas que possuem dias dentro do primeiro mês da base diária.
-    # Essas semanas incluem a primeira semana do planning, que deve permanecer inalterada, inclusive os dias
-    # que já fazem parte do mês seguinte (planning atual). Assim, o segundo mês da base mensal vai
-    # ficar menor do que na realidade.
-
-    primeiras_semanas = ToF_diarizado.groupby(['semana'],as_index=False)['mês'].min()
-    primeiras_semanas['mês'] = pd.DatetimeIndex(primeiras_semanas['semana']).month
-    primeiras_semanas = list(primeiras_semanas.loc[primeiras_semanas['mês'] == primeiro_mes]['semana'].values)
-    '''
 
     # Calculamos um ToF mensal baseado no ToF diarizado
     ToF_mensal_atual = ToF_diarizado.groupby(['ano','mês']+aberturas, as_index=False)[topos_de_funil].sum()
@@ -249,4 +237,3 @@ def quebra_diaria_ToF_2(df_ToF_semanal,     # Dataframe com os volumes semanais 
   
   else:
     return [],df_ToF_semanal
-
