@@ -1006,8 +1006,8 @@ def check_colunas_bases_especificas(nome_do_arquivo,
   col_valores_feriados = [e.lower() for e in col_valores_feriados]
   col_valores_city_share = [e.lower() for e in col_valores_city_share]
 
-  lista_colunas = [col_valores_share,col_valores_feriados,col_valores_city_share]
-  lista_bases = [df_on_top_ratios,df_share_diario,df_impacto_feraidos,df_city_share]
+  lista_colunas = [col_valores_on_top,col_valores_share,col_valores_feriados,col_valores_city_share]
+  lista_df = [df_on_top_ratios,df_share_diario,df_impacto_feraidos,df_city_share]
 
   # Organizando a existência das bases:
   lista_existe = [len(col_valores_on_top),len(col_valores_share),len(col_valores_feriados),len(col_valores_city_share)]
@@ -1018,8 +1018,8 @@ def check_colunas_bases_especificas(nome_do_arquivo,
       lista_existe[x] = False
 
   lista_colunas = list(compress(lista_colunas[1:],lista_existe[1:]))
-  lista_bases = list(compress(lista_bases[1:],lista_existe[1:]))
-  nomes = [x.name for x in lista_bases]
+  lista_df  = list(compress(lista_df[1:],lista_existe[1:]))
+  nomes = [x.name for x in lista_df]
   nomes_dos_arquivos = list(compress(nome_do_arquivo[1:],lista_existe[1:]))
 
   ordem_final = etapas_volume.copy()
