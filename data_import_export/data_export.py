@@ -123,27 +123,11 @@ def exportar_base(base_df,                     # DataFrame
             output = dados_sheets.worksheet(nome_da_aba)
             output.clear()
             set_with_dataframe(output,base_df)
-          except:
 
-            try:
+          except Exception as e:
+            print('\n\nNão foi possível exportar a base '+colored(nome_base,'yellow')+' para a aba '+colored(nome_da_aba,'blue')+' do arquivo '+colored(nome_do_arquivo,'blue')+'\nA tentativa de exportar o arquivo resultou no seguinte erro:\n'+colored(str(e),'red')+'\n\nSerá feita uma tentativa de baixar os dados no formato CSV.')
+            base_exportada = False
 
-              from google.colab import auth
-              auth.authenticate_user()
-
-              import gspread
-              from google.auth import default
-              creds, _ = default()
-
-              gc = gspread.authorize(creds)
-
-              output = dados_sheets.worksheet(nome_da_aba)
-              output.clear()
-              set_with_dataframe(output,base_df)
-
-            except Exception as e:
-              print('\n\nNão foi possível exportar a base '+colored(nome_base,'yellow')+' para a aba '+colored(nome_da_aba,'blue')+' do arquivo '+colored(nome_do_arquivo,'blue')+'\nA tentativa de exportar o arquivo resultou no seguinte erro:\n'+colored(str(e),'red')+'\n\nSerá feita uma tentativa de baixar os dados no formato CSV.')
-              base_exportada = False
-        
         else:
           print(mensagem+'\n\nNão foi possível exportar a base '+colored(nome_base,'yellow')+' para a aba '+colored(nome_da_aba,'blue')+' do arquivo '+colored(nome_do_arquivo,'blue')+'\n\nSerá feita uma tentativa de baixar os dados no formato CSV.')
           base_exportada = False
