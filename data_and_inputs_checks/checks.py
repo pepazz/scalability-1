@@ -1006,17 +1006,25 @@ def check_colunas_bases_especificas(nome_do_arquivo,
   col_valores_feriados = [e.lower() for e in col_valores_feriados]
   col_valores_city_share = [e.lower() for e in col_valores_city_share]
 
+  lista_colunas = [col_valores_share,col_valores_feriados,col_valores_city_share]
+  lista_bases = [df_on_top_ratios,df_share_diario,df_impacto_feraidos,df_city_share]
+
+  # Organizando a existência das bases:
+  lista_existe = [len(col_valores_on_top),len(col_valores_share),len(col_valores_feriados),len(col_valores_city_share)]
+  for x in range(len(lista_existe)):
+    if lista_existe[x] > 0:
+      lista_existe[x] = True
+    else:
+      lista_existe[x] = False
+
+  lista_colunas = list(compress(lista_colunas[1:],lista_existe[1:]))
+  lista_bases = list(compress(lista_bases[1:],lista_existe[1:]))
+  nomes = [x.name for x in lista_bases]
+  nomes_dos_arquivos = list(compress(nome_do_arquivo[1:],lista_existe[1:]))
+
   ordem_final = etapas_volume.copy()
 
   if len(col_valores_on_top) == 0:
-    if len(col_valores_city_share) == 0:
-      lista_colunas = [col_valores_feriados,col_valores_share]
-      nomes = [df_impacto_feraidos.name,df_share_diario.name]
-      nomes_dos_arquivos = [nome_do_arquivo[2],nome_do_arquivo[1]]
-    else:
-      lista_colunas = [col_valores_share,col_valores_feriados,col_valores_city_share]
-      nomes = [df_share_diario.name,df_impacto_feraidos.name,df_city_share.name]
-      nomes_dos_arquivos = [nome_do_arquivo[1],nome_do_arquivo[2],nome_do_arquivo[3]]
     n=0
     for coluna in lista_colunas:
       diferenca_1 = list(set(coluna)-set(etapas_volume))
@@ -1029,7 +1037,7 @@ def check_colunas_bases_especificas(nome_do_arquivo,
   # Checar se todas as colunas de valores são as mesmas entre as bases de share diário, impacto de feriados
   # e share de cidades:
   #-------------------------------------------------------------------------------------------------
-  if erro == 0:
+  if erro == 0 and len(lista_colunas) > 1:
       
     # Criamos uma função auxiliar que compara as colunas entre duas bases e gera mensagens de erro:
     #-------------------------------------------------------------------------------------------------
@@ -1056,18 +1064,7 @@ def check_colunas_bases_especificas(nome_do_arquivo,
       return erro_aux,mensagem_aux
     #-------------------------------------------------------------------------------------------------
 
-
-    # Criamos duas listas: uma contendo as listas de colunas de valores das bases e outra com as
-    # respectivas bases:
-    if len(col_valores_share) == 0:
-      lista_colunas = [col_valores_feriados,col_valores_city_share]
-      lista_df = [df_impacto_feraidos,df_city_share]
-      nomes_dos_arquivos = [nome_do_arquivo[2],nome_do_arquivo[3]]
-    else:
-      lista_colunas = [col_valores_share,col_valores_feriados,col_valores_city_share]
-      lista_df = [df_share_diario,df_impacto_feraidos,df_city_share]
-      nomes_dos_arquivos = [nome_do_arquivo[1],nome_do_arquivo[2],nome_do_arquivo[3]]
-
+    
     # Vamos gerar uma lista com as combinações de pares de índices das listas:
     indices = list(range(len(lista_df)))
     combinacoes = list(itertools.combinations(indices, 2))
@@ -1163,67 +1160,54 @@ def check_colunas_bases_especificas(nome_do_arquivo,
 
 
     
-    # Checar as colunas da base on_top_ratios
-    #-------------------------------------------------------------------------------------------------
+  # Checar as colunas da base on_top_ratios
+  #-------------------------------------------------------------------------------------------------
+
+
+  if len(df_on_top_ratios) == 0 and erro == 0:
+    nome_da_base = 'Racional On Top Ratio'
+    tipo_de_base = ' os inputs no Painel de Controle '
+    nome_do_arquivo_modelo = nome_do_arquivo[0]
+
+    col_valores_on_top_formatada = []
+    try:
+      lista_racional_on_top_1 = col_valores_on_top.split(',')
+      for l in lista_racional_on_top_1:
+        l = l.strip()
+        l = l.split('|')
+        if len(l)>0:
+          l = l[0].strip()
+        col_valores_on_top_formatada = col_valores_on_top_formatada + [l]
+      col_valores_on_top = col_valores_on_top_formatada
+    except:
+      col_valores_on_top = col_valores_on_top
+
+  else:
+    nome_da_base = df_on_top_ratios.name
+    tipo_de_base = ' as colunas de valores da base '
+
+
+
+  etapas_on_top = []
+  for c in col_valores_on_top:
+
+    if '/' not in c:
+      mensagem = mensagem + '\n\nNo arquivo '+colored(nome_do_arquivo_modelo,'blue')+tipo_de_base+colored(str(nome_da_base),'yellow')+' devem todas conter o caractere "/" para separar as etapas. \nColunas de valores encontradas: n\ '+colored(str(col_valores_on_top),'red')
+      erro = erro+1
+    
     if erro == 0:
+      etapa_existente = c.split('/')[0]
+      etapa_nova = c.split('/')[1]
 
-      if len(df_on_top_ratios) == 0:
-        nome_da_base = 'Racional On Top Ratio'
-        tipo_de_base = ' os inputs no Painel de Controle '
-        nome_do_arquivo_modelo = nome_do_arquivo[0]
-
-        col_valores_on_top_formatada = []
-        try:
-          lista_racional_on_top_1 = col_valores_on_top.split(',')
-          for l in lista_racional_on_top_1:
-            l = l.strip()
-            l = l.split('|')
-            if len(l)>0:
-              l = l[0].strip()
-            col_valores_on_top_formatada = col_valores_on_top_formatada + [l]
-          col_valores_on_top = col_valores_on_top_formatada
-        except:
-          col_valores_on_top = col_valores_on_top
-
-      else:
-        nome_da_base = df_on_top_ratios.name
-        tipo_de_base = ' as colunas de valores da base '
+      if etapa_existente not in etapas_volume:
+        mensagem = mensagem + '\n\nNo arquivo '+colored(nome_do_arquivo_modelo,'blue')+tipo_de_base+colored(str(nome_da_base),'yellow')+' devem iniciar com uma etapa cujos valores podem e já foram gerados pelas conversões cohort. \nA primeira etapa na coluna '+colored(str(c),'red')+' é '+colored(str(etapa_existente),'red')+'. Esta etapa não consta na lista de etapas possíveis de serem calculadas pelo funil via cohort: '+colored(str(etapas_volume),'red')
+        erro = erro+1
 
 
-
-      etapas_on_top = []
-      for c in col_valores_on_top:
-
-        if '/' not in c:
-          mensagem = mensagem + '\n\nNo arquivo '+colored(nome_do_arquivo_modelo,'blue')+tipo_de_base+colored(str(nome_da_base),'yellow')+' devem todas conter o caractere "/" para separar as etapas. \nColunas de valores encontradas: n\ '+colored(str(col_valores_on_top),'red')
-          erro = erro+1
-        
-        if erro == 0:
-          etapa_existente = c.split('/')[0]
-          etapa_nova = c.split('/')[1]
-
-          if etapa_existente not in etapas_volume:
-            mensagem = mensagem + '\n\nNo arquivo '+colored(nome_do_arquivo_modelo,'blue')+tipo_de_base+colored(str(nome_da_base),'yellow')+' devem iniciar com uma etapa cujos valores podem e já foram gerados pelas conversões cohort. \nA primeira etapa na coluna '+colored(str(c),'red')+' é '+colored(str(etapa_existente),'red')+'. Esta etapa não consta na lista de etapas possíveis de serem calculadas pelo funil via cohort: '+colored(str(etapas_volume),'red')
-            erro = erro+1
-        '''
-          if etapa_nova not in ordem_final:
-            mensagem = mensagem + '\n\nNo arquivo '+colored(nome_do_arquivo,'blue')+tipo_de_base+colored(str(nome_da_base),'yellow')+' devem terminar com uma etapa que está presente na seguinte lista: '+colored(str(ordem_final),'red')+'. \nA coluna '+colored(str(c),'red')+' possui a segunda etapa '+colored(etapa_nova,'red')+' que não está presente na lista.'
-            erro = erro+1
-        '''    
-        '''
-        if erro == 0:
-          index_existente = ordem_final.index(etapa_existente)
-          index_nova = ordem_final.index(etapa_nova)
-          
-          if index_nova>index_existente:
-            mensagem = mensagem + '\n\nNo arquivo '+colored(nome_do_arquivo,'blue')+' as colunas de valores da base '+str(df_on_top_ratios.name)+' não podem somar uma razão numa etapa que é posterior à etapa pela qual a razão é multiplicada. \nA coluna '+str(c)+' possui a primeira etapa '+str(etapa_existente)+' que ocorre antes da etapa '+str(etapa_nova)+' na ordem do funil definida pela base de share diário: '+str(ordem_final)
-            erro = erro+1
-        '''
-
-      # renomear as colunas do on top rations para tudo minúsculo
-      if erro == 0:
-        if len(df_on_top_ratios) != 0:
-          df_on_top_ratios = df_on_top_ratios.rename(columns=dict(zip(col_valores_on_top_originais, col_valores_on_top)))
+  # renomear as colunas do on top rations para tudo minúsculo
+  if erro == 0:
+    if len(df_on_top_ratios) != 0:
+      df_on_top_ratios = df_on_top_ratios.rename(columns=dict(zip(col_valores_on_top_originais, col_valores_on_top)))
 
   return ordem_final,df_on_top_ratios,df_share_diario,df_impacto_feraidos,df_city_share,mensagem,erro
 
