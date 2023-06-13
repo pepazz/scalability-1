@@ -2293,3 +2293,268 @@ def confere_datas_tof_travado(data_piso, data_teto, format="%Y/%m/%d"):
       cont_erros += 1
   
   return cont_erros, mensagem, data_piso, data_teto
+
+
+#@title Def check_bases_realizadas
+
+def check_bases_realizadas(df_realizado_mensal,
+                           df_realizado_cohort,
+                           df_realizado_tp,
+                           df_metas_tp,
+                           df_modelo,
+                           aberturas_da_base,
+                           df_dicionario_mensal,
+                           df_dicionario_cohort,
+                           col_extra,
+                           nome_coluna_week_origin,
+                           col_volumes,
+                           col_conversoes,
+                           nome_do_arquivo):
+  
+  erros = 0
+  mensagem = ''
+
+  
+  if len(df_realizado_mensal) > 0 and len(df_realizado_cohort) > 0:
+
+    colunas_obrigatorias_mensal = list(df_dicionario_mensal['Nome Original'].values)
+    colunas_novas_mensal = list(df_dicionario_mensal['Nome Novo'].values)
+    colunas_novas_mensal = [c.lower() for c in colunas_novas_mensal]
+
+    colunas_obrigatorias_cohort = list(df_dicionario_cohort['Nome Original'].values)
+    colunas_novas_cohort  = list(df_dicionario_cohort['Nome Novo'].values)
+    colunas_novas_cohort  = [c.lower() for c in colunas_novas_cohort]
+
+
+    col_extra = [c.lower() for c in col_extra]
+    aberturas_oficiais = [c.lower() for c in aberturas_da_base]
+
+    nome_mensal = df_realizado_mensal.name
+    nome_cohort = df_realizado_cohort.name
+
+    lista_de_bases = [df_modelo,df_realizado_mensal,df_realizado_cohort,df_realizado_tp]
+
+
+    df_realizado_mensal,colunas_extra,mensagem_local,erro_local = check_colunas(df = df_realizado_mensal,     # DataFrame
+                                                                                lista_df = lista_de_bases,
+                                                                                aberturas = aberturas_da_base,
+                                                                                  colunas_obrigatorias = colunas_obrigatorias_mensal,  # lista com as colunas obrigatórias e a ordem
+                                                                                  retorna_col_valores = True,
+                                                                                dict_renames = dict_renames,                 # booleano que determina se a função vai retornar as colunas de valores
+                                                                                  
+                                                                                  nome_do_arquivo = nome_do_arquivo)
+
+    erros = erros+erro_local
+    mensagem = mensagem + mensagem_local
+
+    df_realizado_cohort,colunas_extra,mensagem_local,erro_local = check_colunas(df = df_realizado_cohort,     # DataFrame
+                                                                                lista_df = lista_de_bases,
+                                                                                aberturas = aberturas_da_base,
+                                                                                  colunas_obrigatorias = colunas_obrigatorias_cohort,  # lista com as colunas obrigatórias e a ordem
+                                                                                  retorna_col_valores = True,  
+                                                                                dict_renames = dict_renames,               # booleano que determina se a função vai retornar as colunas de valores
+                                                                                  nome_do_arquivo = nome_do_arquivo)
+
+    erros = erros+erro_local
+    mensagem = mensagem + mensagem_local
+
+
+
+    if erros == 0:
+
+      colunas_atuais_mensal = list(set(list(df_realizado_mensal.columns.values))-set(colunas_extra))
+      colunas_atuais_mensal = [c for c in df_realizado_mensal.columns.values if c in colunas_atuais_mensal]
+
+      df_realizado_mensal = df_realizado_mensal.rename(columns=dict(zip(colunas_atuais_mensal ,colunas_obrigatorias_mensal)))
+      df_realizado_mensal = df_realizado_mensal.rename(columns=dict(zip(colunas_obrigatorias_mensal,colunas_novas_mensal)))
+
+      df_realizado_mensal = df_realizado_mensal[colunas_novas_mensal]
+
+      aberturas_realizado = list(set(colunas_novas_mensal)-set(col_volumes+col_extra+['período']))
+      etapas_realizado = list(set(colunas_novas_mensal)-set(aberturas_oficiais+col_extra+['período']))
+
+      diff_aberturas_1 = list(set(aberturas_oficiais)-set(aberturas_realizado))
+      diff_aberturas_2 = list(set(aberturas_realizado)-set(aberturas_oficiais))
+
+      diff_etapas_1 = list(set(col_volumes)-set(etapas_realizado))
+      diff_etapas_2 = list(set(etapas_realizado)-set(col_volumes))
+
+      if len(diff_aberturas_1) > 0 or len(diff_aberturas_2) > 0:
+        mensagem = mensagem + '\n\nNo arquivo '+colored(nome_do_arquivo,'blue')+' as colunas de aberturas da base '+colored(str(nome_mensal),'yellow')+' encontradas são: '+colored(str(aberturas_realizado),'red')+'. \nEssas aberturas não batem com as aberturas definidas no Painel de Controle: '+colored(str(aberturas_oficiais),'red')
+        erros = erros+1
+
+      if len(diff_etapas_1) > 0 or len(diff_etapas_2) > 0:
+        mensagem = mensagem + '\n\nNo arquivo '+colored(nome_do_arquivo,'blue')+' as colunas de etapas do funil da base '+colored(str(nome_mensal),'yellow')+' encontradas são: '+colored(str(etapas_realizado),'red')+'. \nEssas etapas não batem com as aberturas definidas no Painel de Controle: '+colored(str(col_volumes),'red')
+        erros = erros+1
+
+
+      colunas_atuais_cohort = list(set(list(df_realizado_cohort.columns.values))-set(colunas_extra))
+      colunas_atuais_cohort = [c for c in df_realizado_cohort.columns.values if c in colunas_atuais_cohort]
+
+      df_realizado_cohort = df_realizado_cohort.rename(columns=dict(zip(colunas_atuais_cohort ,colunas_obrigatorias_cohort)))
+      df_realizado_cohort = df_realizado_cohort.rename(columns=dict(zip(colunas_obrigatorias_cohort,colunas_novas_cohort)))
+
+      df_realizado_cohort = df_realizado_cohort[colunas_novas_cohort]
+
+      aberturas_realizado = list(set(colunas_novas_cohort)-set(col_conversoes+col_extra+['período',nome_coluna_week_origin]))
+      etapas_realizado = list(set(colunas_novas_cohort)-set(aberturas_oficiais+col_extra+['período',nome_coluna_week_origin]))
+
+      diff_aberturas_1 = list(set(aberturas_oficiais)-set(aberturas_realizado))
+      diff_aberturas_2 = list(set(aberturas_realizado)-set(aberturas_oficiais))
+
+      diff_etapas_1 = list(set(col_conversoes)-set(etapas_realizado))
+      diff_etapas_2 = list(set(etapas_realizado)-set(col_conversoes))
+
+
+      if diff_aberturas_2 == ['vc']:
+        diff_aberturas_2 = []
+      if diff_etapas_2 == ['vc']:
+        diff_etapas_2 = []
+
+      if len(diff_aberturas_1) > 0 or len(diff_aberturas_2) > 0:
+        mensagem = mensagem + '\n\nNo arquivo '+colored(nome_do_arquivo,'blue')+' as colunas de aberturas da base '+colored(str(nome_cohort),'yellow')+' encontradas são: '+colored(str(aberturas_realizado),'red')+'. \nEssas aberturas não batem com as aberturas definidas no Painel de Controle: '+colored(str(aberturas_oficiais),'red')
+        erros = erros+1
+
+      if len(diff_etapas_1) > 0 or len(diff_etapas_2) > 0:
+        mensagem = mensagem + '\n\nNo arquivo '+colored(nome_do_arquivo,'blue')+' as colunas de etapas do funil da base '+colored(str(nome_cohort),'yellow')+' encontradas são: '+colored(str(etapas_realizado),'red')+'. \nEssas etapas não batem com as aberturas definidas no Painel de Controle: '+colored(str(col_conversoes),'red')
+        erros = erros+1
+
+    if erros == 0:
+
+      df_realizado_mensal.name = nome_mensal
+      df_realizado_cohort.name = nome_cohort
+
+
+      df_realizado_mensal,mensagem_local,erro_local = check_valores(df = df_realizado_mensal,                    # DataFrame já deve ter checado a existencia das colunas de valores
+                                                                    colunas_de_valores = col_volumes,    # lista com as colunas que contém valores
+                                                                    check_valores_vazios = False,  # Boleano que, caso seja verdadeiro, verifica se existem blocos de valores vazios nas colunas
+                                                                    nome_do_arquivo = nome_do_arquivo)
+      erros = erros+erro_local
+      mensagem = mensagem + mensagem_local
+
+      df_realizado_cohort,mensagem_local,erro_local = check_valores(df = df_realizado_cohort,                    # DataFrame já deve ter checado a existencia das colunas de valores
+                                                                    colunas_de_valores = col_conversoes,    # lista com as colunas que contém valores
+                                                                    check_valores_vazios = False,  # Boleano que, caso seja verdadeiro, verifica se existem blocos de valores vazios nas colunas
+                                                                    nome_do_arquivo = nome_do_arquivo)
+      
+      erros = erros+erro_local
+      mensagem = mensagem + mensagem_local
+
+
+
+
+
+      df_realizado_mensal.name = nome_mensal
+      df_realizado_cohort.name = nome_cohort
+
+
+
+      df_realizado_mensal,erro_local,mensagem_local = ajusta_formato_data(nome_do_arquivo = nome_do_arquivo, 
+                                                                          dataframe = df_realizado_mensal,
+                                                                          lista_colunas_datas = ['período'])
+      
+      erros = erros+erro_local
+      mensagem = mensagem + mensagem_local
+
+      df_realizado_cohort,erro_local,mensagem_local = ajusta_formato_data(nome_do_arquivo = nome_do_arquivo, 
+                                                                          dataframe = df_realizado_cohort,
+                                                                          lista_colunas_datas = ['período'])
+      
+      erros = erros+erro_local
+      mensagem = mensagem + mensagem_local
+
+
+
+      df_realizado_cohort = check_transforma_base_demanda(base_df = df_realizado_cohort,
+                                                          aberturas = aberturas_da_base,
+                                                          col_week_origin = nome_coluna_week_origin)
+    
+
+  if len(df_metas_tp) > 0 and len(df_realizado_tp) > 0:
+
+    colunas_obrigatorias_tp = ['tp']
+
+    col_data_realizado_tp = list(df_realizado_tp.columns.values)[0]
+    col_data_metas_tp = list(df_metas_tp.columns.values)[0]
+
+    nome_actual_tp = df_realizado_tp.name
+    nome_meta_tp = df_metas_tp.name
+
+    lista_df_check = [df_modelo,df_realizado_mensal,df_realizado_cohort,df_realizado_tp,df_metas_tp]
+
+    df_realizado_tp,colunas_extra,mensagem_local,erro_local = check_colunas(df = df_realizado_tp,     # DataFrame
+                                                                            lista_df = lista_df_check,
+                                                                            aberturas = aberturas_da_base,
+                                                                                  colunas_obrigatorias = colunas_obrigatorias_tp,  # lista com as colunas obrigatórias e a ordem
+                                                                                  retorna_col_valores = True,  
+                                                                            dict_renames = dict_renames,               # booleano que determina se a função vai retornar as colunas de valores
+                                                                                  nome_do_arquivo = nome_do_arquivo)
+
+    erros = erros+erro_local
+    mensagem = mensagem + mensagem_local
+
+
+    df_metas_tp,colunas_extra,mensagem_local,erro_local = check_colunas(df = df_metas_tp,     # DataFrame
+                                                                            lista_df = lista_df_check,
+                                                                            aberturas = aberturas_da_base,
+                                                                            colunas_obrigatorias = colunas_obrigatorias_tp,  # lista com as colunas obrigatórias e a ordem
+                                                                            retorna_col_valores = True,      
+                                                                        dict_renames = dict_renames,           # booleano que determina se a função vai retornar as colunas de valores
+                                                                            nome_do_arquivo = nome_do_arquivo)
+
+    erros = erros+erro_local
+    mensagem = mensagem + mensagem_local
+
+    if erros == 0:
+
+      df_realizado_tp.name = nome_actual_tp
+      df_metas_tp.name = nome_meta_tp
+
+
+      df_realizado_tp,mensagem_local,erro_local = check_valores(df = df_realizado_tp,                    # DataFrame já deve ter checado a existencia das colunas de valores
+                                                                    colunas_de_valores = ['tp'],    # lista com as colunas que contém valores
+                                                                    check_valores_vazios = False,  # Boleano que, caso seja verdadeiro, verifica se existem blocos de valores vazios nas colunas
+                                                                    nome_do_arquivo = nome_do_arquivo)
+      
+      erros = erros+erro_local
+      mensagem = mensagem + mensagem_local
+
+
+      df_metas_tp,mensagem_local,erro_local = check_valores(df = df_metas_tp,                    # DataFrame já deve ter checado a existencia das colunas de valores
+                                                                    colunas_de_valores = ['tp'],    # lista com as colunas que contém valores
+                                                                    check_valores_vazios = False,  # Boleano que, caso seja verdadeiro, verifica se existem blocos de valores vazios nas colunas
+                                                                    nome_do_arquivo = nome_do_arquivo)
+      
+      erros = erros+erro_local
+      mensagem = mensagem + mensagem_local
+
+
+      df_realizado_tp.name = nome_actual_tp
+      df_metas_tp.name = nome_meta_tp
+
+      
+      df_realizado_tp,erro_local,mensagem_local = ajusta_formato_data(nome_do_arquivo = nome_do_arquivo, 
+                                                                          dataframe = df_realizado_tp,
+                                                                          lista_colunas_datas = [col_data_realizado_tp])
+      
+      erros = erros+erro_local
+      mensagem = mensagem + mensagem_local
+
+
+      df_metas_tp,erro_local,mensagem_local = ajusta_formato_data(nome_do_arquivo = nome_do_arquivo, 
+                                                                          dataframe = df_metas_tp,
+                                                                          lista_colunas_datas = [col_data_metas_tp])
+      
+      erros = erros+erro_local
+      mensagem = mensagem + mensagem_local
+
+
+      df_metas_tp = df_metas_tp.rename(columns={col_data_metas_tp:'período'})
+      df_realizado_tp = df_realizado_tp.rename(columns={col_data_realizado_tp:'período'})
+
+      df_realizado_tp = df_realizado_tp.groupby(['período'],as_index=False)['tp'].sum()
+      df_metas_tp = df_metas_tp.groupby(['período'],as_index=False)['tp'].sum()
+
+
+  return df_realizado_mensal,df_realizado_cohort,df_realizado_tp,df_metas_tp,erros,mensagem
+
