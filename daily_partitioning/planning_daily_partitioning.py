@@ -318,7 +318,7 @@ def quebra_diaria(volumes_semanais,  # DataFrame com os volumes semanais coincid
   # Primeiro damos 'left join' na base diária (que por enquanto só repetiu os volumes semanais) com a base
   # de impacto de feriados. Nas chaves onde não há impacto de feriado preenchemos com 1
   base_diaria['data'] = pd.to_datetime(base_diaria['data'], errors='coerce')
-  if 'região' in base_feriados.columns.values:
+  if 'região' in base_diaria.columns.values:
     base_diaria = pd.merge(base_diaria,base_feriados,how='left',on=['data','região']).fillna(1)
   else:
     base_diaria = pd.merge(base_diaria,base_feriados,how='left',on=['data']).fillna(1)
