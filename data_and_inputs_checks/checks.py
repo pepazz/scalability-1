@@ -1009,10 +1009,10 @@ def check_colunas_bases_especificas(nome_do_arquivo,
   ordem_final = etapas_volume.copy()
 
   if len(col_valores_on_top) == 0:
-    if len(col_valores_share) == 0:
-      lista_colunas = [col_valores_feriados,col_valores_city_share]
-      nomes = [df_impacto_feraidos.name,df_city_share.name]
-      nomes_dos_arquivos = [nome_do_arquivo[2],nome_do_arquivo[3]]
+    if len(col_valores_city_share) == 0:
+      lista_colunas = [col_valores_feriados,col_valores_share]
+      nomes = [df_impacto_feraidos.name,df_share_diario.name]
+      nomes_dos_arquivos = [nome_do_arquivo[2],nome_do_arquivo[1]]
     else:
       lista_colunas = [col_valores_share,col_valores_feriados,col_valores_city_share]
       nomes = [df_share_diario.name,df_impacto_feraidos.name,df_city_share.name]
