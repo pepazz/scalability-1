@@ -936,11 +936,11 @@ def check_chaves(lista_df,                   # lista de DataFrames já devem ter
 
 
       if len(chaves_1_2) > 0 and not lista_comparacao_parcial_atualizada[indice_2]:
-        mensagem = mensagem + '\n\nAs chaves '+colored(str(chaves_1_2),'red')+' da abertura '+colored(col,'red')+' da base '+colored(nome_df_1,'yellow')+' do arquivo' + colored(nome_do_arquivo_1,'blue') + ' não estão presentes na base '+colored(nome_df_2,'yellow')+' do arquivo' + colored(nome_do_arquivo_2,'blue')
+        mensagem = mensagem + '\n\nAs chaves '+colored(str(chaves_1_2),'red')+' da abertura '+colored(col,'red')+' da base '+colored(nome_df_1,'yellow')+' do arquivo ' + colored(nome_do_arquivo_1,'blue') + ' não estão presentes na base '+colored(nome_df_2,'yellow')+' do arquivo ' + colored(nome_do_arquivo_2,'blue')
         erro = erro+1
 
       if len(chaves_2_1) > 0 and not lista_comparacao_parcial_atualizada[indice_1]:
-        mensagem = mensagem + '\n\nAs chaves '+colored(str(chaves_2_1),'red')+' da abertura '+colored(col,'red')+' da base '+colored(nome_df_2,'yellow')+' do arquivo' + colored(nome_do_arquivo_2,'blue') +  ' não estão presentes na base '+colored(nome_df_1,'yellow')+' do arquivo' + colored(nome_do_arquivo_1,'blue') 
+        mensagem = mensagem + '\n\nAs chaves '+colored(str(chaves_2_1),'red')+' da abertura '+colored(col,'red')+' da base '+colored(nome_df_2,'yellow')+' do arquivo ' + colored(nome_do_arquivo_2,'blue') +  ' não estão presentes na base '+colored(nome_df_1,'yellow')+' do arquivo ' + colored(nome_do_arquivo_1,'blue') 
         erro = erro+1
 
 
@@ -963,10 +963,10 @@ def check_chaves(lista_df,                   # lista de DataFrames já devem ter
 
     # Verificamos as combinações de chaves entre as bases:
     if len(aberturas_nao_existentes_1) > 0 and not lista_comparacao_parcial_atualizada[indice_1]:
-      mensagem = mensagem + '\n\nAs seguintes combinações de aberturas da base '+colored(nome_df_2,'yellow')+' do arquivo' + colored(nome_do_arquivo_2,'blue') + ' não estão presentes na base '+colored(nome_df_1,'yellow')+' do arquivo' + colored(nome_do_arquivo_1,'blue') +  ': \n' + tabulate(aberturas_nao_existentes_1, headers='keys', tablefmt='psql')
+      mensagem = mensagem + '\n\nAs seguintes combinações de aberturas da base '+colored(nome_df_2,'yellow')+' do arquivo ' + colored(nome_do_arquivo_2,'blue') + ' não estão presentes na base '+colored(nome_df_1,'yellow')+' do arquivo ' + colored(nome_do_arquivo_1,'blue') +  ': \n' + tabulate(aberturas_nao_existentes_1, headers='keys', tablefmt='psql')
       erro = erro+1
     if len(aberturas_nao_existentes_2) > 0 and not lista_comparacao_parcial_atualizada[indice_2]:
-      mensagem = mensagem + '\n\nAs seguintes combinações de aberturas da base '+colored(nome_df_1,'yellow')+' do arquivo' + colored(nome_do_arquivo_1,'blue') +  ' não estão presentes na base '+colored(nome_df_2,'yellow')+' do arquivo' + colored(nome_do_arquivo_2,'blue') +  ': \n' + tabulate(aberturas_nao_existentes_2, headers='keys', tablefmt='psql')
+      mensagem = mensagem + '\n\nAs seguintes combinações de aberturas da base '+colored(nome_df_1,'yellow')+' do arquivo ' + colored(nome_do_arquivo_1,'blue') +  ' não estão presentes na base '+colored(nome_df_2,'yellow')+' do arquivo ' + colored(nome_do_arquivo_2,'blue') +  ': \n' + tabulate(aberturas_nao_existentes_2, headers='keys', tablefmt='psql')
       erro = erro+1
 
       
