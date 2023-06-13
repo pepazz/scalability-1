@@ -12,7 +12,8 @@ def exportar_base(base_df,                     # DataFrame
                   nome_do_painel_de_controle,  # String com o nome do arquivo sheets com o painel de controle
                   arquivo_de_destino,          # String com o nome do arquivo sheets de destino ou o caminho do Google Drive
                   nome_da_aba,                 # String com o nome da aba no arquivo sheets de destino ou nome final do CSV que será salvo
-                  substituir):                 # Booleano indicando se o arquivo CSV será salvo por cima de um existente com mesmo nome ou se será salva uma cópia com nome diferente
+                  substituir,                  # Booleano indicando se o arquivo CSV será salvo por cima de um existente com mesmo nome ou se será salva uma cópia com nome diferente
+                  client = 'client'):               
   
   # Iniciamos uma flag indicando se conseguimos exportar a base
   base_exportada = True
@@ -111,7 +112,8 @@ def exportar_base(base_df,                     # DataFrame
         dados_sheets,base,mensagem,flag_abriu,nome_do_arquivo = abertura_do_arquivo(nome_do_arquivo = arquivo_de_destino, # string com o nome do arquivo sheets a ser aberto
                                                                                     sheets_aberto = False,    # Booleano indicando se o sheets já foi aberto
                                                                                     sheets = [],           # Arquivo sheets já aberto
-                                                                                    nome_da_aba = nome_da_aba)     # string com o nome da aba a ser aberta
+                                                                                    nome_da_aba = nome_da_aba, # string com o nome da aba a ser aberta
+                                                                                    client = client)     
 
 
         # Caso o sheets e a aba existam, vamos tentar salvar a base:
