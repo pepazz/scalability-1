@@ -64,12 +64,12 @@ def base_impacto_feriados(feriados,        # Dataframe contendo as datas, cidade
                           impactos,        # DataFrame contendo o impacto estimado de feriados
                           share_cidades):  # DataFrame contendo o share que cada cidade representa dentro de uma região
 
+
   # definimos os cabeçalhos das bases
   cb_impactos = list(impactos.columns.values)
-  cb_share_cidades = list(share_cidades.columns.values)
 
-  # definimos as etapas do funil a partir do cabeçalho da base de share de cidades
-  etapas = list(set(cb_share_cidades) - set([cb_share_cidades[0],'estado','região','cidade']))
+  # definimos as etapas do funil a partir do cabeçalho da base de impactos
+  etapas = cb_impactos[1:]
   # Como faremos múltiplas uniões entre bases, as colunas com as etapas repetidas adicionam "_x",
   # "_y", "_z".. nos nomes das colunas. Aqui já definimos quais etapas esses nomes estão se referindo
   etapas_share = etapas.copy()
@@ -80,100 +80,111 @@ def base_impacto_feriados(feriados,        # Dataframe contendo as datas, cidade
     etapas_impactos[i] = etapas_impactos[i]+"_y"
     etapas_finais[i] = etapas_finais[i]+"_z"
 
-  # Criamos uma lista com as categoriais que serão usadas para dar join nas bases.
-  # Partimos do cabeçalho completo da base de impactos e removemos todas as colunas
-  # que sejam etapas do funil
-  chaves_impacto = cb_impactos.copy()
-  for element in etapas:
-    if element in chaves_impacto:
-      chaves_impacto.remove(element)
-
-  # Abaixo definimos a base de feriados estaduais e uma base com o restante dos feriados
-  #______________________________________________
-
-  # A base de share de cidades também possui um de-para entre região, cidade e estado.
-  # Usamos essa informação para unir a base de feriados com a base de share de cidades
-  feriados_E = pd.merge(feriados,share_cidades,how='left',on=['estado'])
-  # Unimos essa base com a base de impactos pelas chaves definidas
-  feriados_E = pd.merge(feriados_E,impactos,how='left',on=chaves_impacto)
-
-  # Definimos uma base geral contendo os outros tipos de feriado
-  feriados = pd.merge(feriados,share_cidades,how='left',on=['cidade'])
-  # Unimos essa base com a base de impactos pelas chaves definidas
-  feriados = pd.merge(feriados,impactos,how='left',on=chaves_impacto)
-
-  # Definimos o cabeçalho final provisório que a base final de feriados vai ter
-  cb_final = ['data','região_y']+etapas_finais
-
-  # Criamos uma lista com todas as regiões da base
-  regioes = share_cidades['região'].unique()
+  if 'Dia da Semana' not in cb_impactos:
+    chaves_impacto = ['dia da semana']
+  else:
+    chaves_impacto = ['Dia da Semana']
 
 
-  # Cálculo do impacto de feriados municipais
-  #______________________________________________
 
-  # Selecionamos os feriados municipais pela coluna de tipo de feriado
-  feriados_M = feriados.loc[feriados['tipo'] == 'M']
+  if len(share_cidades) > 0:
+
+
+    # Abaixo definimos a base de feriados estaduais e uma base com o restante dos feriados
+    #______________________________________________
+
+    # A base de share de cidades também possui um de-para entre região, cidade e estado.
+    # Usamos essa informação para unir a base de feriados com a base de share de cidades
+    feriados_E = pd.merge(feriados,share_cidades,how='left',on=['estado'])
+    # Unimos essa base com a base de impactos pelas chaves definidas
+    feriados_E = pd.merge(feriados_E,impactos,how='left',on=chaves_impacto)
+
+    # Definimos uma base geral contendo os outros tipos de feriado
+    feriados = pd.merge(feriados,share_cidades,how='left',on=['cidade'])
+    # Unimos essa base com a base de impactos pelas chaves definidas
+    feriados = pd.merge(feriados,impactos,how='left',on=chaves_impacto)
+
+    # Definimos o cabeçalho final provisório que a base final de feriados vai ter
+    cb_final = ['data','região_y']+etapas_finais
+
+    # Criamos uma lista com todas as regiões da base
+    regioes = share_cidades['região'].unique()
+
+
+    # Cálculo do impacto de feriados municipais
+    #______________________________________________
+
+    # Selecionamos os feriados municipais pela coluna de tipo de feriado
+    feriados_M = feriados.loc[feriados['tipo'] == 'M']
+    
+    # O impacto dos feriados finais no caso dos municipais é = 1-((1-impacto)*share_cidade)
+    feriados_M[etapas_impactos] = 1-feriados_M[etapas_impactos].astype('float').values
+    feriados_M[etapas_finais] = 1-feriados_M[etapas_impactos].multiply(feriados_M[etapas_share].astype('float').values, axis="index")
+
+    # selecionamos apenas os dados finais
+    feriados_M = feriados_M[cb_final]
+
+    # Cálculo do impacto de feriados nacionais
+    #______________________________________________
+
+    # Selecionamos os feriados nacionais pela coluna de tipo de feriado
+    feriados_N = feriados.loc[feriados['tipo'] == 'N']
+    
+    # O impacto dos feriados nacionais é o impacto original do feriado
+    feriados_N[etapas_finais] = feriados_N[etapas_impactos].astype('float').values
+
+    feriados_N = feriados_N[cb_final]
+
+    # O impacto do feriado nacional é repetido para todas as regiões da base
+    # Criamos uma cópia da base geral e depois repetimos ela adicionando todas as regiões
+    feriados_N['região_y'] = regioes[0]
+    feriados_N_final = feriados_N.copy()
+    for i in range(1,len(regioes)):
+      feriados_N_copy = feriados_N.copy()
+      feriados_N_copy['região_y'] = regioes[i]
+      frames = [feriados_N_final,feriados_N_copy]
+      feriados_N_final = pd.concat(frames)
+
+
+    # Cálculo do impacto de feriados estaduais
+    #______________________________________________
+
+    # Selecionamos os feriados estaduais pela coluna de tipo de feriado
+    feriados_E = feriados_E.loc[feriados_E['tipo'] == 'E']
+
+    # Definimos, inicialmente, o impacto dos feriados estaduais como sendo o impacto dos feriados sem alteração
+    feriados_E[etapas_finais] = feriados_E[etapas_impactos].astype('float').values
+    
+    # selecionamos apenas os dados finais
+    feriados_E = feriados_E[cb_final]
+
+    # Como a base de feriados estaduais possui regiões repetidas (pois feriados estaduais que cairam em
+    # cidades pertencentes à uma mesma região foram contadas individualmente), definimos o impacto final
+    # do feriado estadual por região como sendo a média dos impactos das cidades dentro daquela região
+    feriados_E = feriados_E.groupby(['data','região_y'], as_index=False)[etapas_finais].mean()
+
+
+    # Compor todos os tipos de feriado
+    #______________________________________________
+    
+    # Aqui só concatenamos as bases de feriados nacionais, municipais e estaduais na base final
+
+    feriados_finais = pd.concat([feriados_N_final,feriados_E,feriados_M], axis=0)
+
+    feriados_finais = feriados_finais.groupby(['data','região_y'], as_index=False)[etapas_finais].prod()
+
+    feriados_finais = feriados_finais.rename(columns={"região_y": "região"})
+
+    feriados_finais['data'] = pd.to_datetime(feriados_finais['data'], infer_datetime_format=True)
+
   
-  # O impacto dos feriados finais no caso dos municipais é = 1-((1-impacto)*share_cidade)
-  feriados_M[etapas_impactos] = 1-feriados_M[etapas_impactos].astype('float').values
-  feriados_M[etapas_finais] = 1-feriados_M[etapas_impactos].multiply(feriados_M[etapas_share].astype('float').values, axis="index")
+  # Caso não tenhamos uma base de share de cidades, vamos gerar uma base somente com as datas e impactos
+  else:
+    
+    # Selecionamos os feriados nacionais pela coluna de tipo de feriado
+    feriados_N = feriados.loc[feriados['tipo'] == 'N']
 
-  # selecionamos apenas os dados finais
-  feriados_M = feriados_M[cb_final]
-
-  # Cálculo do impacto de feriados nacionais
-  #______________________________________________
-
-  # Selecionamos os feriados nacionais pela coluna de tipo de feriado
-  feriados_N = feriados.loc[feriados['tipo'] == 'N']
-  
-  # O impacto dos feriados nacionais é o impacto original do feriado
-  feriados_N[etapas_finais] = feriados_N[etapas_impactos].astype('float').values
-
-  feriados_N = feriados_N[cb_final]
-
-  # O impacto do feriado nacional é repetido para todas as regiões da base
-  # Criamos uma cópia da base geral e depois repetimos ela adicionando todas as regiões
-  feriados_N['região_y'] = regioes[0]
-  feriados_N_final = feriados_N.copy()
-  for i in range(1,len(regioes)):
-    feriados_N_copy = feriados_N.copy()
-    feriados_N_copy['região_y'] = regioes[i]
-    frames = [feriados_N_final,feriados_N_copy]
-    feriados_N_final = pd.concat(frames)
-
-
-  # Cálculo do impacto de feriados estaduais
-  #______________________________________________
-
-  # Selecionamos os feriados estaduais pela coluna de tipo de feriado
-  feriados_E = feriados_E.loc[feriados_E['tipo'] == 'E']
-
-  # Definimos, inicialmente, o impacto dos feriados estaduais como sendo o impacto dos feriados sem alteração
-  feriados_E[etapas_finais] = feriados_E[etapas_impactos].astype('float').values
-  
-  # selecionamos apenas os dados finais
-  feriados_E = feriados_E[cb_final]
-
-  # Como a base de feriados estaduais possui regiões repetidas (pois feriados estaduais que cairam em
-  # cidades pertencentes à uma mesma região foram contadas individualmente), definimos o impacto final
-  # do feriado estadual por região como sendo a média dos impactos das cidades dentro daquela região
-  feriados_E = feriados_E.groupby(['data','região_y'], as_index=False)[etapas_finais].mean()
-
-
-  # Compor todos os tipos de feriado
-  #______________________________________________
-  
-  # Aqui só concatenamos as bases de feriados nacionais, municipais e estaduais na base final
-
-  feriados_finais = pd.concat([feriados_N_final,feriados_E,feriados_M], axis=0)
-
-  feriados_finais = feriados_finais.groupby(['data','região_y'], as_index=False)[etapas_finais].prod()
-
-  feriados_finais = feriados_finais.rename(columns={"região_y": "região"})
-
-  feriados_finais['data'] = pd.to_datetime(feriados_finais['data'], infer_datetime_format=True)
+    feriados_finais = pd.merge(feriados_N,impactos,how='left',on=chaves_impacto)
 
   return feriados_finais # <-- retornamos DataFrame final de feriados, com somente a data, região e impacto final em cada etapa do funil
 
@@ -307,7 +318,11 @@ def quebra_diaria(volumes_semanais,  # DataFrame com os volumes semanais coincid
   # Primeiro damos 'left join' na base diária (que por enquanto só repetiu os volumes semanais) com a base
   # de impacto de feriados. Nas chaves onde não há impacto de feriado preenchemos com 1
   base_diaria['data'] = pd.to_datetime(base_diaria['data'], errors='coerce')
-  base_diaria = pd.merge(base_diaria,base_feriados,how='left',on=['data','região']).fillna(1)
+  if 'região' in base_feriados.columns.values:
+    base_diaria = pd.merge(base_diaria,base_feriados,how='left',on=['data','região']).fillna(1)
+  else:
+    base_diaria = pd.merge(base_diaria,base_feriados,how='left',on=['data']).fillna(1)
+    
   #base_diaria[etapas_impactos] = base_diaria[etapas_impactos].fillna(1)
   #base_diaria.dropna(axis=0, how='any', inplace=True)
 
