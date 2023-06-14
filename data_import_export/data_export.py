@@ -7,6 +7,8 @@ from data_import import *
 import pandas as pd
 import time
 import numpy as np
+import gspread
+from gspread_dataframe import set_with_dataframe
 
 def exportar_base(base_df,                     # DataFrame
                   nome_do_painel_de_controle,  # String com o nome do arquivo sheets com o painel de controle
