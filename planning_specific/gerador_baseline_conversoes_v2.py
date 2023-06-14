@@ -43,7 +43,6 @@ def gerador_baseline_conversoes_v2(baseline_cohort_df, inputs_df, dict_grupos, n
   datas_adicionais = [x.normalize() for x in datas_adicionais]
 
   etapas = list(set(baseline_cohort_df_c.columns.values) - set([nome_coluna_week_origin,coluna_de_semanas]+categorias_mutaveis))
-  print(etapas)
   #-------------------------------------------------------------------------------------------------
 
 
@@ -193,9 +192,6 @@ def gerador_baseline_conversoes_v2(baseline_cohort_df, inputs_df, dict_grupos, n
     # Nesta etapa juntamos a base de baseline com os inputs combinados
     lista_index_pivot.remove('conversão')
     lista_index_pivot.append(nome_coluna_week_origin)
-    print(baseline_cohort_df_c.columns.values)
-    print(inputs_combinados)
-    print(lista_index_pivot)
     baseline_cohort_df_c = pd.merge(baseline_cohort_df_c, inputs_combinados, how='left', on=lista_index_pivot)
     baseline_cohort_df_c = baseline_cohort_df_c.fillna(1)
 
