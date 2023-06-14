@@ -99,7 +99,7 @@ def base_geral(base_cohort,  # DataFrame das conversões cohort
   max_origin = merged[merged[nome_coluna_week_origin] != "Coincident"][nome_coluna_week_origin].astype('int').max()
 
   # encontramos algumas definições sobre as datas que serão úteis em outras funções
-  datas_unicas = merged.data.unique()
+  datas_unicas = merged[coluna_de_semanas].unique()
   datas_unicas_list = list(datas_unicas)
   data_min = datas_unicas.min()
   data_max = datas_unicas.max()
