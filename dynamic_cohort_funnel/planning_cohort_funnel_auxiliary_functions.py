@@ -118,12 +118,13 @@ def base_geral(base_cohort,  # DataFrame das conversões cohort
 
   # Utilizamos uma função auxiliar para gerar uma coluna de datas deslocadas. Essas datas deslocadas
   # servirão para somar a "diagonal" da cohort e obter os volumes coincident.
-  if aplicacao_ajuste == '':
-    aplicacao_ajuste = max_origin
-  elif int(aplicacao_ajuste) > int(max_origin):
-    aplicacao_ajuste = max_origin
-  else:
-    aplicacao_ajuste = aplicacao_ajuste
+  try:
+    aplicacao_ajuste = int(aplicacao_ajuste)
+  except:
+    aplicacao_ajuste = int(max_origin)
+  if int(aplicacao_ajuste) > int(max_origin):
+    aplicacao_ajuste = int(max_origin)
+
   merged['shifted'] = shift_datas(merged[coluna_de_semanas],merged[nome_coluna_week_origin],intervalo,aplicacao_ajuste) # @função_auxiliar
 
   # <-- retornamos a base final e todas as outras informações que geramos de início
