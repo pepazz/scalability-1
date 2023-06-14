@@ -29,15 +29,16 @@ def separa_conv(lista_conv): # --> lista (lista de strings ['VB2VC', 'VC2OS', 'O
 # igual à maior cohort da base. 
  
 def add_datas_passado(base,      # DataFrame cohort ou ToF
+                      col_data,
                       intervalo, # interio que define o intervalo da cohort em dias (no caso semanal = 7 dias)
                       data_min,  # datetime (primiera data da base = baseline)
                       max_conv): # max_conv (inteiro que define qual é a cohort máxima (no caso = 5)
 
   for i in range(max_conv):
-    copy = base.loc[base['data']==data_min]
-    copy['data'] = copy['data'].apply(lambda x: x-pd.Timedelta((i+1)*intervalo, unit='D'))
-    copy['data'] = copy['data'].apply(lambda x: pd.Timestamp(x, freq=None))
-    copy['data'] = copy['data'].apply(lambda x: x.normalize())
+    copy = base.loc[base[col_data]==data_min]
+    copy[col_data] = copy[col_data].apply(lambda x: x-pd.Timedelta((i+1)*intervalo, unit='D'))
+    copy[col_data] = copy[col_data].apply(lambda x: pd.Timestamp(x, freq=None))
+    copy[col_data] = copy[col_data].apply(lambda x: x.normalize())
     base = pd.concat([copy,base])
   return base # <-- base (DataFrame igual ao input, mas extendido para o passado)
   
@@ -85,6 +86,9 @@ def base_geral(base_cohort,  # DataFrame das conversões cohort
   chaves_ToF = cb_ToF[:posi_ToF]
 
   # unimos a base cohort e a base de ToF com base nessas chaves
+  print(base_cohort.columns.values)
+  print(base_ToF.columns.values)
+  print(chaves_ToF)
   merged = pd.merge(base_cohort,base_ToF,how='left',on=chaves_ToF)
   #print(chaves_ToF)
   #print(base_ToF.loc[(base_ToF['Região']=='RMSP') & (base_ToF['Lead']=='FSS') & (base_ToF['Canal']=='Indica Aí - General')][['Data','OP']])
@@ -109,7 +113,11 @@ def base_geral(base_cohort,  # DataFrame das conversões cohort
   # para executar a cohort de forma correta.
   # Utilizamos uma função auxiliar que repete os dados da primeira semana um número de vezes igual à maior
   # cohort e gera as datas passadas corretas
-  merged = add_datas_passado(merged,intervalo,data_min,max_origin) # @função_auxiliar
+  merged = add_datas_passado(merged,
+                             coluna_de_semanas,
+                             intervalo,
+                             data_min,
+                             max_origin) # @função_auxiliar
 
   # Utilizamos uma função auxiliar para gerar uma coluna de datas deslocadas. Essas datas deslocadas
   # servirão para somar a "diagonal" da cohort e obter os volumes coincident.
@@ -450,7 +458,6 @@ def Funil_Dinamico_DataFrame(df_ToF,                # DataFrame contendo os volu
 
   return output_cohort,output_coincident,topo_de_funil,topos_de_funil # <-- retornamos as bases coincident, cohort e a informação de qual foi a etapa de ToF utilizada
 #---------------------------------------------------------------------------------------------------
-
 
 
 
