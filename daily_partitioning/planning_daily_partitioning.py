@@ -183,8 +183,9 @@ def base_impacto_feriados(feriados,        # Dataframe contendo as datas, cidade
     
     # Selecionamos os feriados nacionais pela coluna de tipo de feriado
     feriados_N = feriados.loc[feriados['tipo'] == 'N']
-
     feriados_finais = pd.merge(feriados_N,impactos,how='left',on=chaves_impacto)
+    feriados_finais[etapas_finais] = feriados_finais[etapas].values
+    feriados_finais = feriados_finais.groupby(['data'], as_index=False)[etapas_finais].prod()
 
   return feriados_finais # <-- retornamos DataFrame final de feriados, com somente a data, região e impacto final em cada etapa do funil
 
