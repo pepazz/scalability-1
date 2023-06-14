@@ -370,9 +370,9 @@ def quebra_diaria(volumes_semanais,  # DataFrame com os volumes semanais coincid
   #print(base_semanal_nova.loc[(base_semanal_nova['Data'] == '2021-03-29') & (base_semanal_nova['Região'] == 'Belo Horizonte') & (base_semanal_nova['Operação'] == 'B2B')][['Fluxo','Guarantee','VB']])
 
   # Trocamos o nome da coluna e das chaves para unir corretamente a base semanal nova com a base de volumes original
-  base_semanal_nova = base_semanal_nova.rename(columns={"semana": "data"}) # trocamos o nome da coluna
+  base_semanal_nova = base_semanal_nova.rename(columns={"semana": coluna_de_semanas}) # trocamos o nome da coluna
   chaves_agg_semanais.remove('semana')
-  chaves_agg_semanais = chaves_agg_semanais+['data']
+  chaves_agg_semanais = chaves_agg_semanais+[coluna_de_semanas]
 
   # Fazemos um 'left join' da base de volumes semanais originais com a base de volumes semanais nova,
   # com o objetivo de comparar os valores linha a linha
