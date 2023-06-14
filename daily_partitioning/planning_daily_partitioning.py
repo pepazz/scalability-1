@@ -393,9 +393,9 @@ def quebra_diaria(volumes_semanais,  # DataFrame com os volumes semanais coincid
   # etapas da diferença = _d (etapas_diff)
 
   # Trocamos novamente o nome da coluna e das chaves para unir corretamente a base diária nova com a base das diferenças semanais
-  chaves_agg_semanais.remove('data')
+  chaves_agg_semanais.remove(coluna_de_semanas)
   chaves_agg_semanais = chaves_agg_semanais+['semana']
-  merge_semanas = merge_semanas.rename(columns={"data": "semana"})
+  merge_semanas = merge_semanas.rename(columns={coluna_de_semanas: "semana"})
 
   # Fazemos um 'left join' da base diária com a base semanal que contém a diferença de volumes entre as semanais originais e as novas
   # Chamamos essa base unida de 'share_diario_atual' pois nela vamos calcular o share diário dos
