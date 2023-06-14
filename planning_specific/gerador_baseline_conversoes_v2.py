@@ -72,7 +72,7 @@ def gerador_baseline_conversoes_v2(baseline_cohort_df, inputs_df, dict_grupos, n
     inputs_df['etapa'] = inputs_df['etapa'].str.lower()
     inputs = inputs_df.copy()
     # Melt nas datas para elas passarem de colunas para linhas
-    inputs = inputs.melt(id_vars=categorias, value_vars=datas, var_name='data')
+    inputs = inputs.melt(id_vars=categorias, value_vars=datas, var_name=coluna_de_semanas)
     #inputs = inputs.rename(columns={'variable':'data'})
     inputs['value']=pd.to_numeric(inputs['value'], errors='coerce')
     inputs = inputs.dropna(axis=0)
@@ -120,7 +120,7 @@ def gerador_baseline_conversoes_v2(baseline_cohort_df, inputs_df, dict_grupos, n
     datas = datas + datas_adicionais
     datas.sort()
 
-    inputs[coluna_de_semanas] = inputs.apply(lambda row: datas[datas.index(row.data):] if row.aplicação == 'Permanente' else row.data, axis=1)
+    inputs[coluna_de_semanas] = inputs.apply(lambda row: datas[datas.index(row[coluna_de_semanas]):] if row.aplicação == 'Permanente' else row[coluna_de_semanas], axis=1)
 
     #-----------------------------------------------------------------------------
     # Notar empilhamento de dataframes e ajuste de formato dos elementos das células
@@ -128,7 +128,7 @@ def gerador_baseline_conversoes_v2(baseline_cohort_df, inputs_df, dict_grupos, n
     # o 'match' correto posteriormente no código
     inputs['conversão'] = inputs['conversão'].astype('str') ###
     
-    aux_categorias_mutaveis = categorias_mutaveis + ['data']
+    aux_categorias_mutaveis = categorias_mutaveis + [coluna_de_semanas]
     for coluna in list(set(inputs.columns)-set(aux_categorias_mutaveis)):
       inputs[coluna] = inputs[coluna].apply(lambda x: [x])
 
