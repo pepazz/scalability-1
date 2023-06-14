@@ -30,12 +30,14 @@ def recalcula_share_diario(ToF_diarizado, topos_de_funil):
   for topo in topos_de_funil:
     output[f'share-{topo}'] = output[topo]/output[f'soma_semana_{topo}']
     output[f'share-{topo}'] = output[f'share-{topo}'].astype('float')
-
-  output = output.loc[:,~output.columns.str.contains('_', case=False)]
+  
+  output = output.loc[:,~output.columns.str.contains('soma_semana_', case=False)]
   output = output.drop(columns=topos_de_funil)
   output = output.drop(columns=['ano','mês','data'])
   return output
 
+
+#@title pondera_semanas_incompletas
 
 #@title pondera_semanas_incompletas
 
@@ -82,7 +84,7 @@ def pondera_semanas_incompletas(df_topos_merged, topos_de_funil, df_share_diario
     aux[f'volumetotalsemana-{topo}'] = aux[f"somaparcial_{topo}"]/aux[f'share-{topo}']
 
   # Eliminamos colunas auxiliares
-  aux = aux.loc[:,~aux.columns.str.contains('_', case=False)]
+  aux = aux.loc[:,~aux.columns.str.contains('somaparcial_', case=False)]
   aux = aux.loc[:,~aux.columns.str.contains('share', case=False)]
 
   aberturas_share_recalculado.remove("dia da semana")
@@ -97,8 +99,9 @@ def pondera_semanas_incompletas(df_topos_merged, topos_de_funil, df_share_diario
   df_topos_merged = df_topos_merged.append(df_topos_merged_nan)
   
   # Eliminamos colunas auxiliares
-  df_topos_merged = df_topos_merged.loc[:,~df_topos_merged.columns.str.contains('_', case=False)]
-  df_topos_merged = df_topos_merged.loc[:,~df_topos_merged.columns.str.contains('-', case=False)]
+  df_topos_merged = df_topos_merged.loc[:,~df_topos_merged.columns.str.contains('somaparcial_', case=False)]
+  df_topos_merged = df_topos_merged.loc[:,~df_topos_merged.columns.str.contains('volumetotalsemana-', case=False)]
+  df_topos_merged = df_topos_merged.loc[:,~df_topos_merged.columns.str.contains('share-', case=False)]
 
   for topo in topos_de_funil:
     df_topos_merged[topo] = df_topos_merged[topo].fillna(0)
@@ -107,7 +110,6 @@ def pondera_semanas_incompletas(df_topos_merged, topos_de_funil, df_share_diario
 
 
   return df_topos_merged
-
 
 #@title quebra_diaria_ToF_2
 
