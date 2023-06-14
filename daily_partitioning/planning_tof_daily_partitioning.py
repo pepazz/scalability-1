@@ -226,7 +226,7 @@ def quebra_diaria_ToF_2(df_ToF_semanal,     # Dataframe com os volumes semanais 
     
 
     # Redefinindo ToF semanal após a redistribuição
-    n_ToF_semanal = ToF_diarizado.groupby(['semana']+aberturas, as_index=False)[topos_de_funil].sum().rename(columns={'semana':'data'})
+    n_ToF_semanal = ToF_diarizado.groupby(['semana']+aberturas, as_index=False)[topos_de_funil].sum().rename(columns={'semana':coluna_de_semanas})
     n_ToF_semanal = n_ToF_semanal.fillna(0)
 
     ToF_diarizado['data'] = pd.to_datetime(ToF_diarizado['data'], infer_datetime_format=True)
