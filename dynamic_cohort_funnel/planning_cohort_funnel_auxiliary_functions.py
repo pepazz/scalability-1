@@ -86,9 +86,6 @@ def base_geral(base_cohort,  # DataFrame das conversões cohort
   chaves_ToF = cb_ToF[:posi_ToF]
 
   # unimos a base cohort e a base de ToF com base nessas chaves
-  print(base_cohort.columns.values)
-  print(base_ToF.columns.values)
-  print(chaves_ToF)
   merged = pd.merge(base_cohort,base_ToF,how='left',on=chaves_ToF)
   #print(chaves_ToF)
   #print(base_ToF.loc[(base_ToF['Região']=='RMSP') & (base_ToF['Lead']=='FSS') & (base_ToF['Canal']=='Indica Aí - General')][['Data','OP']])
