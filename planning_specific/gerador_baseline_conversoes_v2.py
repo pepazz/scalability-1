@@ -42,7 +42,8 @@ def gerador_baseline_conversoes_v2(baseline_cohort_df, inputs_df, dict_grupos, n
   datas_adicionais = [pd.Timestamp(x, freq=None) for x in datas_adicionais]
   datas_adicionais = [x.normalize() for x in datas_adicionais]
 
-  etapas = list(filter(lambda x: '2' in x, baseline_cohort_df_c.columns))
+  etapas = list(set(baseline_cohort_df_c.columns.values) - set([nome_coluna_week_origin,coluna_de_semanas]+categorias_mutaveis))
+  print(etapas)
   #-------------------------------------------------------------------------------------------------
 
 
