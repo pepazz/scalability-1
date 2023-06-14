@@ -145,7 +145,7 @@ def exportar_base(base_df,                     # DataFrame
       files.download(nome_base+'.csv')  
       '''
       print("Baixe manualmente a base ",colored(nome_base,'yellow')," mostrada abaixo:\n")
-      #display(base_df)
+      display(base_df)
       base_exportada = True 
     except Exception as e:
       base_exportada = False
