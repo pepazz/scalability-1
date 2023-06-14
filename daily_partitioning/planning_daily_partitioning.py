@@ -376,9 +376,6 @@ def quebra_diaria(volumes_semanais,  # DataFrame com os volumes semanais coincid
 
   # Fazemos um 'left join' da base de volumes semanais originais com a base de volumes semanais nova,
   # com o objetivo de comparar os valores linha a linha
-  print(volumes_semanais_agrupados.columns.values)
-  print(base_semanal_nova.columns.values)
-  print(chaves_agg_semanais)
   merge_semanas = pd.merge(volumes_semanais_agrupados,base_semanal_nova,how='left',on=chaves_agg_semanais)
   # Data = Semana
   # etapas do volume semanal = _x (etapas_semanal)
