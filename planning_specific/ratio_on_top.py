@@ -55,6 +55,8 @@ def ratio_on_top(df_parametro, #df que será a base de cálculo
     df_media_global.replace([np.inf, -np.inf], 0.0, inplace=True) #transformando os infinitos em zero
     for i in range (len(aux)): # Removendo os ratios onde não fazem sentido na media e std
       if aux[i][1][0].strip() != 'todos':
+        print(aux,aux[i][1][0].strip())
+        print(df_media_global.columns.values)
         df_media_global[aux[i][0][0].strip()] = np.where(df_media_global[aux[i][1][0].strip()] == aux[i][1][1].strip(), np.nan, df_media_global[aux[i][0][0].strip()])
     df_media_global.replace(0.0, np.nan, inplace=True) #transformando as linhas com 0 em nans para remover abaixo
     df_media_global.dropna(inplace=True)    #removendo as linhas que estão com nan, para que a média global faça mais sentido.
