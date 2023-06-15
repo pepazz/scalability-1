@@ -563,8 +563,6 @@ def check_colunas(df,                    # DataFrame
 
       # Caso a coluna faltante seja somente uma coluna de datas, vamos tentar renomear se encontrarmos apenas
       # uma coluna na base passível de ser formatada como data:
-      print(colunas_faltantes)
-      print(colunas_datas)
       if len(colunas_faltantes) > 0 and len(colunas_datas) == 1 and (colunas_datas[0] in colunas_faltantes or colunas_datas[0].lower() in colunas_faltantes):
         
         col_faltante =  colunas_datas[0].lower()
@@ -598,7 +596,6 @@ def check_colunas(df,                    # DataFrame
           else:
             comparacao = comparacao
 
-        print(comparacao)
         # Se somente 1 coluna for formatável, vamos considerá-la como sendo a coluna de datas:
         if len(comparacao) == 1:
           df = df.rename(columns={comparacao[0]:col_faltante})
@@ -1961,10 +1958,6 @@ def check_geral(lista_de_bases,                 # Lista de bases que vamos verif
   for b in range(len(lista_de_bases)):
 
     if len(lista_de_bases[b]) > 0:
-      print("-------------------------")
-      print(lista_de_bases[b].name)
-      print(lista_lista_colunas_datas[b])
-      print(lista_de_colunas_obrigatorias[b])
            
       lista_de_bases[b],colunas_de_valores,mensagem_local,erro_local = check_colunas(df = lista_de_bases[b],     # DataFrame
                                                                                      lista_df = lista_de_bases,
