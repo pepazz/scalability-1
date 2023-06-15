@@ -81,7 +81,8 @@ def ajusta_volumes_tof_travado_diarizado(tof_diarizado_shares, df_shares_histori
     #ToF_travado_diarizado[topo] = ToF_travado_diarizado[topo]/ToF_travado_diarizado[f'fator_{topo}']
     ToF_travado_diarizado[topo] = tof_diarizado_shares[f'soma_{topo}']*ToF_travado_diarizado[f'share_{topo}']
 
-  ToF_travado_diarizado = ToF_travado_diarizado.loc[:,~ToF_travado_diarizado.columns.str.contains('_')]
+  ToF_travado_diarizado = ToF_travado_diarizado.loc[:,~ToF_travado_diarizado.columns.str.contains('soma_')]
+  ToF_travado_diarizado = ToF_travado_diarizado.loc[:,~ToF_travado_diarizado.columns.str.contains('share_')]
 
   ToF_travado_diarizado = ToF_travado_diarizado.fillna(0)
 
