@@ -1961,7 +1961,11 @@ def check_geral(lista_de_bases,                 # Lista de bases que vamos verif
   for b in range(len(lista_de_bases)):
 
     if len(lista_de_bases[b]) > 0:
-
+      print("-------------------------")
+      print(lista_de_bases[b].name)
+      print(lista_lista_colunas_datas[b])
+      print(lista_de_colunas_obrigatorias[b])
+           
       lista_de_bases[b],colunas_de_valores,mensagem_local,erro_local = check_colunas(df = lista_de_bases[b],     # DataFrame
                                                                                      lista_df = lista_de_bases,
                                                                                      aberturas = aberturas_das_bases,                                                                                    
