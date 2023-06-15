@@ -72,7 +72,7 @@ def calcula_volumes_tof_diarizado(tof_diarizado, topos_de_funil):
 
 #@title def ajusta_volumes_tof_travado_diarizado
 
-def ajusta_volumes_tof_travado_diarizado(tof_diarizado_shares, df_shares_historicos, aberturas_das_bases, topos_de_funil):
+def ajusta_volumes_tof_travado_diarizado(tof_diarizado_shares, df_shares_historicos, aberturas_das_bases, topos_de_funil, col_de_semanas):
   
   ToF_travado_diarizado = pd.merge(tof_diarizado_shares, df_shares_historicos, how='left', on=aberturas_das_bases)
 
@@ -87,8 +87,8 @@ def ajusta_volumes_tof_travado_diarizado(tof_diarizado_shares, df_shares_histori
   ToF_travado_diarizado = ToF_travado_diarizado.fillna(0)
 
   n_ToF_travado_semanal = ToF_travado_diarizado.groupby(aberturas_das_bases+['building block tof', 'semana'],as_index=False)[topos_de_funil].sum()
-  n_ToF_travado_semanal = n_ToF_travado_semanal.rename(columns={'semana':'data'})
-  n_ToF_travado_semanal.insert(0, 'data',n_ToF_travado_semanal.pop('data'))
-  n_ToF_travado_semanal['data'] = pd.to_datetime(n_ToF_travado_semanal['data'],infer_datetime_format=True)
+  n_ToF_travado_semanal = n_ToF_travado_semanal.rename(columns={'semana':col_de_semanas})
+  n_ToF_travado_semanal.insert(0, col_de_semanas,n_ToF_travado_semanal.pop(col_de_semanas))
+  n_ToF_travado_semanal[col_de_semanas] = pd.to_datetime(n_ToF_travado_semanal[col_de_semanas],infer_datetime_format=True)
 
   return ToF_travado_diarizado,n_ToF_travado_semanal
