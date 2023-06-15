@@ -54,10 +54,8 @@ def ratio_on_top(df_parametro, #df que será a base de cálculo
     df_media_global[ratios] = df_media_global[ratios_split_2].astype(float).values/df_media_global[ratios_split_1].astype(float).values #Calculando os racionais. Dividindo os kpis para da base total de medias.
     df_media_global.replace([np.inf, -np.inf], 0.0, inplace=True) #transformando os infinitos em zero
     for i in range (len(aux)): # Removendo os ratios onde não fazem sentido na media e std
-      if aux[i][1][0].strip() != 'todos':
-        print(aux,aux[i][1][0].strip())
-        print(df_media_global.columns.values)
-        df_media_global[aux[i][0][0].strip()] = np.where(df_media_global[aux[i][1][0].strip()] == aux[i][1][1].strip(), np.nan, df_media_global[aux[i][0][0].strip()])
+      if aux[i][1][0].strip().lower() != 'todos':
+        df_media_global[aux[i][0][0].strip()] = np.where(df_media_global[aux[i][1][0].strip().lower()] == aux[i][1][1].strip(), np.nan, df_media_global[aux[i][0][0].strip()])
     df_media_global.replace(0.0, np.nan, inplace=True) #transformando as linhas com 0 em nans para remover abaixo
     df_media_global.dropna(inplace=True)    #removendo as linhas que estão com nan, para que a média global faça mais sentido.
     df_media_global['aux_mean'] = 0
@@ -79,9 +77,9 @@ def ratio_on_top(df_parametro, #df que será a base de cálculo
     df_std = df_media.groupby(aberturas, as_index=False)[ratios].std() #criando df com os stds por mix sem datas
     df_media = pd.merge(df_completo, df_media, how = 'left', on = aberturas) #merge entre a base completa e a base com os valores totais sem filtro
     for i in range (len(aux)): # Removendo os ratios onde não fazem sentido na media e std
-      if aux[i][1][0].strip() != 'todos':
-        df_mean[aux[i][0][0].strip()] = np.where(df_mean[aux[i][1][0].strip()] == aux[i][1][1].strip(), 0, df_mean[aux[i][0][0].strip()])
-        df_std[aux[i][0][0].strip()] = np.where(df_std[aux[i][1][0].strip()] == aux[i][1][1].strip(), 0, df_std[aux[i][0][0].strip()])
+      if aux[i][1][0].strip().lower() != 'todos':
+        df_mean[aux[i][0][0].strip()] = np.where(df_mean[aux[i][1][0].strip().lower()] == aux[i][1][1].strip(), 0, df_mean[aux[i][0][0].strip()])
+        df_std[aux[i][0][0].strip()] = np.where(df_std[aux[i][1][0].strip().lower()] == aux[i][1][1].strip(), 0, df_std[aux[i][0][0].strip()])
     
     df_mean_e_std = pd.merge(df_mean, df_std, how = 'left', on = aberturas, suffixes= ('_mean', '_std')) #merge pra ter no mesmo df a media e o std de cada combinação.
     df_media = pd.merge(df_completo, df_mean_e_std, how = 'left', on = aberturas) #merge entre a base completa e a base com os valores totais sem filtro
@@ -92,9 +90,9 @@ def ratio_on_top(df_parametro, #df que será a base de cálculo
       df_media[etapa+'_std'] = df_media[etapa+'_std'].fillna(0) #transformando os NaN´s do std em zero
     
     for i in range (len(aux)): # Removendo os ratios onde não fazem sentido na media e std
-      if aux[i][1][0].strip() != 'todos':
-        df_media[aux[i][0][0].strip()+'_mean'] = np.where(df_media[aux[i][1][0].strip()] == aux[i][1][1].strip(), 0, df_media[aux[i][0][0].strip()+'_mean'])
-        df_media[aux[i][0][0].strip()+'_std'] = np.where(df_media[aux[i][1][0].strip()] == aux[i][1][1].strip(), 0, df_media[aux[i][0][0].strip()+'_std'])
+      if aux[i][1][0].strip().lower() != 'todos':
+        df_media[aux[i][0][0].strip()+'_mean'] = np.where(df_media[aux[i][1][0].strip().lower()] == aux[i][1][1].strip(), 0, df_media[aux[i][0][0].strip()+'_mean'])
+        df_media[aux[i][0][0].strip()+'_std'] = np.where(df_media[aux[i][1][0].strip().lower()] == aux[i][1][1].strip(), 0, df_media[aux[i][0][0].strip()+'_std'])
       
 
     '''
@@ -108,8 +106,8 @@ def ratio_on_top(df_parametro, #df que será a base de cálculo
     df_ratio[ratios] = df_ratio[ratios_split_2].astype(float).values/df_ratio[ratios_split_1].astype(float).values #Calculando os racionais. Dividindo os kpis.
     df_ratio.replace([np.inf, -np.inf], np.nan, inplace=True) #removendo os valores infinitos
     for i in range (len(aux)): # Removendo os ratios onde não fazem sentido. Inserido pelo usuário no painel de controle. Deve seguir o modelo
-      if aux[i][1][0].strip() != 'todos':
-        df_ratio[aux[i][0][0].strip()] = np.where(df_ratio[aux[i][1][0].strip()] == aux[i][1][1].strip(), 0, df_ratio[aux[i][0][0].strip()])     
+      if aux[i][1][0].strip().lower() != 'todos':
+        df_ratio[aux[i][0][0].strip()] = np.where(df_ratio[aux[i][1][0].strip().lower()] == aux[i][1][1].strip(), 0, df_ratio[aux[i][0][0].strip()])     
     df_ratio = df_ratio.fillna(0) #transformando os NaN´s em 0
 
 
