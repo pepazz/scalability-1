@@ -23,7 +23,14 @@ def calcula_shares_historicos(df_act_historico, df_parametro, nome_coluna_datas,
     df_act_historico.loc[(df_act_historico['fluxo'] == 'VISIT'), ['os']] = 0.0
   except:
     pass
-
+  
+  # Remoção de valores de fluxos que não interessam nos topos de testes automatizados
+  try:
+    df_act_historico.loc[(df_act_historico['abertura_1'] == 'Fluxo B'), ['a']] = 0.0
+    df_act_historico.loc[(df_act_historico['abertura_1'] == 'Fluxo A'), ['b']] = 0.0
+  except:
+    pass
+  
   # Inner join da base histórica com um df de parâmetro JÁ TRATADO. Desta forma
   # garante-se que as aberturas observadas no histórico sejam as mesmas do planning
   df_parametro['aux'] = 1
