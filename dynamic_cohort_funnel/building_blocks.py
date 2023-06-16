@@ -66,7 +66,7 @@ def building_blocks(inputs_df,
   qtd_tof = 0
   for tof in lista_bb_tof:
 
-    #clear_output(wait=True)
+    clear_output(wait=True)
     print_string = 'Calculando Funil Baseline do ToF: '+colored(tof,'y')
     empty_string = " "*(50-len(print_string))
     print(60*" ",end='\r')
@@ -143,7 +143,7 @@ def building_blocks(inputs_df,
     qtd_p = 0
     for projeto in projetos:
 
-      print_string = 'Calculando Funil com ToF: '+colored(tof,'y')+' e projeto: '+colored(projetos,'b')
+      print_string = 'Calculando Funil com ToF: '+colored(tof,'y')+' e projeto: '+colored(projeto,'b')
       empty_string = " "*(50-len(print_string))
       print()
       print(print_string,empty_string,str(qtd_p+1),"/",str(len(projetos)),end='\r')
