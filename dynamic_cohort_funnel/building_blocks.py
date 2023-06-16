@@ -9,6 +9,7 @@ from redutor_de_base import *
 from ajusta_teto_cohort import *
 
 
+
 def building_blocks(inputs_df,
                     baseline_cohort,
                     ToF_semanal,
@@ -61,10 +62,15 @@ def building_blocks(inputs_df,
   output_coincident_final_final = pd.DataFrame()
 
   # paracada BB ToF
+  qtd_tof = 0
   for tof in lista_bb_tof:
 
-    clear_output(wait=True)
-    print('Calculando Funil Baseline do ToF: ',tof)
+    #clear_output(wait=True)
+    print_string = 'Calculando Funil Baseline do ToF: '+colored(tof,'y')
+    empty_string = " "*(50-len(print_string))
+    print(60*" ",end='\r')
+    print(print_string,empty_string,str(qtd_tof+1),"/",str(len(lista_bb_tof)),end='\r')
+    qtd_tof+=1
 
     #Calcula funil Baseline:
     #-----------------------------------------------------------------------------------------------
@@ -133,12 +139,14 @@ def building_blocks(inputs_df,
 
     # Calculamos cada projeto individualmente:
     #_______________________________________________________________________________________________
+    qtd_p = 0
     for projeto in projetos:
 
-      clear_output(wait=True)
-      print('Calculando Funil do Building Block')
-      print('BB ToF', tof)
-      print('BB Cohort', projeto)
+      print_string = 'Calculando Funil com ToF: '+colored(tof,'y')+' e projeto: '+colored(projetos,'b')
+      empty_string = " "*(50-len(print_string))
+      print()
+      print(print_string,empty_string,str(qtd_p+1),"/",str(len(projetos)),end='\r')
+      qtd_p+=1
 
       # Seleciona o projeto e o ToF correspondente
       inputs_projeto_df = inputs_df.loc[(inputs_df['building block cohort'] == projeto) & (inputs_df['building block tof'] == tof)]
@@ -228,6 +236,7 @@ def building_blocks(inputs_df,
   # Reorganizando a ordem das colunas:
   output_cohort_final_final = output_cohort_final_final[[chaves_cohort[0]]+['building block cohort','building block tof']+chaves_cohort[1:]+etapas_cohort]
   output_coincident_final_final = output_coincident_final_final[[chaves_coincident[0]]+['building block cohort','building block tof']+chaves_coincident[1:]+etapas_coincident]
-
+  
+  print()
+  print(colored(str(qtd_tof-1)+' funis de baseline ToF calculado e '+str(qtd_p-1)+' funis de projeto calculados.','g'))
   return output_cohort_final_final,output_coincident_final_final,etapas_coincident,etapas_cohort
-
