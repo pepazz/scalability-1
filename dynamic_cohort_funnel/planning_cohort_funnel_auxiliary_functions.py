@@ -349,11 +349,11 @@ def Funil_Dinamico_DataFrame(df_ToF,                # DataFrame contendo os volu
                              nome_coluna_week_origin,
                              aplicacao_ajuste,
                              coluna_de_semanas): 
-
+  '''
   print("Executando Funil Dinâmico DataFrame 1.0")
   print("_______________________________________")
   print("Definições Iniciais")
-
+  '''
   # Os dados inputados na forma de matriz são transformados em DataFrames
 
   if len(df_ratio.index)>0:
@@ -373,7 +373,7 @@ def Funil_Dinamico_DataFrame(df_ToF,                # DataFrame contendo os volu
   #-------------------------------------------------------------------------------------------------
 
 
-  print("Unindo base de ToF e base de conversões")
+  #print("Unindo base de ToF e base de conversões")
   # Primeiro unimos as bases Cohort ,ToF e Split utilizando uma função auxiliar "base_geral".
   # Essa função, além de retornar uma base geral única, onde todas as conversões, volumes e ratios correspondem
   # nas datas e aberturas da base, também retorna muitas outras informações sobre o funil, que ficam armazenadas
@@ -392,7 +392,7 @@ def Funil_Dinamico_DataFrame(df_ToF,                # DataFrame contendo os volu
   topos_de_funil = merged[2]
   #-------------------------------------------------------------------------------------------------
 
-  print("Calculando o funil a partir de ",topo_de_funil)
+  #print("Calculando o funil a partir de ",topo_de_funil)
   # Com base nas informações geradas pela função "base_geral", podemos executar a função auxiliar
   # "funil_dinamico", que vai efetivamente calcular todas as etapas do funil, inclusive realizando
   # o split de fluxos (se existir).
@@ -412,7 +412,7 @@ def Funil_Dinamico_DataFrame(df_ToF,                # DataFrame contendo os volu
   #-------------------------------------------------------------------------------------------------
 
 
-  print('Adicionando volumes via ratio on top')
+  #print('Adicionando volumes via ratio on top')
   # Após calcular o funil completo, aplicamos outra função auxiliar para gerar os volumes que são
   # calculados via ratio on top e somá-los na base.
   if df_ontop.iloc[0,0] != 'sem_ratio':
@@ -427,7 +427,7 @@ def Funil_Dinamico_DataFrame(df_ToF,                # DataFrame contendo os volu
   #-------------------------------------------------------------------------------------------------
 
 
-  print('Formatando bases finais')
+  #print('Formatando bases finais')
   # Após calcular a base completa, formatamos as bases finais separando a base de volumes cohort dos
   # volumes coincident, utilizando uma função auxiliar
   # @função_auxiliar
@@ -451,8 +451,8 @@ def Funil_Dinamico_DataFrame(df_ToF,                # DataFrame contendo os volu
   output_coincident['check'] = output_coincident[etapas_volume].astype('float').sum(axis=1)
   output_coincident = output_coincident[(output_coincident['check'] != 0)][cabecalho]
   #-------------------------------------------------------------------------------------------------
-  print("_______________________________________")
-  print('Funil calculado')
+  #print("_______________________________________")
+  #print('Funil calculado')
 
   return output_cohort,output_coincident,topo_de_funil,topos_de_funil # <-- retornamos as bases coincident, cohort e a informação de qual foi a etapa de ToF utilizada
 #---------------------------------------------------------------------------------------------------
