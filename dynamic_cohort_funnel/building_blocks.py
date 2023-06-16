@@ -239,5 +239,5 @@ def building_blocks(inputs_df,
   output_coincident_final_final = output_coincident_final_final[[chaves_coincident[0]]+['building block cohort','building block tof']+chaves_coincident[1:]+etapas_coincident]
   
   print()
-  print(colored(str(qtd_tof-1)+' funis de baseline ToF calculado e '+str(qtd_p-1)+' funis de projeto calculados.','g'))
+  print(colored(str(qtd_tof)+' funis de baseline ToF calculado e '+str(qtd_p)+' funis de projeto calculados.','g'))
   return output_cohort_final_final,output_coincident_final_final,etapas_coincident,etapas_cohort
