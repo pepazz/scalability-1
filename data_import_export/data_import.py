@@ -124,9 +124,9 @@ def abertura_das_bases(lista_de_nomes_das_bases,  # lista de strings com os nome
       i+=1
     
     else:
-
-      print("\r", end="")
-      print("Abrindo "+colored(nome_da_base,'y')+": "+str(qtd+1)+'/'+str(qtd_bases_existentes),end="")
+      string_print = "Abrindo "+colored(nome_da_base,'y')+": "
+      empty_string = " "*(40-len(string_print))
+      print("Abrindo "+colored(nome_da_base,'y')+": "+empty_string+str(qtd+1)+'/'+str(qtd_bases_existentes),end="\r")
       qtd+=1
 
 
@@ -220,7 +220,7 @@ def abertura_das_bases(lista_de_nomes_das_bases,  # lista de strings com os nome
           break
 
 
-
+  print()
   if len(lista_de_bases) == numero_de_bases:
     print("\r", end="")
     if len(lista_de_bases) > 1:
