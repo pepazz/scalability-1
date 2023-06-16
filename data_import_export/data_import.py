@@ -103,7 +103,7 @@ def abertura_das_bases(lista_de_nomes_das_bases,  # lista de strings com os nome
   
   qtd_bases_existentes = 0
   for x in range(len(lista_de_nomes_das_bases)):
-    if lista_obrigatoria[x] and lista_de_nomes_das_bases[x] != '':
+    if lista_de_nomes_das_bases[x] != '':
       qtd_bases_existentes+=1
 
 
@@ -227,6 +227,7 @@ def abertura_das_bases(lista_de_nomes_das_bases,  # lista de strings com os nome
     print("\r", end="")
     if len(lista_de_bases) > 1:
       print(colored("Bases Abertas","green"),end="")
+      print()
       for base in lista_bases_abertas:
         print(colored(base,'b'))
     else:
