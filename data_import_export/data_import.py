@@ -222,12 +222,14 @@ def abertura_das_bases(lista_de_nomes_das_bases,  # lista de strings com os nome
           break
 
 
-  print()
+  clear_output(wait=True)
   if len(lista_de_bases) == numero_de_bases:
     print("\r", end="")
     if len(lista_de_bases) > 1:
-      print(colored("Bases Abertas","green"),end="")
-      print()
+      string_print = colored("Bases Abertas: ","green")
+      empty_string = " "*(40-len(string_print))
+      print(string_print+empty_string,str(qtd_bases_existentes)+'/'+str(qtd_bases_existentes),end="")
+      print('\n')
       for base in lista_bases_abertas:
         print(colored(base,'b'))
     else:
