@@ -7,6 +7,7 @@ import pandas as pd
 from IPython.display import clear_output
 from redutor_de_base import *
 from ajusta_teto_cohort import *
+from colored import colored
 
 
 
