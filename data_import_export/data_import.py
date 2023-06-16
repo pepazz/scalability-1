@@ -100,10 +100,17 @@ def abertura_das_bases(lista_de_nomes_das_bases,  # lista de strings com os nome
 
   numero_de_bases = len(lista_de_nomes_das_bases)
   lista_de_bases = []
+  
+  qtd_bases_existentes = 0
+  for x in range(len(lista_de_nomes_das_bases)):
+    if lista_obrigatoria[x] and lista_de_nomes_das_bases[x] != '':
+      qtd_bases_existentes+=1
+
 
   # Para cada base na lista de bases, vamos tentar abrir o arquivo:
   #_________________________________________________________________________________________________
   i=0
+  qtd=0
   for nome_da_base in lista_de_nomes_das_bases:
 
     
@@ -119,7 +126,8 @@ def abertura_das_bases(lista_de_nomes_das_bases,  # lista de strings com os nome
     else:
 
       print("\r", end="")
-      print("Abrindo "+nome_da_base+": "+str(i+1)+'/'+str(numero_de_bases),end="")
+      print("Abrindo "+colored(nome_da_base,'y')+": "+str(qtd+1)+'/'+str(qtd_bases_existentes),end="")
+      qtd+=1
 
 
       # Caso exista "/" no nome do arquivo, vamos considerar que se trata de um caminho para
