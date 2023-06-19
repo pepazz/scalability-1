@@ -337,7 +337,6 @@ def quebra_diaria(volumes_semanais,  # DataFrame com os volumes semanais coincid
   # etapas do volume semanal = _x (etapas_semanal)
   # etapas dos impactos = _z (etapas_impactos)
   # etapas do share = _y (etapas_share)
-  print(base_diaria)
   #-------------------------------------------------------------------------------------------------
 
 
