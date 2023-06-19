@@ -22,7 +22,7 @@ def share_diario(df_parametro, #df que será a base
     days = ['Sunday', 'Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'] #lista com os nomes dos dias para incluir posteriormente nos campos vazios.      
 
     etapas = etapas_vol #Aqui criamos as listas com os nomes dos kpis. Geramos para cada etapa para facilitar os merges e group bys
-    etapas_day = [e+"_day" for e in etapas]
+    etapas_day = [e+"_dia da semana" for e in etapas]
     etapas_week = [e+"_week" for e in etapas]
     etapas_share = [e+"_share" for e in etapas]
     etapas_share_soma = [e+"_y" for e in etapas_share]
