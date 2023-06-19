@@ -31,7 +31,7 @@ def share_diario(df_parametro, #df que será a base
     # Caso não encontremos a coluna de semanas na base, vamos criar uma:
     if coluna_semanas not in df_parametro.columns.values:
       coluna_semanas = 'week_start'
-      df_parametro[coluna_semanas] = df_parametro[coluna_datas].datetime.to_period('W').apply(lambda r: r.start_time)
+      df_parametro[coluna_semanas] = df_parametro[coluna_datas].dt.to_period('W').apply(lambda r: r.start_time)
 
     df_parametro[coluna_semanas] = pd.to_datetime(df_parametro[coluna_semanas], infer_datetime_format = True) #Convertendo datas para datetime
     df_parametro[coluna_datas] = pd.to_datetime(df_parametro[coluna_datas], infer_datetime_format = True)
