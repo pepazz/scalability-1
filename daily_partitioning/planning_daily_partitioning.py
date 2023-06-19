@@ -417,7 +417,6 @@ def quebra_diaria(volumes_semanais,  # DataFrame com os volumes semanais coincid
   # originais. Assim, os volumes diários contemplam os efeitos de feriado e, ao mesmo tempo, se somados,
   # retornam os volumes semanais originais.
   share_diario_atual[etapas_diario_corrigido] = share_diario_atual[etapas_semanal_x].astype('float').multiply(share_diario_atual[etapas_share_atual].astype('float').values, axis="index")
-  print(share_diario_atual)
                     
   # Substituímos os volumes diários calculados pela primeira vez pelos volumes diários corrigidos na
   # base diária final
