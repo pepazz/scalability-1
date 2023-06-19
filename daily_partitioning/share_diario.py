@@ -1,6 +1,7 @@
 #@title Def Share Diário
 import pandas as pd
 import datetime
+from datetime import datetime 
 
 def share_diario(df_parametro, #df que será a base
                  data_inicio, #data inicial do filtro
