@@ -36,4 +36,5 @@ def city_share(df_parametro, #df que será a base de cálculo
 
 
 #incluir a UF pela query
+    df_city_share.name = 'city_share_gerado_internamente'
     return df_city_share
