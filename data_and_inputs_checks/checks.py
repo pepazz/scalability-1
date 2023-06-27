@@ -985,6 +985,7 @@ def check_colunas_bases_especificas(nome_do_arquivo,
                                       df_share_diario,
                                       df_impacto_feraidos,
                                       df_city_share,
+                                      aberturas,
                                       col_valores_on_top,
                                       col_valores_share,
                                       col_valores_feriados,
@@ -997,6 +998,12 @@ def check_colunas_bases_especificas(nome_do_arquivo,
   mensagem = ''
 
   erro = 0
+
+  # Verificamos se existe "região" nas aberturas e se existe uma base de share de cidades
+  aberturas_lower = [e.lower() for e in aberturas]
+  if 'região' in aberturas_lower and len(df_city_share) == 0:
+    erro+=1
+    mensagem=mensagem+'\n\nNo arquivo '+colored(nomes_dos_arquivos[3],'blue')+' parece que não existe uma base de'+colored('City Share','yellow')+'. Esta base é obrigatória se houver uma abertura "região"'
 
   if len(df_on_top_ratios) != 0:
     col_valores_on_top_originais = col_valores_on_top.copy()
