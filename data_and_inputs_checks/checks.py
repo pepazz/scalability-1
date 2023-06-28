@@ -1002,7 +1002,7 @@ def check_colunas_bases_especificas(nome_do_arquivo,
 
   # Verificamos se existe "região" nas aberturas e se existe uma base de share de cidades
   aberturas_lower = [e.lower() for e in aberturas]
-  if 'região' in aberturas_lower and (len(df_city_share) == 0 or not flag_gerar_city_share):
+  if 'região' in aberturas_lower and len(df_city_share) == 0 and not flag_gerar_city_share:
     erro+=1
     mensagem=mensagem+'\n\nNo arquivo '+colored(nome_do_arquivo[3],'blue')+' parece que não existe uma base de '+colored('City Share','yellow')+'. Esta base é obrigatória se houver uma abertura '+colored('"região"','red')
 
