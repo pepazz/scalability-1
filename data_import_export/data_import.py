@@ -123,7 +123,7 @@ def abertura_das_bases(lista_de_nomes_das_bases,  # lista de strings com os nome
     else:
       nome_da_base = nome_aba
     
-    
+
     if not lista_obrigatoria[i] and nome_aba == '':
 
       base_df = pd.DataFrame()
@@ -154,11 +154,11 @@ def abertura_das_bases(lista_de_nomes_das_bases,  # lista de strings com os nome
         path = '/content/drive/'+lista_de_arquivos_das_bases[i]+'/'
 
         # removemos a terminação ".csv" do nome do arquivo caso o usuário tenha inputado dessa forma
-        nome_da_base = nome_da_base.replace('.csv','')
+        nome_aba = nome_aba.replace('.csv','')
 
         # tentamos abrir o arquivo
         try:
-          base_df=pd.read_csv(path+nome_da_base+'.csv')
+          base_df=pd.read_csv(path+nome_aba+'.csv')
           flag_abriu = True
         except Exception as e:
           print('\n\nNão foi possível abrir o arquivo '+colored(nome_da_base,'blue')+'.\nFoi identificado que esta é uma tentativa de abrir um arquivo csv localizado na seguinte pasta do Google Drive:\n'+colored(lista_de_arquivos_das_bases[i],'red')+'\nA tentativa de abrir o arquivo resultou no seguinte erro:\n'+colored(str(e),'red'))
@@ -194,7 +194,7 @@ def abertura_das_bases(lista_de_nomes_das_bases,  # lista de strings com os nome
           dados_sheets,base,mensagem,flag_abriu,nome_do_arquivo = abertura_do_arquivo(nome_do_arquivo = nome_do_painel_de_controle,
                                                                                       sheets_aberto = True,
                                                                                       sheets = sheets_painel_de_controle,
-                                                                                      nome_da_aba = nome_da_base,
+                                                                                      nome_da_aba = nome_aba,
                                                                                       client = client)
         # Caso contrário, procuramos um outro sheets:
         else:
@@ -202,7 +202,7 @@ def abertura_das_bases(lista_de_nomes_das_bases,  # lista de strings com os nome
           dados_sheets,base,mensagem,flag_abriu,nome_do_arquivo = abertura_do_arquivo(nome_do_arquivo = lista_de_arquivos_das_bases[i],
                                                                                       sheets_aberto = False,
                                                                                       sheets = [],
-                                                                                      nome_da_aba = nome_da_base,
+                                                                                      nome_da_aba = nome_aba,
                                                                                       client = client)
         
         # Caso conseguimos abrir o sheets e a aba dentro dele, vamos transformar em DataFrame:
