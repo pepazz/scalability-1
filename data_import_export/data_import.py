@@ -96,7 +96,8 @@ def abertura_das_bases(lista_de_nomes_das_bases,  # lista de strings com os nome
                        lista_obrigatoria,         # lista de booleanos indicando se a existência daquela base é obrigatória
                        nome_do_painel_de_controle,           # string com o nome do arquivo sheets onde se encontra o painel de controle (somente para imprimir mensagens de erro)
                        sheets_painel_de_controle,           # arquivo sheets do painel de controle aberto
-                       client = 'client'):                  # Autorização de acesso
+                       client = 'client',                  # Autorização de acesso
+                       nomes_teoricos_das_bases = []):                  # nomes_teoricos_das_bases
   
 
   numero_de_bases = len(lista_de_nomes_das_bases)
@@ -115,10 +116,18 @@ def abertura_das_bases(lista_de_nomes_das_bases,  # lista de strings com os nome
   lista_bases_abertas = []
   for nome_da_base in lista_de_nomes_das_bases:
 
+    nome_aba = nome_da_base
+
+    if len(nomes_teoricos_das_bases) == len(lista_de_nomes_das_bases):
+      nome_da_base = str(nomes_teoricos_das_bases[i])+' - ('+nome_aba+')'
+    else:
+      nome_da_base = nome_aba
     
-    if not lista_obrigatoria[i] and nome_da_base == '':
+    
+    if not lista_obrigatoria[i] and nome_aba == '':
 
       base_df = pd.DataFrame()
+
       base_df.name = nome_da_base
 
       lista_de_bases = lista_de_bases+[base_df]
