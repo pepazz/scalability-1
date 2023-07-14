@@ -228,8 +228,20 @@ def abertura_das_bases(lista_de_nomes_das_bases,  # lista de strings com os nome
           i+=1
 
         else:
-          print(mensagem)
-          break
+          if lista_obrigatoria[i]:
+            print(mensagem)
+            break
+          else:
+            base_df = pd.DataFrame()
+            
+            base_df.name = 'base_vazia'
+  
+            lista_de_bases = lista_de_bases+[base_df]
+  
+            i+=1
+
+                         
+            
 
 
   clear_output(wait=True)
