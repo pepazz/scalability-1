@@ -246,6 +246,7 @@ def abertura_das_bases(lista_de_nomes_das_bases,  # lista de strings com os nome
 
   clear_output(wait=True)
   if len(lista_de_bases) == numero_de_bases:
+    flag_abriu = True
     print("\r", end="")
     if len(lista_de_bases) > 1:
       string_print = colored("Bases Abertas: ","green")
@@ -257,7 +258,6 @@ def abertura_das_bases(lista_de_nomes_das_bases,  # lista de strings com os nome
     else:
       print(colored(nome_da_base+' aberto',"green"),end="")
   else:
-    print(len(lista_de_bases),numero_de_bases)
     flag_abriu = False
   
   return lista_de_bases,flag_abriu
