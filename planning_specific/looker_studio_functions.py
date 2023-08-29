@@ -62,7 +62,7 @@ def data_studio_mensal(df_actual_mensal,
   
   periodo_maximo = ultimo_periodo
   if ultimo_dia_do_periodo != ultimo_dia:
-    periodo_maximo = datetime(penultimo_ano,penultimo_mes,1) 
+    periodo_maximo = datetime(ultimo_ano,ultimo_mes,1) 
 
   periodo_minimo = primeiro_periodo
   if primeiro_dia_do_periodo != primeiro_dia:
