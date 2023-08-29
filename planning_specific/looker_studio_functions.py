@@ -54,7 +54,7 @@ def data_studio_mensal(df_actual_mensal,
   else:
     penultimo_mes = ultimo_mes - 1
 
-  ultimo_dia_do_periodo = datetime(ultimo_ano,ultimo_mes,1) - pd.Timedelta(1, unit='D')
+  ultimo_dia_do_periodo = datetime(ultimo_ano,ultimo_mes,1) #- pd.Timedelta(1, unit='D')   Comentei essa subtração, se não iria para 30/11
   primeiro_dia_do_periodo = datetime(primeiro_ano,primeiro_mes,1)
 
   ultimo_dia = df_planning_diario['data'].max()
