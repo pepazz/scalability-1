@@ -921,6 +921,9 @@ def check_chaves(lista_df,                   # lista de DataFrames já devem ter
     # Verificamos a existência de chaves entre as bases abertura por abertura:
     for col in list(aberturas_1.columns.values):
       chaves_unicas_1 = list(np.unique(aberturas_1[col].values))
+      print(nome_df_1,aberturas_1)
+      print(nome_df_2,aberturas_2)
+      print("---------------------------")
       chaves_unicas_2 = list(np.unique(aberturas_2[col].values))
 
       # vamos remover as chaves que devem ser ignoradas na comparação
