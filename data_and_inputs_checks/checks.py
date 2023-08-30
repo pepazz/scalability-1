@@ -870,8 +870,7 @@ def check_chaves(lista_df,                   # lista de DataFrames já devem ter
           else:
             mensagem = mensagem + '\n\nNo arquivo '+colored(nome_do_arquivo[c],'blue')+', na base '+colored(nome,'yellow')+' parece que existem as seguintes aberturas repetidas:' + '\n' + tabulate(chaves_repetidas, headers='keys', tablefmt='psql')+'\nAs aberturas repetidas foram agrupadas e os valores foram somados.'
         df = df.drop(columns=['idx'])
-        if 'aux' in df.columns.values:
-          df = df.drop(columns=['aux'])
+
 
 
       # Criamos bases contendo apenas as aberturas únicas encontradas:
@@ -922,6 +921,12 @@ def check_chaves(lista_df,                   # lista de DataFrames já devem ter
 
     # Verificamos a existência de chaves entre as bases abertura por abertura:
     for col in list(aberturas_1.columns.values):
+      print("-----------------------------------")
+      print(aberturas_compartilhadas)
+      print(nome_do_arquivo_1)
+      print(aberturas_1.columns.values)
+      print(nome_do_arquivo_2)
+      print(aberturas_2.columns.values)
       chaves_unicas_1 = list(np.unique(aberturas_1[col].values))
       chaves_unicas_2 = list(np.unique(aberturas_2[col].values))
 
