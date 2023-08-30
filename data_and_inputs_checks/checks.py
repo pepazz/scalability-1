@@ -923,9 +923,9 @@ def check_chaves(lista_df,                   # lista de DataFrames já devem ter
     for col in list(aberturas_1.columns.values):
       print("-----------------------------------")
       print(aberturas_compartilhadas)
-      print(nome_do_arquivo_1)
+      print(nome_df_1)
       print(aberturas_1.columns.values)
-      print(nome_do_arquivo_2)
+      print(nome_df_2)
       print(aberturas_2.columns.values)
       chaves_unicas_1 = list(np.unique(aberturas_1[col].values))
       chaves_unicas_2 = list(np.unique(aberturas_2[col].values))
