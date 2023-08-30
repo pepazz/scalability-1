@@ -920,13 +920,7 @@ def check_chaves(lista_df,                   # lista de DataFrames já devem ter
     nome_do_arquivo_2 = nome_do_arquivo[indice_2]
 
     # Verificamos a existência de chaves entre as bases abertura por abertura:
-    for col in list(aberturas_1.columns.values):
-      print("-----------------------------------")
-      print(aberturas_compartilhadas)
-      print(nome_df_1)
-      print(aberturas_1.columns.values)
-      print(nome_df_2)
-      print(aberturas_2.columns.values)
+    for col in aberturas_compartilhadas:
       chaves_unicas_1 = list(np.unique(aberturas_1[col].values))
       chaves_unicas_2 = list(np.unique(aberturas_2[col].values))
 
@@ -952,7 +946,7 @@ def check_chaves(lista_df,                   # lista de DataFrames já devem ter
 
     # Vamos exluir as aberturas que contenham uma chave a ser ignorada:
     for c in chaves_ignoradas:
-      for coluna in list(aberturas_1.columns.values):
+      for coluna in aberturas_compartilhadas:
         aberturas_1 = aberturas_1.loc[aberturas_1[coluna] != c]
         aberturas_2 = aberturas_2.loc[aberturas_2[coluna] != c]
 
