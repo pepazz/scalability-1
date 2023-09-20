@@ -2,6 +2,8 @@
 
 # Importando bibliotecas necessárias
 import pandas as pd
+import numpy as np
+from functools import reduce
 
 def gerador_baseline_conversoes_v2(baseline_cohort_df, inputs_df, dict_grupos, nome_coluna_week_origin,coluna_de_semanas):
   '''
