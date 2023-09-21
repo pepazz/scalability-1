@@ -156,7 +156,7 @@ def gerador_baseline_conversoes_v2(baseline_cohort_df, inputs_df, dict_grupos, n
       aux = eval(expression)
       # repetimos essa base de aberturas para cada data, aplicação e etapa que está na linha de inputs:
       # criamos uma lista com dataframes com a base auxiliar e as listas na linha de inputs transformadas em dataframes
-      dataframe_list = [aux, pd.DataFrame({'data':linha['data']}),pd.DataFrame({'aplicação':linha['aplicação']}),pd.DataFrame({'etapa':linha['etapa']})]
+      dataframe_list = [aux, pd.DataFrame({coluna_de_semanas:linha[coluna_de_semanas]}),pd.DataFrame({'aplicação':linha['aplicação']}),pd.DataFrame({'etapa':linha['etapa']})]
       # riamos uma coluna de chave repetida "key" em todas as bases e "mergeamos" as bases da lista pela chave repetida, 
       # criando uma repetição das aberturas para cada ítem da lista da linha de inputs.
       aux = reduce(lambda  left,right: pd.merge(left.assign(key=0),right.assign(key=0),on = 'key',how='left'), dataframe_list)
