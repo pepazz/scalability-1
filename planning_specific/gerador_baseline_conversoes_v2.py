@@ -2,6 +2,8 @@
 
 # Importando bibliotecas necessárias
 import pandas as pd
+import numpy as np
+from functools import reduce
 
 def gerador_baseline_conversoes_v2(baseline_cohort_df, inputs_df, dict_grupos, nome_coluna_week_origin,coluna_de_semanas):
   '''
@@ -135,11 +137,38 @@ def gerador_baseline_conversoes_v2(baseline_cohort_df, inputs_df, dict_grupos, n
     for coluna in aux_categorias_mutaveis:
       inputs[coluna] = inputs[coluna].apply(lambda x: [x] if type(x) != list else x )
     
-    inputs_combinados = pd.DataFrame([], columns=list(inputs.columns))  
-    for linha in inputs.iterrows():
-      idx = pd.MultiIndex.from_product(linha[1],names=inputs.columns.values)
-      df_aux = pd.DataFrame(index=idx).reset_index()
-      inputs_combinados = inputs_combinados.append(df_aux)
+    # Aqui vamos gerar a base com a repetição de todos os inputs pelas aberturas
+    # do baseline de acordo com cada linha da base de inputs:
+    #---------------------------------------------------------------------------------------------- 
+    inputs_combinados_aux = []
+    # Construir expressão que irá filtrar as aberturas do baseline nas chaves selecionadas de cada linha dos inputs:
+    expression = ''
+    for col in categorias_mutaveis:
+      if col == categorias_mutaveis[0]:
+        expression = expression + "baseline_cohort_df_c.loc[(baseline_cohort_df_c['"+col+"'].isin(linha['"+col+"'])) "
+      else:
+        expression = expression + "& (baseline_cohort_df_c['"+col+"'].isin(linha['"+col+"'])) "
+    expression = expression + "& (baseline_cohort_df_c[nome_coluna_week_origin].isin(linha['conversão']))][categorias_mutaveis+[nome_coluna_week_origin]]"
+
+    # Aplicamos a expressão em cada linha dos inputs
+    for l in range(len(inputs)):
+      linha = inputs.iloc[l]
+      aux = eval(expression)
+      # repetimos essa base de aberturas para cada data, aplicação e etapa que está na linha de inputs:
+      # criamos uma lista com dataframes com a base auxiliar e as listas na linha de inputs transformadas em dataframes
+      dataframe_list = [aux, pd.DataFrame({coluna_de_semanas:linha[coluna_de_semanas]}),pd.DataFrame({'aplicação':linha['aplicação']}),pd.DataFrame({'etapa':linha['etapa']})]
+      # riamos uma coluna de chave repetida "key" em todas as bases e "mergeamos" as bases da lista pela chave repetida, 
+      # criando uma repetição das aberturas para cada ítem da lista da linha de inputs.
+      aux = reduce(lambda  left,right: pd.merge(left.assign(key=0),right.assign(key=0),on = 'key',how='left'), dataframe_list)
+      # Adicionamos o valor de input na base
+      aux['value'] = linha['value'][0]
+      aux = aux.drop(columns='key')
+      inputs_combinados_aux = inputs_combinados_aux+[aux]
+      
+    # empilhamos todas as tabela auxiliares, sendo que cada linha da base de inputs gerou uma tabela
+    inputs_combinados = pd.concat(inputs_combinados_aux)
+    # renomeamos só pra manter o restante do código inalterado
+    inputs_combinados = inputs_combinados.rename(columns={nome_coluna_week_origin:'conversão'})
       
     '''
     inputs_combinados = pd.DataFrame([], columns=list(inputs.columns))
