@@ -581,8 +581,9 @@ def quebra_diaria(volumes_semanais,  # DataFrame com os volumes semanais coincid
 
     base_diaria_final['semana'] = pd.to_datetime(base_diaria_final['semana'], errors='coerce')
     base_diaria_final['semana'] = base_diaria_final['semana'].dt.date
-    print(categorias_completas)
-    print(base_diaria_final)
+    base_diaria_final['data'] = pd.to_datetime(base_diaria_final['data'], errors='coerce')
+    base_diaria_final['data'] = base_diaria_final['data'].dt.date
+    
     base_diaria_final = base_diaria_final.groupby(categorias_completas, as_index=False)[topo_de_funil].sum()
 
     # Unimos a base ToF com o restante da base
