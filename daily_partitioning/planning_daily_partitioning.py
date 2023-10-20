@@ -588,6 +588,12 @@ def quebra_diaria(volumes_semanais,  # DataFrame com os volumes semanais coincid
 
     # Unimos a base ToF com o restante da base
     base_restante = base_diaria[categorias_completas+restante]
+    
+    base_restante['semana'] = pd.to_datetime(base_restante['semana'], errors='coerce')
+    base_restante['semana'] = base_restante['semana'].dt.date
+    base_restante['data'] = pd.to_datetime(base_restante['data'], errors='coerce')
+    base_restante['data'] = base_restante['data'].dt.date
+    
     base_diaria = pd.merge(base_diaria_final,base_restante,how='outer',on=categorias_completas)
     base_diaria = base_diaria.fillna(0)
 
