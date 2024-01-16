@@ -1,6 +1,8 @@
 #@title Def gerador_base_exogenas
 import pandas as pd
 import numpy as np
+from datetime import datetime
+from datetime import timedelta
 '''
 alterados:
 
