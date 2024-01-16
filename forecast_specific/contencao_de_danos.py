@@ -1,10 +1,10 @@
- #@title Def contencao_de_danos
+#@title Def contencao_de_danos
 
- '''
- Essa função serve para fazer ajustes nos resultados do forecast, abertura por abertura
- e em cada métrica, previnindo números negativos, conversões acima de 100% ou mesmo
- números muito "estourados"
- '''
+'''
+Essa função serve para fazer ajustes nos resultados do forecast, abertura por abertura
+e em cada métrica, previnindo números negativos, conversões acima de 100% ou mesmo
+números muito "estourados"
+'''
 
 def contencao_de_danos(df, # filtrado na etapa e abertura
                        endogenous,
