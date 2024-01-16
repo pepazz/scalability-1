@@ -1,6 +1,7 @@
 #@title Def classifica_aberturas_ruins
 from sklearn.mixture import GaussianMixture
 import pandas as pd
+import numpy as pd
 
 def classifica_aberturas_ruins(df_completo,  # data_frame formatado completo
                                ultima_data_hist,
