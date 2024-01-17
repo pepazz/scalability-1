@@ -1961,10 +1961,7 @@ Função que aplica os seguintes checks e formatações numa lista de dataframes
 
 '''
 
-def check_geral(lista_mantem_formatacao_original = True,
-                lista_comparacao_a_mais = [],
-                tipo_de_tof = '',
-                lista_de_bases,                 # Lista de bases que vamos verificar (dataframes)
+def check_geral(lista_de_bases,                 # Lista de bases que vamos verificar (dataframes)
                 lista_de_colunas_obrigatorias,  # Lista das colunas obrigatórias correspondentes de cada base
                 lista_colunas_de_valores,       # Lista com as colunas de valores pré-definidas de cada base
                 lista_do_retorno_de_valores,    # Lista indicando quais bases possuem colunas de valores a serem inferidas e retornadas por este check
@@ -1979,7 +1976,10 @@ def check_geral(lista_mantem_formatacao_original = True,
                 aberturas_das_bases,            # Lista com as aberturas comuns às bases, definidas no painel de controle
                 coluna_de_conversoes,
                 Nome_do_arquivo_sheets,
-                dict_renames):
+                dict_renames,
+                lista_mantem_formatacao_original = True,
+                lista_comparacao_a_mais = [],
+                tipo_de_tof = ''):
   
 
   contador_de_erros = 0
