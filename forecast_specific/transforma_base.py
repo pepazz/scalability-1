@@ -23,7 +23,17 @@ def transforma_base(df_conversoes,
                     df_targets,
                     data_end_forecast,
                     ultima_data_hist):
+                          
+  def week_of_month(tgtdate):
 
+      days_this_month = calendar.mdays[tgtdate.month]
+      for i in range(1, days_this_month):
+          d = datetime(tgtdate.year, tgtdate.month, i)
+          if d.day - d.weekday() > 0:
+              startdate = d
+              break
+      # now we canuse the modulo 7 appraoch
+      return (tgtdate - startdate).days //7 + 1
 
   # Vamos fazer algumas definições iniciais sobre a base
   cb_conversoes = list(df_conversoes.columns.values) # Colunas no cabeçalho
