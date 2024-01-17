@@ -23,7 +23,7 @@ def transforma_base(df_conversoes,
                     df_targets,
                     data_end_forecast,
                     ultima_data_hist):
-
+  print("teste $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")    
 
   # Vamos fazer algumas definições iniciais sobre a base
   cb_conversoes = list(df_conversoes.columns.values) # Colunas no cabeçalho
