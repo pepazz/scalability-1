@@ -6,7 +6,7 @@ from formata_base_para_funil import formata_base_para_funil
 from auxiliary_functions import *
 from base_de_inputs import base_de_inputs
 from progressao_funil import progressao_funil
-from exportar_base import exportar_base
+from data_export import exportar_base
 from formatacao_output_forecast import formatacao_output_forecast
 
 '''
