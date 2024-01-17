@@ -1,4 +1,5 @@
 #@title Def adiciona_feriados
+import pandas as pd
 
 
 def adiciona_feriados(df,           # DataFrame com os dados semanais onde queremos adicionar uma coluna de feriados
