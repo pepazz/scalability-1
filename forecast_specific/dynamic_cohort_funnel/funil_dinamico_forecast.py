@@ -1,5 +1,5 @@
 #@title Def funil_dinamico_forecast (fdf 0)
-
+import pandas as pd
 '''
 Descrição Geral:
 
