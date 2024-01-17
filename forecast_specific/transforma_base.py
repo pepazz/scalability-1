@@ -4,6 +4,7 @@ import numpy as np
 import datetime
 from datetime import datetime
 import calendar
+
 '''
 Recebe uma base com as seguintes colunas:
 
