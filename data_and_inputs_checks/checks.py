@@ -1961,16 +1961,17 @@ Função que aplica os seguintes checks e formatações numa lista de dataframes
 
 '''
 
-def check_geral(lista_de_bases,                 # Lista de bases que vamos verificar (dataframes)
+def check_geral(lista_mantem_formatacao_original = True,
+                lista_comparacao_a_mais = [],
+                tipo_de_tof = '',
+                lista_de_bases,                 # Lista de bases que vamos verificar (dataframes)
                 lista_de_colunas_obrigatorias,  # Lista das colunas obrigatórias correspondentes de cada base
                 lista_colunas_de_valores,       # Lista com as colunas de valores pré-definidas de cada base
                 lista_do_retorno_de_valores,    # Lista indicando quais bases possuem colunas de valores a serem inferidas e retornadas por este check
-                lista_mantem_formatacao_original = True,
                 lista_check_vazios,             # Lista indicando quais bases devem fazer uma checagem de valores vazios (fórmulas arrastadas até o final)
                 lista_verifica_valores,         # Lista indicando quais bases devem fazer uma checagem de valores vazios (fórmulas arrastadas até o final)
                 lista_de_bases_checar_chaves,   # Lista indicando quais bases devem fazer uma checagem de valores vazios (fórmulas arrastadas até o final)
                 lista_comparacao_parcial,       # Lista indicando quais bases devem fazer uma checagem de valores vazios (fórmulas arrastadas até o final)
-                lista_comparacao_a_mais = [],
                 aberturas_especificas,          # Lista com as aberturas específicas que não são chaves de comparação mas não são colunas com valores
                 lista_lista_colunas_datas,      # Lista com as aberturas específicas que não são chaves de comparação mas não são colunas com valores
                 lista_lista_frequencia,         # Lista com as aberturas específicas que não são chaves de comparação mas não são colunas com valores
@@ -1978,7 +1979,6 @@ def check_geral(lista_de_bases,                 # Lista de bases que vamos verif
                 aberturas_das_bases,            # Lista com as aberturas comuns às bases, definidas no painel de controle
                 coluna_de_conversoes,
                 Nome_do_arquivo_sheets,
-                tipo_de_tof = '',
                 dict_renames):
   
 
