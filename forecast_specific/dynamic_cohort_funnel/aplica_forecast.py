@@ -1,5 +1,7 @@
 #@title Def aplica_forecast (fdf 1)
 import timeit
+import pandas as pd
+import numpy as np
 '''
 Descrição Geral:
 
