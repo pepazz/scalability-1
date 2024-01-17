@@ -1,5 +1,6 @@
 #@title Def transforma_base
-
+import pandas as pd
+import numpy as np
 '''
 Recebe uma base com as seguintes colunas:
 
