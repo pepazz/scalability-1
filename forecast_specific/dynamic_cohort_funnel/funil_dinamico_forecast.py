@@ -1,5 +1,14 @@
 #@title Def funil_dinamico_forecast (fdf 0)
 import pandas as pd
+from aplica_forecast import aplica_forecast
+from projeta_tof_externo import projeta_tof_externo
+from formata_base_para_funil import formata_base_para_funil
+from shift_datas import shift_datas
+from base_de_inputs import base_de_inputs
+from progressao_funil import progressao_funil
+from exportar_base import exportar_base
+from formatacao_output_forecast import formatacao_output_forecast
+
 '''
 Descrição Geral:
 
