@@ -1,5 +1,6 @@
 #@title Def forecast_2 (fdf 2)
-
+import pandas as pd
+import numpy as np
 '''
 Descrição Geral:
 
