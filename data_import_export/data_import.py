@@ -181,7 +181,7 @@ def abertura_das_bases(lista_de_nomes_das_bases,  # lista de strings com os nome
           # adicionamos a base na nossa lista de bases
           lista_de_bases = lista_de_bases+[base_df]
 
-          i+=1
+        i+=1
 
 
       # Caso o nome do arquivo não seja um caminho, tentamos abrir um sheets com o nome indicado:
