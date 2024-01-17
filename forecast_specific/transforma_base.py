@@ -6,7 +6,6 @@ from datetime import datetime
 import calendar
 from week_of_month import week_of_month
 from adiciona_feriados import adiciona_feriados
-from strip_accents import strip_accents
 
 #@title Def adiciona_feriados
 
