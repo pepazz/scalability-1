@@ -6,7 +6,9 @@ from projeta_por_media import projeta_por_media
 from outliers_detector import *
 from inputs_exogenas import inputs_exogenas
 from acf_pac import *
-
+from transforma_dummy import transforma_dummy
+from transforma_exogs_2 import *
+from contencao_de_danos import *
 '''
 Descrição Geral:
 
