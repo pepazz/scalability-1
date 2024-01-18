@@ -1,5 +1,6 @@
 #@title Def progressao_funil
-
+import numpy as np
+import pandas as pd
 # Multiplica conv x vol, gera vol_coh e soma o volume da nova etapa.
 
 # Essa função literalmente faz a conta de progressão do funil. Com a base única, multiplicamos
