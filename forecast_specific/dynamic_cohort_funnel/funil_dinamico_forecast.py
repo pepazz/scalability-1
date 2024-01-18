@@ -9,7 +9,7 @@ from base_de_inputs import base_de_inputs
 from progressao_funil import progressao_funil
 from data_export import exportar_base
 from formatacao_output_forecast import formatacao_output_forecast
-
+from clear___output import *
 '''
 Descrição Geral:
 
