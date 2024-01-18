@@ -1,4 +1,9 @@
 #@title Def Auxiliar_Forecast (fdf 3)
+import pandas as pd
+import numpy as np
+from multilinear import *
+from projeta_por_media import projeta_por_media
+from outliers_detector import *
 
 '''
 Descrição Geral:
