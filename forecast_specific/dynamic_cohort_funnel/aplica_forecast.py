@@ -6,6 +6,7 @@ from clear___output import *
 from colored import colored
 from remove_historico_zerado import remove_historico_zerado
 from tempo_maturacao import *
+from forecast_2 import *
 '''
 Descrição Geral:
 
