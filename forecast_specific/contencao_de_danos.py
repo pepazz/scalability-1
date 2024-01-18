@@ -1,5 +1,6 @@
 #@title Def contencao_de_danos
-
+import numpy as np
+import pandas as pd
 '''
 Essa função serve para fazer ajustes nos resultados do forecast, abertura por abertura
 e em cada métrica, previnindo números negativos, conversões acima de 100% ou mesmo
