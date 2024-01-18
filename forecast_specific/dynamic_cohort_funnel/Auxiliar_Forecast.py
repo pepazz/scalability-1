@@ -4,6 +4,7 @@ import numpy as np
 from multilinear import *
 from projeta_por_media import projeta_por_media
 from outliers_detector import *
+from inputs_exogenas import inputs_exogenas
 
 '''
 Descrição Geral:
