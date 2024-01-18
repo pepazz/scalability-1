@@ -2,6 +2,7 @@
 import timeit
 import pandas as pd
 import numpy as np
+from clear___output import *
 '''
 Descrição Geral:
 
