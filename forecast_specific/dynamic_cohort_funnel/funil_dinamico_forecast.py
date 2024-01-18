@@ -1,5 +1,6 @@
 #@title Def funil_dinamico_forecast (fdf 0)
 import pandas as pd
+import numpy as np
 from aplica_forecast import aplica_forecast
 from projeta_tof_externo import projeta_tof_externo
 from formata_base_para_funil import formata_base_para_funil
