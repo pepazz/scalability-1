@@ -1,6 +1,7 @@
 #@title Def forecast_2 (fdf 2)
 import pandas as pd
 import numpy as np
+from Auxiliar_Forecast import *
 '''
 Descrição Geral:
 
