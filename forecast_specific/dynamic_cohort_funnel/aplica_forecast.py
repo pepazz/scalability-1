@@ -3,6 +3,7 @@ import timeit
 import pandas as pd
 import numpy as np
 from clear___output import *
+from colored import colored
 '''
 Descrição Geral:
 
