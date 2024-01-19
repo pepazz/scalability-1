@@ -145,7 +145,7 @@ def gerador_base_exogenas(base_modelo,
       lista_lista_frequencia = [['None'] for f in lista_de_col_datas]#+[['W-Mon']]
 
       chaves_ignoradas = []
-      print(lista_de_bases_check[0])
+
       lista_de_bases_check, colunas_de_valores, mensagem_local, erro_local = check_geral(lista_de_bases = lista_de_bases_check,
                                                                                         lista_de_colunas_obrigatorias = lista_de_colunas_obrigatorias,
                                                                                         lista_colunas_de_valores = lista_colunas_de_valores,
@@ -165,7 +165,7 @@ def gerador_base_exogenas(base_modelo,
                                                                                         dict_renames = dict_renames,
                                                                                         tipo_de_tof = '',
                                                                                         Nome_do_arquivo_sheets = nome_do_arquivo)
-      print(lista_de_bases_check[0])
+
       mensagem = mensagem + mensagem_local
       if erro_local == 0:
 
@@ -209,8 +209,6 @@ def gerador_base_exogenas(base_modelo,
           #base_exo[lista_de_lista_col_valores[b]] = base_exo[lista_de_lista_col_valores[b]].astype(float)
 
           # Renomeamos as colunas das bases conforme os nomes originais:
-          print(base_exo)
-          print(colunas_originais[b])
           base_exo.columns = colunas_originais[b]
           colunas = list(base_exo.columns.values)
 
@@ -245,7 +243,6 @@ def gerador_base_exogenas(base_modelo,
             data_max = base_exo[lista_lista_colunas_datas[b]].values.max()
             data_min = base_exo[lista_lista_colunas_datas[b]].values.min()
 
-            print(base_exo[lista_lista_colunas_datas[b]])
             primeira_segunda = data_min - pd.Timedelta(pd.to_datetime(str(data_min)).weekday(), unit='D')
             if pd.to_datetime(str(data_max)).weekday() != 6:
               ultimo_domingo = data_max + pd.Timedelta((6-pd.to_datetime(str(data_max)).weekday()), unit='D')
