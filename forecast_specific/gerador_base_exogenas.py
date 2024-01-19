@@ -209,6 +209,8 @@ def gerador_base_exogenas(base_modelo,
           #base_exo[lista_de_lista_col_valores[b]] = base_exo[lista_de_lista_col_valores[b]].astype(float)
 
           # Renomeamos as colunas das bases conforme os nomes originais:
+          print(base_exo)
+          print(colunas_originais[b])
           base_exo.columns = colunas_originais[b]
           colunas = list(base_exo.columns.values)
 
