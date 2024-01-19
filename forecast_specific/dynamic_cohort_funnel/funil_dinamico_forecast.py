@@ -10,6 +10,7 @@ from progressao_funil import progressao_funil
 from data_export import exportar_base
 from formatacao_output_forecast import formatacao_output_forecast
 from clear___output import *
+from colored import colored
 '''
 Descrição Geral:
 
