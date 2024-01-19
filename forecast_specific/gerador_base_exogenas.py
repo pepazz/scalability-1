@@ -145,7 +145,7 @@ def gerador_base_exogenas(base_modelo,
       lista_lista_frequencia = [['None'] for f in lista_de_col_datas]#+[['W-Mon']]
 
       chaves_ignoradas = []
-
+      print(lista_de_bases_check[0])
       lista_de_bases_check, colunas_de_valores, mensagem_local, erro_local = check_geral(lista_de_bases = lista_de_bases_check,
                                                                                         lista_de_colunas_obrigatorias = lista_de_colunas_obrigatorias,
                                                                                         lista_colunas_de_valores = lista_colunas_de_valores,
@@ -165,7 +165,7 @@ def gerador_base_exogenas(base_modelo,
                                                                                         dict_renames = dict_renames,
                                                                                         tipo_de_tof = '',
                                                                                         Nome_do_arquivo_sheets = nome_do_arquivo)
-
+      print(lista_de_bases_check[0])
       mensagem = mensagem + mensagem_local
       if erro_local == 0:
 
