@@ -5,6 +5,7 @@ from datetime import datetime
 from datetime import timedelta
 from data_import import *
 from data_export import *
+from checks import *
 '''
 alterados:
 
