@@ -29,7 +29,8 @@ def gerador_base_exogenas(base_modelo,
                           qtd_semanas,
                           data_inicio_historico,
                           data_fim_historico,
-                          data_fim_forecast):
+                          data_fim_forecast,
+                         client = 'client'):
 
   if not utilizar_anterior:
 
@@ -73,7 +74,8 @@ def gerador_base_exogenas(base_modelo,
                                                         colunas_para_dropar = [],       # lista de listas de inteiros, indicando a posição das colunas a serem excluídas de cada base (lista vazia caso nenhuma coluna a ser excluída)
                                                         lista_obrigatoria = lista_obrigatoria,         # lista de booleanos indicando se a existência daquela base é obrigatória
                                                         nome_do_painel_de_controle = nome_do_arquivo,           # string com o nome do arquivo sheets onde se encontra o painel de controle (somente para imprimir mensagens de erro)
-                                                        sheets_painel_de_controle = [])           # arquivo sheets do painel de controle aberto
+                                                        sheets_painel_de_controle = [],
+                                                        client = client)           # arquivo sheets do painel de controle aberto
 
     else:
       flag_abriu = False
