@@ -1,5 +1,6 @@
 #@title Def aplica_teste (AG 1)
-
+import pandas as pd
+from Auxiliar_Teste import *
 
 def aplica_teste(df_completo,      # DataFrame filtrado na etapa e abertura
             df_inputs_exogenas,
