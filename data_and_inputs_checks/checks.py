@@ -1997,8 +1997,7 @@ def check_geral(lista_de_bases,                 # Lista de bases que vamos verif
   for b in range(len(lista_de_bases)):
 
     if len(lista_de_bases[b]) > 0:
-      print("check_colunas_________________________________________________________")  
-      print(lista_de_bases[b].columns)
+
       lista_de_bases[b],colunas_de_valores,mensagem_local,erro_local = check_colunas(df = lista_de_bases[b],     # DataFrame
                                                                                      lista_df = lista_de_bases,
                                                                                      aberturas = aberturas_das_bases,                                                                                    
@@ -2009,7 +2008,7 @@ def check_geral(lista_de_bases,                 # Lista de bases que vamos verif
                                                                                     coluna_de_conversoes = coluna_de_conversoes,
                                                                                     colunas_datas = lista_lista_colunas_datas[b],
                                                                                     nome_do_arquivo = Nome_do_arquivo_sheets[b])
-      print(lista_de_bases[b].columns)
+
       if lista_do_retorno_de_valores[b]:
         lista_colunas_de_valores[b] = colunas_de_valores
       
@@ -2037,14 +2036,13 @@ def check_geral(lista_de_bases,                 # Lista de bases que vamos verif
     for b in range(len(lista_de_bases)):
 
       if len(lista_de_bases[b]) > 0:
-        print("check_valores_________________________________________________________")  
-        print(lista_de_bases[b].columns)
+
         lista_de_bases[b], mensagem_local, erro_local = check_valores(df = lista_de_bases[b],                   # DataFrame já deve ter checado a existencia das colunas de valores
                                                                         colunas_de_valores = lista_colunas_de_valores[b],    # lista com as colunas que contém valores
                                                                         check_valores_vazios = lista_check_vazios[b],                # Boleano que, caso seja verdadeiro, verifica se existem blocos de valores vazios nas colunas
                                                                         mantem_formatacao_original = lista_mantem_formatacao_original[b],
                                                                       nome_do_arquivo = Nome_do_arquivo_sheets[b])
-        print(lista_de_bases[b].columns)
+
 
         contador_de_erros = contador_de_erros+erro_local
         mensagens_locais = mensagens_locais+mensagem_local
@@ -2101,8 +2099,7 @@ def check_geral(lista_de_bases,                 # Lista de bases que vamos verif
     lista_nomes_arquivos_chaves = list(compress(Nome_do_arquivo_sheets, lista_de_bases_checar_chaves))
     if len(lista_comparacao_a_mais) > 0:
       lista_comparacao_a_mais = list(compress(lista_comparacao_a_mais, lista_de_bases_checar_chaves))
-    print("check_chaves_________________________________________________________")  
-    print(lista_de_bases[b].columns)
+
     lista_de_bases_chaves, mensagem_local, erro_local = check_chaves(lista_df = lista_de_bases_chaves,                   # lista de DataFrames já devem ter as colunas de valores formatadas
                                                                     aberturas_compartilhadas = aberturas_das_bases,   # lista com as aberturas que devem estar presentes em todas as bases da lista de dataframes
                                                                     aberturas_especificas = aberturas_especificas,      # lista com as aberturas que não precisam estar presentes em todas as bases
@@ -2112,7 +2109,7 @@ def check_geral(lista_de_bases,                 # Lista de bases que vamos verif
                                                                     tipo_de_tof = tipo_de_tof,
                                                                     nome_do_arquivo = lista_nomes_arquivos_chaves,
                                                                     agrupar_duplicados = True)
-    print(lista_de_bases[b].columns)
+
     contador_de_erros = contador_de_erros+erro_local
     mensagens_locais = mensagens_locais+mensagem_local
 
@@ -2133,8 +2130,6 @@ def check_geral(lista_de_bases,                 # Lista de bases que vamos verif
 
   if not flag_erro_colunas: # nao conseguimos verificar as datas se a coluna de datas não existir na base
 
-    print("check_datas_________________________________________________________")  
-    print(lista_de_bases[b].columns)
 
     # Para cada base na lista de bases
     for b in range(len(lista_de_bases)):
@@ -2157,7 +2152,7 @@ def check_geral(lista_de_bases,                 # Lista de bases que vamos verif
 
         contador_de_erros = contador_de_erros+erro_local
         mensagens_locais = mensagens_locais+mensagem_local
-    print(lista_de_bases[b].columns)
+
     if mensagens_locais != '':
       mensagens = mensagens+cabecalho_dos_erros+mensagens_locais
 
