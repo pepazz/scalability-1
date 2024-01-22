@@ -645,14 +645,15 @@ def check_colunas(df,                    # DataFrame
       df = df.drop(columns=colunas_extra)
       mensagem = mensagem + '\n\nNo arquivo '+colored(nome_do_arquivo,'blue')+', na base '+colored(nome_da_base,'yellow')+', as seguintes colunas não devem existir: '+colored(str(colunas_extra),'red')+'\nEssas colunas serão removidas e os valores serão somados e agrupados.'+'\nBaseado na lista de colunas obrigatórias definida pelo usuário: '+colored(str(colunas_o),'red')
       #erro = erro+1
-    print("rename_7.1_________________________________________")
-    print(df.columns.values,colunas)
+    print("rename_7.1_________________________________________",retorna_col_valores)
+    print(df)
     # Se não estiver definido quais são as colunas de valores, retornamos as colunas que foram encontradas
     # em excesso como sendo as colunas de valores dessa base.
     if erro == 0 and retorna_col_valores:
       df = df[colunas_o+colunas_extra]
     elif erro == 0:
       df = df[colunas_o]
+    print(df)
     
   print("rename_8_________________________________________")
   print(df.columns.values,colunas)
