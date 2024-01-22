@@ -410,6 +410,8 @@ def check_colunas(df,                    # DataFrame
       colunas_o = [c.lower() for c in colunas_o]
 
     # Renomeamos as colunas da base para ficar com tudo minúsculo
+    print("rename_1_________________________________________")
+    print(df.columns.values,colunas)
     df = df.rename(columns=dict(zip(df.columns.values, colunas)))
     
     # Vamos determinar quais colunas estão faltando e quais estão com nomes errados na base:
@@ -458,7 +460,6 @@ def check_colunas(df,                    # DataFrame
             # Não queremos substituir colunas onde estão faltando mais da metade das chaves
             # da base modelo:
             if numero_faltante < len(conteudo_modelo)/2:
-
               df = df.rename(columns={coluna_compativel:col_faltante})
               colunas = list(df.columns.values)
               colunas_substituidas = colunas_substituidas + [col_faltante]
@@ -472,6 +473,8 @@ def check_colunas(df,                    # DataFrame
       # Após renomear as colunas encontradas, redefinimos as colunas faltantes, se ainda existirem. 
       colunas_faltantes = list(set(colunas_faltantes) - set(colunas_substituidas))
 
+      print("rename_2_________________________________________")
+      print(df.columns.values,colunas)
 
       # Agora vamos procurar as colunas de valores
       #--------------------------------------------------------------------------------------------_
@@ -485,7 +488,9 @@ def check_colunas(df,                    # DataFrame
       colunas = df.columns.values
       colunas_faltantes = list(set(colunas_o) - set(colunas))
 
-
+      print("rename_3_________________________________________")
+      print(df.columns.values,colunas)
+      
       # Caso a aplicação do dicionário ainda assim resultou em colunas faltantes, vamos tentar encontrar
       # as colunas de valores pelo nome mais parecido no dicionário:
       if len(colunas_faltantes) > 0:
@@ -528,7 +533,9 @@ def check_colunas(df,                    # DataFrame
           
       colunas = df.columns.values
       colunas_faltantes = list(set(colunas_o) - set(colunas))
-
+      
+      print("rename_4_________________________________________")
+      print(df.columns.values,colunas)
 
       # Caso a coluna faltante seja a coluna de conversões, vamos tentar encontrá-la pelo conteúdo:
       if len(colunas_faltantes) > 0 and (coluna_de_conversoes in colunas_faltantes or coluna_de_conversoes.lower() in colunas_faltantes):
@@ -562,6 +569,8 @@ def check_colunas(df,                    # DataFrame
       colunas = df.columns.values
       colunas_faltantes = list(set(colunas_o) - set(colunas))
 
+      print("rename_5_________________________________________")
+      print(df.columns.values,colunas)
 
       # Caso a coluna faltante seja somente uma coluna de datas, vamos tentar renomear se encontrarmos apenas
       # uma coluna na base passível de ser formatada como data:
@@ -608,7 +617,8 @@ def check_colunas(df,                    # DataFrame
 
       colunas = df.columns.values
       colunas_faltantes = list(set(colunas_o) - set(colunas))
-
+      print("rename_6_________________________________________")
+      print(df.columns.values,colunas)
 
       if len(colunas_faltantes) > 0:
         mensagem = mensagem + '\n\nNo arquivo '+colored(nome_do_arquivo,'blue')+', na base '+colored(nome_da_base,'yellow')+', estão faltando as seguintes colunas: '+colored(str(colunas_faltantes),'red')+'\nBaseado na lista de colunas obrigatórias definida pelo usuário: '+colored(str(colunas_o),'red')
@@ -619,7 +629,8 @@ def check_colunas(df,                    # DataFrame
     #-----------------------------------------------------------------------------------------------
     colunas = list(df.columns.values)
     colunas_extra = list(set(colunas) - set(colunas_o))
-
+    print("rename_7_________________________________________")
+    print(df.columns.values,colunas)
     # Caso desejamos retornar as colunas de valores, é importante retornar na ordem que aparecem na base original
     if retorna_col_valores and len(colunas_extra) > 0:
       colunas_extra_original = colunas_extra.copy()
@@ -642,6 +653,8 @@ def check_colunas(df,                    # DataFrame
     elif erro == 0:
       df = df[colunas_o]
 
+  print("rename_8_________________________________________")
+  print(df.columns.values,colunas)
 
   df.name = nome_da_base
   #print(df.head(3))
