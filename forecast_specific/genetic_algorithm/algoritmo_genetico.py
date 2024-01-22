@@ -27,7 +27,7 @@ def algoritmo_genetico(df_completo, # DF filtrado somente etapa e abertura e end
   # Vamos definir o baseline de da qualidade do modelo medindo o R2 ajustado para o caso de um modelo
   # simples de média móvel ponderada para um número de termos da endógena dada pela pcf_lag:
   #_________________________________________________________________________________________________
-
+  print("testeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
   exogs_media_movel = []
   if pcf_lag == 0:
     exogs_media_movel = [col_endog+"___l___1"]
