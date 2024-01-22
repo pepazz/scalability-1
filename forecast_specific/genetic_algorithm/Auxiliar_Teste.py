@@ -4,7 +4,7 @@ from inputs_exogenas import *
 from transforma_dummy import *
 from transforma_exogs_2 import *
 from  algoritmo_genetico import *
-
+from acf_pac import *
 
 
 def Auxiliar_Teste(df_completo, # DF filtrado etapa abertura endog e data, ordenado com a data mais antiga no topo
