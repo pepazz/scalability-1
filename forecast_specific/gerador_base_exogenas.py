@@ -201,12 +201,12 @@ def gerador_base_exogenas(base_modelo,
 
         for b in range(len(lista_de_bases_check)):
 
+          # Precisamos formatar novamente as colunas pois não utilizamos as bases que saem dos checks, pois elas estão com as colunas trocadas ou modificadas
           base_exo = lista_de_bases_exo[b]
-          #lista_de_lista_col_valores[b] = [c.lower() for c in lista_de_lista_col_valores[b]]
-          #lista_lista_colunas_datas[b] = [c.lower() for c in lista_lista_colunas_datas[b]]
           for d in lista_lista_colunas_datas[b]:
             base_exo[d] = pd.to_datetime(base_exo[d], infer_datetime_format=True)
           for v in lista_de_lista_col_valores[b]:
+            base_exo[v] = base_exo[v].replace('','0')
             base_exo[v] = base_exo[v].astype(float)
 
           # Renomeamos as colunas das bases conforme os nomes originais:
