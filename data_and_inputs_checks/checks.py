@@ -410,6 +410,9 @@ def check_colunas(df,                    # DataFrame
       colunas_o = [c.lower() for c in colunas_o]
 
     # Renomeamos as colunas da base para ficar com tudo minúsculo
+    print("-----------------------------------")
+    print(df.columns.values)
+    print(colunas)
     df = df.rename(columns=dict(zip(df.columns.values, colunas)))
     
     # Vamos determinar quais colunas estão faltando e quais estão com nomes errados na base:
