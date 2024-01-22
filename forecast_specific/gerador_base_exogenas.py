@@ -242,7 +242,7 @@ def gerador_base_exogenas(base_modelo,
             # Criamos uma base de de-para com os dias e as datas correspondentes da base:
             data_max = base_exo[lista_lista_colunas_datas[b]].values.max()
             data_min = base_exo[lista_lista_colunas_datas[b]].values.min()
-
+            print(data_min,pd.Timedelta(pd.to_datetime(str(data_min)).weekday(), unit='D'))
             primeira_segunda = data_min - pd.Timedelta(pd.to_datetime(str(data_min)).weekday(), unit='D')
             if pd.to_datetime(str(data_max)).weekday() != 6:
               ultimo_domingo = data_max + pd.Timedelta((6-pd.to_datetime(str(data_max)).weekday()), unit='D')
