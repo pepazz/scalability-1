@@ -87,7 +87,7 @@ def gerador_base_exogenas(base_modelo,
       #-----------------------------------------------------------------------------------------------
 
       # Geramos a lista de vases que serão verificadas
-      lista_de_bases_check = lista_de_bases_exo#+[base_modelo_copy]
+      lista_de_bases_check = lista_de_bases_exo.copy()#+[base_modelo_copy]
 
       # Registramos o nome das colunas originais para substituir depois,
       # pois os checks transformam tudo em minúsculo:
