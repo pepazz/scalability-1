@@ -191,7 +191,9 @@ def gerador_base_exogenas(base_modelo,
         base_modelo_final = pd.concat([base_modelo_final,aux])
 
         base_modelo_final[col_data_base_modelo] = pd.to_datetime(base_modelo_final[col_data_base_modelo], infer_datetime_format=True)
-
+        print("base_modelo_final_1______________________________________________________________________")
+        print(base_modelo_final)
+        print(base_modelo_final[col_data_base_modelo].unique())
 
 
         # Agora, para cada base exogena, vamos tratá-la e adicioná-la à base modelo:
@@ -397,7 +399,9 @@ def gerador_base_exogenas(base_modelo,
 
             # Unir com a base modelo nas chaves compatíveis
             base_modelo_final = pd.merge(base_modelo_final,base_exo,how='left',on=chaves_finais)
-
+            print("base_modelo_final_2______________________________________________________________________")
+            print(base_modelo_final)
+            print(base_modelo_final[col_data_base_modelo].unique())
 
 
         # Com todas as bases unidas, vamos agrupar as exógenas que estão separadas entre histórico e projeção:
@@ -456,7 +460,9 @@ def gerador_base_exogenas(base_modelo,
                 if len(lista_exo_original) >= 3:
                   lista_exo[lista_exo.index(nome_exo_novo)] = nome_exo_novo+'_z'
                   base_modelo_final = base_modelo_final.rename(columns={nome_exo_novo:nome_exo_novo+'_z'})
-
+                  print("base_modelo_final_3______________________________________________________________________")
+                  print(base_modelo_final)
+                  print(base_modelo_final[col_data_base_modelo].unique())
               else:
                 nome_exo_novo = '_&_'.join(nomes_desduplicados)
 
@@ -468,7 +474,9 @@ def gerador_base_exogenas(base_modelo,
                 base_modelo_final_filtrada = base_modelo_final[base_modelo_final[col].notnull()]
                 data_max = base_modelo_final_filtrada[col_data_base_modelo].values.max()
                 data_min = base_modelo_final_filtrada[col_data_base_modelo].values.min()
-
+                print("base_modelo_final_4______________________________________________________________________")
+                print(base_modelo_final)
+                print(base_modelo_final[col_data_base_modelo].unique())
                 datas_max_min = datas_max_min + [[col,data_max,data_min]]
 
               df_datas_max_min = pd.DataFrame(datas_max_min,
@@ -490,13 +498,17 @@ def gerador_base_exogenas(base_modelo,
 
                   exo_hist = exo_inicial
                   base_modelo_final[nome_exo_novo] = base_modelo_final[exo_inicial].values
-
+                  print("base_modelo_final_5______________________________________________________________________")
+                  print(base_modelo_final)
+                  print(base_modelo_final[col_data_base_modelo].unique())
                 else:
 
                   data_limite = df_datas_max_min.loc[df_datas_max_min['exo'] != exo_inicial,['data_max']].values.min()
                   exo = df_datas_max_min.loc[(df_datas_max_min['data_max'] == data_limite) & (df_datas_max_min['exo'] != exo_inicial),['exo']].values[0][0]
                   base_modelo_final.loc[base_modelo_final[col_data_base_modelo] > data_limite_inicial,[nome_exo_novo]] = base_modelo_final.loc[base_modelo_final[col_data_base_modelo] > data_limite_inicial,[exo]].values
-
+                  print("base_modelo_final_6______________________________________________________________________")
+                  print(base_modelo_final)
+                  print(base_modelo_final[col_data_base_modelo].unique())
                   data_limite_inicial = data_limite
                   exo_inicial = exo
 
@@ -510,10 +522,14 @@ def gerador_base_exogenas(base_modelo,
                 data_menor = datas_menores.min()
                 exo_menor = df_datas_max_min.loc[df_datas_max_min['data_min'] == data_menor,['exo']].values[0][0]
                 base_modelo_final.loc[base_modelo_final[col_data_base_modelo] < data_hist,[nome_exo_novo]] = base_modelo_final.loc[base_modelo_final[col_data_base_modelo] < data_hist,[exo_menor]].values
-
+                print("base_modelo_final_7______________________________________________________________________")
+                print(base_modelo_final)
+                print(base_modelo_final[col_data_base_modelo].unique())
               # Removemos as colunas antigas que estavam separadas
               base_modelo_final = base_modelo_final.drop(columns = lista_exo)
-
+              print("base_modelo_final_8______________________________________________________________________")
+              print(base_modelo_final)
+              print(base_modelo_final[col_data_base_modelo].unique())
 
 
 
@@ -605,7 +621,9 @@ def gerador_base_exogenas(base_modelo,
         base_modelo_final_concat = pd.concat(lista_base_modelo_final_concat)
         base_modelo_final = base_modelo_final_concat
         base_modelo_final = base_modelo_final.fillna(0)
-
+        print("base_modelo_final_9______________________________________________________________________")
+        print(base_modelo_final)
+        print(base_modelo_final[col_data_base_modelo].unique())
     else:
         # Vamos criar uma base de exógenas modelo, com todas as chaves e todas as semanas de histórico
         # e forecast:
@@ -621,9 +639,13 @@ def gerador_base_exogenas(base_modelo,
           aux = aberturas_modelo.copy()
           aux[col_data_base_modelo] = semana
           base_modelo_final = pd.concat([base_modelo_final,aux])
-
+        print("base_modelo_final_10______________________________________________________________________")
+        print(base_modelo_final)
+        print(base_modelo_final[col_data_base_modelo].unique())
         base_modelo_final[col_data_base_modelo] = pd.to_datetime(base_modelo_final[col_data_base_modelo], infer_datetime_format=True)
-
+        print("base_modelo_final_11______________________________________________________________________")
+        print(base_modelo_final)
+        print(base_modelo_final[col_data_base_modelo].unique())
 
   return base_modelo_final,mensagem
 
