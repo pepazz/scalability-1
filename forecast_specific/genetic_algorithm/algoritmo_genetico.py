@@ -3,7 +3,6 @@ from sklearn.linear_model import LinearRegression
 import numpy as np
 from fitness_func_qualidade_do_modelo import *
 from parametros_modelo import *
-import pygad as pygad
 
 def algoritmo_genetico(df_completo, # DF filtrado somente etapa e abertura e endógena e data, já com todas as combinações possíveis de exógenas (inclusive as endog transformadas)
                       col_exogs,   # Lista com o nome das colunas de exogs
@@ -130,6 +129,7 @@ def algoritmo_genetico(df_completo, # DF filtrado somente etapa e abertura e end
 
 
     # Aqui definimos o modelo do algoritmo genético
+    import pygad
     ga_instance = pygad.GA(num_generations=num_generations,
                           num_parents_mating=num_parents_mating,
                           fitness_func=fitness_function,
