@@ -205,8 +205,8 @@ def gerador_base_exogenas(base_modelo,
           #lista_de_lista_col_valores[b] = [c.lower() for c in lista_de_lista_col_valores[b]]
           #lista_lista_colunas_datas[b] = [c.lower() for c in lista_lista_colunas_datas[b]]
 
-          #base_exo[lista_lista_colunas_datas[b]] = pd.to_datetime(base_exo[lista_lista_colunas_datas[b]], infer_datetime_format=True)
-          #base_exo[lista_de_lista_col_valores[b]] = base_exo[lista_de_lista_col_valores[b]].astype(float)
+          base_exo[lista_lista_colunas_datas[b]] = pd.to_datetime(base_exo[lista_lista_colunas_datas[b]], infer_datetime_format=True)
+          base_exo[lista_de_lista_col_valores[b]] = base_exo[lista_de_lista_col_valores[b]].astype(float)
 
           # Renomeamos as colunas das bases conforme os nomes originais:
           base_exo.columns = colunas_originais[b]
@@ -243,9 +243,9 @@ def gerador_base_exogenas(base_modelo,
             data_max = base_exo[lista_lista_colunas_datas[b]].values.max()
             data_min = base_exo[lista_lista_colunas_datas[b]].values.min()
 
-            primeira_segunda = pd.to_datetime(str(data_min)) - pd.Timedelta(pd.to_datetime(str(data_min)).weekday(), unit='D')
+            primeira_segunda = data_min - pd.Timedelta(pd.to_datetime(str(data_min)).weekday(), unit='D')
             if pd.to_datetime(str(data_max)).weekday() != 6:
-              ultimo_domingo = pd.to_datetime(str(data_max)) + pd.Timedelta((6-pd.to_datetime(str(data_max)).weekday()), unit='D')
+              ultimo_domingo = data_max + pd.Timedelta((6-pd.to_datetime(str(data_max)).weekday()), unit='D')
             else:
               ultimo_domingo = data_max
 
