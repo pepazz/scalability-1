@@ -1,5 +1,7 @@
 #@title Def algoritmo_genetico (AG 3)
 from sklearn.linear_model import LinearRegression
+import numpy as np
+
 def algoritmo_genetico(df_completo, # DF filtrado somente etapa e abertura e endógena e data, já com todas as combinações possíveis de exógenas (inclusive as endog transformadas)
                       col_exogs,   # Lista com o nome das colunas de exogs
                       exogs_obrigatorias, # Lista com as exógenas que devem estar obrigatoriamente no modelo de AG
