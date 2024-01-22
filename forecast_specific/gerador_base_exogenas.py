@@ -181,7 +181,8 @@ def gerador_base_exogenas(base_modelo,
         # Para todas as combinações de aberturas encontradas, vamos repet-las em todas as semanas de historiuco e de forecast:
 
         lista_semanas_completa = list(pd.date_range(start=data_inicio_historico, end=(data_fim_forecast+pd.Timedelta(7, unit='D')), freq='W'))
-
+        print(data_inicio_historico,data_fim_forecast,data_fim_forecast+pd.Timedelta(7, unit='D'))
+        print(lista_semanas_completa)
         lista_base_modelo_final = [base_modelo_final]
         for semana in lista_semanas_completa:
           semana = semana - pd.Timedelta(6, unit='D') # date_range gera lista de domingos
