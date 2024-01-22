@@ -204,7 +204,7 @@ def gerador_base_exogenas(base_modelo,
           base_exo = lista_de_bases_exo[b]
           #lista_de_lista_col_valores[b] = [c.lower() for c in lista_de_lista_col_valores[b]]
           #lista_lista_colunas_datas[b] = [c.lower() for c in lista_lista_colunas_datas[b]]
-          print(base_exo[lista_lista_colunas_datas[b]]
+          print(base_exo[lista_lista_colunas_datas[b]])
           base_exo[lista_lista_colunas_datas[b]] = pd.to_datetime(base_exo[lista_lista_colunas_datas[b]], infer_datetime_format=True)
           base_exo[lista_de_lista_col_valores[b]] = base_exo[lista_de_lista_col_valores[b]].astype(float)
 
