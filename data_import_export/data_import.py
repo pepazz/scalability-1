@@ -10,7 +10,7 @@ from colored import colored
 import pandas as pd
 from IPython.display import clear_output
 # A autorização "client" já deve ter sido configurada no notebook
-
+'''
 def abertura_do_arquivo(nome_do_arquivo, # string com o nome do arquivo sheets a ser aberto
                        sheets_aberto,    # Booleano indicando se o sheets já foi aberto
                        sheets,           # Arquivo sheets já aberto
@@ -261,3 +261,4 @@ def abertura_das_bases(lista_de_nomes_das_bases,  # lista de strings com os nome
     flag_abriu = False
   
   return lista_de_bases,flag_abriu
+'''
