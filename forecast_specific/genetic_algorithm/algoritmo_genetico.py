@@ -129,7 +129,7 @@ def algoritmo_genetico(df_completo, # DF filtrado somente etapa e abertura e end
 
 
     # Aqui definimos o modelo do algoritmo genético
-    # teste
+    pygad = 'teste'
     ga_instance = pygad.GA(num_generations=num_generations,
                           num_parents_mating=num_parents_mating,
                           fitness_func=fitness_function,
