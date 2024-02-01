@@ -3,11 +3,7 @@ from sklearn.linear_model import LinearRegression
 import numpy as np
 from fitness_func_qualidade_do_modelo import *
 from parametros_modelo import *
-try:
-  import pygad
-except:
-  pip install pygad
-  import pygad
+import pygad
         
 #@title Def algoritmo_genetico (AG 3)
 
