@@ -1,6 +1,6 @@
 #@title Def check_inputs_exogenas
-
-#@title Def check_inputs_exogenas
+import pandas as pd
+import numpy as np
 
 def check_inputs_exogenas(df_inputs,
                           col_valores_exogenas,
