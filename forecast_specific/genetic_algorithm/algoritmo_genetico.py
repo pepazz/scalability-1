@@ -3,7 +3,12 @@ from sklearn.linear_model import LinearRegression
 import numpy as np
 from fitness_func_qualidade_do_modelo import *
 from parametros_modelo import *
-
+try:
+  import pygad
+except:
+  !pip install pygad
+  import pygad
+        
 #@title Def algoritmo_genetico (AG 3)
 
 def algoritmo_genetico(df_completo, # DF filtrado somente etapa e abertura e endógena e data, já com todas as combinações possíveis de exógenas (inclusive as endog transformadas)
