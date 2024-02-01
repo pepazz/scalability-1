@@ -6,7 +6,7 @@ from parametros_modelo import *
 try:
   import pygad
 except:
-  !pip install pygad
+  pip install pygad
   import pygad
         
 #@title Def algoritmo_genetico (AG 3)
