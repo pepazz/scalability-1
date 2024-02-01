@@ -315,7 +315,7 @@ def fitness_func_qualidade_do_modelo(ga_instance,
       df_fitness[exogs_fitness] = df_fitness[exogs_fitness].replace(np.nan, 0, inplace=False)
 
       # Definimos o modelo linear
-      model = LinearRegression(fit_intercept=fit_intercept)
+      model = LinearRegression(fit_intercept=fit_intercept_fitness)
 
       X_train = df_fitness[exogs_fitness]
 
