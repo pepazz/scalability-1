@@ -4,6 +4,8 @@ import numpy as np
 from fitness_func_qualidade_do_modelo import *
 from parametros_modelo import *
 
+#@title Def algoritmo_genetico (AG 3)
+
 def algoritmo_genetico(df_completo, # DF filtrado somente etapa e abertura e endógena e data, já com todas as combinações possíveis de exógenas (inclusive as endog transformadas)
                       col_exogs,   # Lista com o nome das colunas de exogs
                       exogs_obrigatorias, # Lista com as exógenas que devem estar obrigatoriamente no modelo de AG
@@ -119,17 +121,16 @@ def algoritmo_genetico(df_completo, # DF filtrado somente etapa e abertura e end
 
         n_series = endog_lag+len(np.where(np.array(solution[1:]) != 0)[0])
 
-        fitness = np.exp((fitness + n_series * overfitting_vs_underfitting_fitness)/2)
+        fitness_r2 = np.exp((fitness + n_series * overfitting_vs_underfitting_fitness)/2)
 
-        change=fitness - last_fitness
-        last_fitness = fitness
+        change=fitness_r2 - last_fitness
+        last_fitness = fitness_r2
 
         print("\r", end="")
-        print(col_endog,"| Baseline MA:",round(fitness_baseline,2),"| Generation:",generation,"| Fitness:",round(fitness,2),"| n Series:",n_series,"| n lags:",endog_lag,"| Change:",round(change*100,2),"%",end="")
+        print(col_endog,"| Baseline MA:",round(fitness_baseline,2),"| Generation:",generation,"| Fitness:",round(fitness_r2,2),"| n Series:",n_series,"| n lags:",endog_lag,"| Change:",round(change*100,2),"%","| Best Generation Exogs: ",list(vetor_exogs_fitness[np.where(np.array(solution[1:]) != 0)[0]]),end="")
 
 
     # Aqui definimos o modelo do algoritmo genético
-    pygad = 'teste'
     ga_instance = pygad.GA(num_generations=num_generations,
                           num_parents_mating=num_parents_mating,
                           fitness_func=fitness_function,
@@ -149,13 +150,18 @@ def algoritmo_genetico(df_completo, # DF filtrado somente etapa e abertura e end
     # Executamos o GA:
     ga_instance.run()
 
-    #ga_instance.plot_fitness(title = col_endog)
-
     # Retornamos o melhor cromossomo (melhor indivíduo que resultou no maior R2 do ajuste multilienar)
     solution, solution_fitness, solution_idx = ga_instance.best_solution()
 
+    try:
+      ga_instance.plot_fitness()
+    except:
+      print("Sem Gráfico")
+
+
     # Caso a melhor solução tenha sido a de fitness == -10000, significa que o modelo falhou:
     if solution_fitness == -10000:
+      print("\n!!!!!!!!!!!!!!!!!!! Model Fail !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
       solution = []
       endog_trans = []
       for l in range(1,pcf_lag+1):
@@ -176,6 +182,7 @@ def algoritmo_genetico(df_completo, # DF filtrado somente etapa e abertura e end
           exogs_finais = ['Volume']
           if col_endog == 's__1':
             exogs_finais = exogs_finais + ['s__0']
+      print("Final Exogs: ",exogs_finais)
 
   else:
 
