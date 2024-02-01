@@ -1,5 +1,6 @@
 #@title Def treina_melhores_exogs_e_lags (AG 0)
 import timeit
+from datetime import timedelta
 import pandas as pd
 import numpy as np
 from remove_historico_zerado import remove_historico_zerado
