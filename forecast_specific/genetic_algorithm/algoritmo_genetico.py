@@ -3,9 +3,9 @@ from sklearn.linear_model import LinearRegression
 import numpy as np
 #from fitness_func_qualidade_do_modelo import *
 from parametros_modelo import *
-import warnings
-warnings.simplefilter("ignore", UserWarning)
-warnings.simplefilter("error", category=Warning)
+#import warnings
+#warnings.simplefilter("ignore", UserWarning)
+#warnings.simplefilter("error", category=Warning)
 import pygad
         
 #@title Def algoritmo_genetico (AG 3)
