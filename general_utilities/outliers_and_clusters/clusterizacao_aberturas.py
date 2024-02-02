@@ -3,6 +3,7 @@ from sklearn.cluster import DBSCAN
 import pandas as pd
 import numpy as np
 from colored import *
+from encaixa_abertura_no_cluster import *
 
 def clusterizacao_aberturas(df_completo,  # data_frame formatado completo
                             df_classificacao_aberturas_ruins,
