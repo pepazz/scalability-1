@@ -733,7 +733,7 @@ def check_valores(df,                    # DataFrame já deve ter checado a exis
     # Para cada coluna, separamos os valores que contém vírgula. Depois, separamos dentre estes
     # os que contém ponto também.
     virgulas = df[df[coluna].str.contains(',')][coluna]
-    virgulas = virgulas.str.replace('.','#') # substituímos os pontos por cerquilha, pois o código não funcionou procurando os pontos diretamente
+    virgulas = virgulas.str.replace('.','#',regex=True) # substituímos os pontos por cerquilha, pois o código não funcionou procurando os pontos diretamente
     pontos_e_virgulas = virgulas[virgulas.str.contains('#')]
 
     # Checar se a formatação está correta:
@@ -761,7 +761,7 @@ def check_valores(df,                    # DataFrame já deve ter checado a exis
     if erro == 0:
 
       # Vamos substituir vírgulas por pontos
-      df[coluna] = df[coluna].str.replace(',','')
+      df[coluna] = df[coluna].str.replace(',','',regex=True)
 
       # Vamos substituir os vazios por zero
       df.loc[df[coluna] == '',[coluna]] = '0.0'
@@ -2218,7 +2218,7 @@ def check_transforma_base_demanda(base_df,
     col_valores_x = [x + "_x" for x in col_valores]
     col_valores_y = [x + "_y" for x in col_valores]
 
-    base_merged[col_valores] = base_merged[col_valores].replace('',0)
+    base_merged[col_valores] = base_merged[col_valores].replace('',0,regex=True)
 
     base_merged[col_valores] = base_merged[col_valores].astype(float)
 
@@ -2308,9 +2308,9 @@ def check_building_blocks(base_tof_semanal,
   # Formatando o conteúdo das colunas de Building Blocks ToF:
   if erro_bb == 0:
 
-    base_tof_semanal['building block tof'] = base_tof_semanal['building block tof'].str.replace(lista_baselines[0],'baseline')
-    base_tof_mensal['building block tof'] = base_tof_mensal['building block tof'].str.replace(lista_baselines[0],'baseline')
-    base_inputs['building block tof'] = base_inputs['building block tof'].str.replace(lista_baselines[0],'baseline')
+    base_tof_semanal['building block tof'] = base_tof_semanal['building block tof'].str.replace(lista_baselines[0],'baseline',regex=True)
+    base_tof_mensal['building block tof'] = base_tof_mensal['building block tof'].str.replace(lista_baselines[0],'baseline',regex=True)
+    base_inputs['building block tof'] = base_inputs['building block tof'].str.replace(lista_baselines[0],'baseline',regex=True)
 
   return base_tof_semanal,base_tof_mensal,base_inputs,mensagem_bb,erro_bb
   
