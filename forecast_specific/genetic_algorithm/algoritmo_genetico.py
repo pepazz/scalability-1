@@ -3,6 +3,17 @@ from sklearn.linear_model import LinearRegression
 import numpy as np
 #from fitness_func_qualidade_do_modelo import *
 from parametros_modelo import *
+import warnings
+from statsmodels.tools.sm_exceptions import ValueWarning
+from statsmodels.tools.sm_exceptions import ConvergenceWarning
+from statsmodels.tools.sm_exceptions import HessianInversionWarning
+warnings.simplefilter('ignore', ValueWarning)
+warnings.simplefilter('ignore', ConvergenceWarning)
+warnings.simplefilter('ignore', HessianInversionWarning)
+warnings.simplefilter('ignore', RuntimeWarning)
+warnings.simplefilter('ignore', FutureWarning)
+warnings.simplefilter("ignore", UserWarning)
+warnings.simplefilter("error", category=Warning)
 import pygad
         
 #@title Def algoritmo_genetico (AG 3)
