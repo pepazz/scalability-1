@@ -7,6 +7,7 @@ def treina_melhores_exogs_e_lags(df_completo,      # DataFrame completo
                                 df_aberturas_clusterizadas,
                                 data_corte,
                                 topo,
+                                 tipo_de_tof,
                                  etapas_vol,
                                  etapas_conv,
                                 max_origin,
@@ -249,8 +250,6 @@ def treina_melhores_exogs_e_lags(df_completo,      # DataFrame completo
           # Caso o histórico exista, mas ainda assim tiver poucos pontos não realizamos a otimização
           if len(df_completo_abertura.loc[df_completo_abertura[col_data] <= data_maturacao]) > qtd_semanas_media:
 
-
-
             # Realizamos a projeção de todas as variáveis da abertura (Volumes de topo, shares de cohorts, cohort aberta e cohorts fechadas)
             out_parametros_a = aplica_teste(df_completo = df_completo_abertura,      # DataFrame filtrado na etapa e abertura
                                             df_inputs_exogenas = df_inputs_exogenas,
@@ -262,6 +261,7 @@ def treina_melhores_exogs_e_lags(df_completo,      # DataFrame completo
                                             aberturas = aberturas,
                                             etapa = e,                    # String com o nome da etapa do funil
                                             topo = topo,                      # Lista com o nome das etapas do ToF.
+                                            tipo_de_tof = tipo_de_tof,
                                             max_origin = max_origin,               # int indicando qual a maior cohort do histórico
                                             conversoes = conversoes,               # Lista com os nomes das conversões sem '%__Volume Aberta' ('s__0','s__1',...,'s__Coincident')
                                             qtd_semanas_media = qtd_semanas_media,
