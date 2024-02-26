@@ -22,6 +22,10 @@ def check_inputs_exogenas(df_inputs,
   colunas_2 = ['Etapa','Endógena','Ação','Exógena','Lag ou Diff','Slope Sanity Check']
   df_inputs = df_inputs.rename(columns=dict(zip(colunas_2, colunas)))
 
+  # selecionar aberturas e manter na ordem original
+  lista_aberturas = list(set(df_inputs.columns.values) - set(colunas))
+  aberturas = [x for x in df_inputs.columns.values if x in lista_aberturas]
+
   lista_itens_obrigatorios = [conversoes,
                               ['Volume','Cohort Aberta']+shares_permitidos,
                               ['Incluir','Check'],
@@ -43,7 +47,6 @@ def check_inputs_exogenas(df_inputs,
       erro += 1
 
 
-
   # Checando se a endógena de volume está numa etapa que contém ToF
   if erro == 0:
 
@@ -60,6 +63,7 @@ def check_inputs_exogenas(df_inputs,
       else:
         mensagem = mensagem
 
+
   # Separando a base de inputs da base de sanity check:
   if len(df_inputs)>0:
     df_sanity_check = df_inputs[['exógena','slope sanity check']]
@@ -73,9 +77,10 @@ def check_inputs_exogenas(df_inputs,
     df_sanity_check = pd.DataFrame()
 
   if 'Incluir' in list(df_inputs['ação'].values):
-    df_inputs = df_inputs.loc[df_inputs['ação'] == 'Incluir',colunas[:-1]]
+    df_inputs = df_inputs.loc[df_inputs['ação'] == 'Incluir',aberturas+colunas[:-1]]
   else:
-    df_inputs = df_inputs[colunas[:-1]]
+    df_inputs = df_inputs[aberturas+colunas[:-1]]
+
 
   df_inputs.name = nome
   return df_inputs,df_sanity_check,mensagem,erro
