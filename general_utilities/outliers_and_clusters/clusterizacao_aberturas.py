@@ -273,7 +273,7 @@ def clusterizacao_aberturas(df_completo,  # data_frame formatado completo
 
         df_clusters_final_formatado = df_clusters_final.copy()
         df_clusters_final_formatado = df_clusters_final_formatado.melt(id_vars=aberturas+['clusters','outlier'],var_name='Etapa', value_name='Cohort Aberta Média')
-        df_clusters_final_formatado = pd.merge(df_clusters_final_formatado,df_share_fechada[aberturas+['Etapa']+col_shares+['%__Coincident']],how='left',on=aberturas+['Etapa'])
+        df_clusters_final_formatado = pd.merge(df_clusters_final_formatado,df_share_fechada[aberturas+['Etapa,'clusters']+col_shares+['%__Coincident']],how='left',on=aberturas+['Etapa,'clusters'])
 
 
         df_aberturas = df_filtrado_original.copy()
