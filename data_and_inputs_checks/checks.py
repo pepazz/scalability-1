@@ -31,6 +31,7 @@ def check_etapas_do_funil(lista_etapas_conversao, # lista com todas as etapas de
 
   etapas_conv = []
   etapas_vol = []
+  etapas_extra = []                          
 
   # Removemos os valores duplicados das etapas e ToF's
   #-------------------------------------------------------------------------------------------------
