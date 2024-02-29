@@ -132,7 +132,8 @@ def classifica_aberturas_ruins(df_completo,  # data_frame formatado completo
 
 
         # Também vamos classificar como outlier a abertura cuja última etapa do funil esteja zerada:
-        df_merged['outlier'] = np.where(df_merged[ultima_etapa] == 0, 1, df_merged['outlier'])
+        # Essa classificação em outlier está errada
+        # df_merged['outlier'] = np.where(df_merged[ultima_etapa] == 0, 1, df_merged['outlier'])
 
 
         # Retornamos apenas as colunas que importam
