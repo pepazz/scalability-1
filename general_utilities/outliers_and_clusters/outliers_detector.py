@@ -192,6 +192,14 @@ def remove_ouliers(df,endogenous,exogenous,outlierIndexes):
   outliers[[endogenous]+exogenous] = np.nan
   df_sem_outlier.iloc[outlierIndexes,:] = outliers.values
 
+  # Aqui também vamos remover os shares da W0 que estiverem zerados
+  if endogenous == 's__0':
+    df_sem_outlier_copy = df_sem_outlier.copy()
+    df_sem_outlier_copy.loc[df_sem_outlier_copy['s__0'] == 0,[endogenous]+exogenous] = np.nan
+    # Mas se todos os shares estiverem zerados,mantemos zerados
+    if len(df_sem_outlier_copy.loc[df_sem_outlier_copy['s__0'].isnull(),[endogenous]+exogenous]) < len(df_sem_outlier[[endogenous]+exogenous]):
+      df_sem_outlier = df_sem_outlier_copy
+      
   return df_sem_outlier
 
 #_________________________________________________________________________________________________
