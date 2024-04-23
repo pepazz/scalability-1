@@ -5,6 +5,7 @@ def projeta_por_media(df,endogenous,qtd_semanas_projetadas,qtd_semanas_media):
   print("***********************************************************")
   print(endogenous)
   print(df.head(3))
+  print(erro_erro)
   serie = df[endogenous].astype('float').values
 
 
