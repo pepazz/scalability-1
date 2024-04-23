@@ -4,7 +4,7 @@ import numpy as np
 def projeta_por_media(df,endogenous,qtd_semanas_projetadas,qtd_semanas_media):
   print("***********************************************************")
   print(endogenous)
-  print(df.head(3))
+  print(df.columns.values)
   print(erro_erro=0)
   serie = df[endogenous].astype('float').values
 
