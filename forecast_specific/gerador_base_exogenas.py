@@ -396,13 +396,8 @@ def gerador_base_exogenas(base_modelo,
             chaves_finais = [col_data_base_modelo] + list(set(aberturas_da_base_modelo) - set(colunas_faltantes))
 
             # Unir com a base modelo nas chaves compatíveis
-            print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-            print(base_modelo_final.head(3))
             base_modelo_final = pd.merge(base_modelo_final,base_exo,how='left',on=chaves_finais)
-            print("-----------------------------------------------------")
-            print(base_exo.head(3))
-            print("-----------------------------------------------------")
-            print(base_modelo_final.head(3))
+
 
 
         # Com todas as bases unidas, vamos agrupar as exógenas que estão separadas entre histórico e projeção:
