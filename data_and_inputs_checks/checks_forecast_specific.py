@@ -1,6 +1,7 @@
 #@title Def check_inputs_exogenas
 import pandas as pd
 import numpy as np
+from colored import colored
 
 def check_inputs_exogenas(df_inputs,
                           col_valores_exogenas,
