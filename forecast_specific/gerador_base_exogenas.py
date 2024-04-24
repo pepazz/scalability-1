@@ -16,7 +16,7 @@ abertura do arquivo
 checks
 check valore negativos
 '''
-'''
+
 def gerador_base_exogenas(base_modelo,
                           dict_renames,
                           nome_do_arquivo,
@@ -32,14 +32,7 @@ def gerador_base_exogenas(base_modelo,
                           data_fim_historico,
                           data_fim_forecast,
                          client = 'client'):
-'''
-def gerador_base_exogenas(base_modelo,
-                          dict_renames,
-                          nome_do_arquivo,
-                          coluna_de_conversoes,
-                          aberturas_da_base_modelo,
-                          col_data_base_modelo,
-                         client = 'client'):
+
                            
   if not utilizar_anterior:
 
