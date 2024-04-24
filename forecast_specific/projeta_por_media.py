@@ -2,10 +2,7 @@
 import numpy as np
 # o df tem que estar ordenado por data com a mais antiga no topo
 def projeta_por_media(df,endogenous,qtd_semanas_projetadas,qtd_semanas_media):
-  print("***********************************************************")
-  print(endogenous)
-  print(df.columns.values)
-  print(erro_erro=0)
+
   serie = df[endogenous].astype('float').values
 
 
