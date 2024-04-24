@@ -35,6 +35,8 @@ def gerador_base_exogenas(base_modelo,
 
   if not utilizar_anterior:
 
+    print("Entrouuuuuuuuu")
+
     mensagem = ''
 
     nome_base_modelo = base_modelo.name
