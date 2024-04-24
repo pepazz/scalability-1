@@ -33,7 +33,7 @@ def gerador_base_exogenas(base_modelo,
                           data_fim_forecast,
                          client = 'client'):
 
-                           
+  print("Testeeeeeee")                         
   if not utilizar_anterior:
 
     print("Entrouuuuuuuuu")
