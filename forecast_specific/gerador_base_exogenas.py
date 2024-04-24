@@ -33,10 +33,8 @@ def gerador_base_exogenas(base_modelo,
                           data_fim_forecast,
                          client = 'client'):
 
-  print("Testeeeeeee")                         
+                       
   if not utilizar_anterior:
-
-    print("Entrouuuuuuuuu")
 
     mensagem = ''
 
@@ -85,7 +83,7 @@ def gerador_base_exogenas(base_modelo,
       flag_abriu = False
 
     if flag_abriu:
-      print("Teste pós abertura")
+
       # Realizar um pré-check geral na base modelo:
       #-----------------------------------------------------------------------------------------------
 
@@ -171,7 +169,7 @@ def gerador_base_exogenas(base_modelo,
 
       mensagem = mensagem + mensagem_local
       if erro_local == 0:
-        print("Teste pós check")
+
         # Caso não tenha sido encontrado nenhum erro nas bases, vamos gerar a base final:
         ############################################################################################
 
@@ -238,7 +236,7 @@ def gerador_base_exogenas(base_modelo,
 
 
           if erro_local == 0:
-            print("Teste pós check 2")
+
             # Para cada base de exogenas, vamos transformá-la numa base semanal:
             #-----------------------------------------------------------------------------------------
 
