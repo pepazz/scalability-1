@@ -80,7 +80,7 @@ def gerador_base_exogenas(base_modelo,
                                                         nome_do_painel_de_controle = nome_do_arquivo,           # string com o nome do arquivo sheets onde se encontra o painel de controle (somente para imprimir mensagens de erro)
                                                         sheets_painel_de_controle = [],
                                                         client = client)           # arquivo sheets do painel de controle aberto
-
+      print("Teste pós abertura")
     else:
       flag_abriu = False
 
