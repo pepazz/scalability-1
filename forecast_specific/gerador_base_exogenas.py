@@ -80,12 +80,12 @@ def gerador_base_exogenas(base_modelo,
                                                         nome_do_painel_de_controle = nome_do_arquivo,           # string com o nome do arquivo sheets onde se encontra o painel de controle (somente para imprimir mensagens de erro)
                                                         sheets_painel_de_controle = [],
                                                         client = client)           # arquivo sheets do painel de controle aberto
-      print("Teste pós abertura")
+      
     else:
       flag_abriu = False
 
     if flag_abriu:
-
+      print("Teste pós abertura")
       # Realizar um pré-check geral na base modelo:
       #-----------------------------------------------------------------------------------------------
 
@@ -171,7 +171,7 @@ def gerador_base_exogenas(base_modelo,
 
       mensagem = mensagem + mensagem_local
       if erro_local == 0:
-
+        print("Teste pós check")
         # Caso não tenha sido encontrado nenhum erro nas bases, vamos gerar a base final:
         ############################################################################################
 
@@ -238,7 +238,7 @@ def gerador_base_exogenas(base_modelo,
 
 
           if erro_local == 0:
-
+            print("Teste pós check 2")
             # Para cada base de exogenas, vamos transformá-la numa base semanal:
             #-----------------------------------------------------------------------------------------
 
