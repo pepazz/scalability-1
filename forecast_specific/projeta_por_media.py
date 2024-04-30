@@ -5,10 +5,16 @@ def projeta_por_media(df,
                       endogenous,
                       qtd_semanas_projetadas,
                       qtd_semanas_media):
-  '''
+
   if endogenous == '%__Volume Aberta':
-    serie_aberta = df['Volume Aberta'].astype('float').values
+    #serie_aberta = df['Volume Aberta'].astype('float').values
     serie_volume = df['Volume'].astype('float').values
+    # Devemos multiplicar a cohort aberta % pelos volumes, pois,
+    # caso tenha sido feita uma projeção das cohorts não-maturadas
+    # ou uma remoção de outliers,
+    # precisamos incluir essa correção nos volumes.
+    serie_aberta = df['%__Volume Aberta'].astype('float').values * serie_volume
+    
 
     if len(serie_aberta) >= qtd_semanas_media:
       serie_aberta = serie_aberta[-qtd_semanas_media:]
@@ -33,6 +39,8 @@ def projeta_por_media(df,
       serie = serie[-qtd_semanas_media:]
 
     avg = np.mean(serie)
+
+                        
   '''
   serie = df[endogenous].astype('float').values
 
@@ -40,7 +48,8 @@ def projeta_por_media(df,
     serie = serie[-qtd_semanas_media:]
 
   avg = np.mean(serie)
-    
+  '''
+                        
   forecast = np.zeros(shape=(int(qtd_semanas_projetadas)))
   forecast[:] = avg
 
