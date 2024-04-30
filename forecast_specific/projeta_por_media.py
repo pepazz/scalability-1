@@ -5,7 +5,7 @@ def projeta_por_media(df,
                       endogenous,
                       qtd_semanas_projetadas,
                       qtd_semanas_media):
-  
+  '''
   if endogenous == '%__Volume Aberta':
     serie_aberta = df['Volume Aberta'].astype('float').values
     serie_volume = df['Volume'].astype('float').values
@@ -33,7 +33,14 @@ def projeta_por_media(df,
       serie = serie[-qtd_semanas_media:]
 
     avg = np.mean(serie)
+  '''
+  serie = df[endogenous].astype('float').values
 
+  if len(serie) >= qtd_semanas_media:
+    serie = serie[-qtd_semanas_media:]
+
+  avg = np.mean(serie)
+    
   forecast = np.zeros(shape=(int(qtd_semanas_projetadas)))
   forecast[:] = avg
 
