@@ -257,7 +257,7 @@ def clusterizacao_aberturas(df_completo,  # data_frame formatado completo
         df_share_fechada = df_filtrado_original.copy()
         colunas = df_share_fechada.columns.values
         col_shares = [x for x in colunas if "s__" in x]
-        df_share_fechada = df_share_fechada[aberturas+['Etapa']+col_shares+['%__Coincident']]
+        df_share_fechada = df_share_fechada.groupby(aberturas+['Etapa'],as_index=False)[col_shares+['%__Coincident']].mean()
         #df_share_fechada = pd.merge(df_share_fechada,df_clusters_final.loc[df_clusters_final['outlier'] == 0,aberturas+['clusters']],how='left',on=aberturas)
         df_share_fechada = pd.merge(df_share_fechada,df_clusters_final[aberturas+['clusters','outlier']],how='left',on=aberturas)
         # Calculando a média dos shares de Coincident dos clusters sem outliers.
@@ -273,7 +273,7 @@ def clusterizacao_aberturas(df_completo,  # data_frame formatado completo
 
         df_clusters_final_formatado = df_clusters_final.copy()
         df_clusters_final_formatado = df_clusters_final_formatado.melt(id_vars=aberturas+['clusters','outlier'],var_name='Etapa', value_name='Cohort Aberta Média')
-        #df_clusters_final_formatado = pd.merge(df_clusters_final_formatado,df_share_fechada[aberturas+['Etapa','clusters']+col_shares+['%__Coincident']],how='left',on=aberturas+['Etapa','clusters'])
+        df_clusters_final_formatado = pd.merge(df_clusters_final_formatado,df_share_fechada[aberturas+['Etapa','clusters']+col_shares+['%__Coincident']],how='left',on=aberturas+['Etapa','clusters'])
 
 
         df_aberturas = df_filtrado_original.copy()
