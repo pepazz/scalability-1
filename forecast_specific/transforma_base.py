@@ -48,7 +48,7 @@ def transforma_base(df_conversoes,
 
   # Definir automaticamente a coluna de região:
   # @ aqui melhorar
-  if "city_group" not in list(df_exogenous.columns.values):
+  if "city_group" not in list(df_exogenous.columns.values) and len(df_exogenous) > 0:
     col_regiao = "city_group_tier"
   else:
     col_regiao = "city_group"
