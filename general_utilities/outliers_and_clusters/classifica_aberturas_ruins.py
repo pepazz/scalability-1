@@ -39,7 +39,7 @@ def classifica_aberturas_ruins(df_completo,  # data_frame formatado completo
         # Vamos criar uma base com o desvio padrão da cohort aberta de todas as etapas e todas as aberturas
 
 
-        df_std = df_filtrado.groupby(aberturas+['Etapa'],as_index=False)['%__Volume Aberta'].sum()
+        df_std = df_filtrado.groupby(aberturas+['Etapa'],as_index=False)['%__Volume Aberta'].std()
         df_std = df_std.rename(columns={'%__Volume Aberta':'%__Volume Aberta_std'})
 
         # Porém as aberturas ruins são justamente aquelas que possuem muitas semanas zeradas, reduzindo o std, apesar de saltos altos de conversão.
