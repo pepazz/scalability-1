@@ -41,7 +41,11 @@ def clusterizacao_aberturas(df_completo,  # data_frame formatado completo
 
 
         # Vamos criar uma base com a media das cohorts abertas de todas as etapas e todas as aberturas
-        df_media = df_filtrado.groupby(aberturas+['Etapa'],as_index=False)['%__Volume Aberta'].mean()
+        #df_media = df_filtrado.groupby(aberturas+['Etapa'],as_index=False)['%__Volume Aberta'].mean()
+        # vamos melhorar a média fazendo a cohort aberta média ao invés da média das cohorts abertas:
+        df_media = df_filtrado.groupby(aberturas+['Etapa'],as_index=False)['Volume Aberta','Volume'].sum()
+        df_media['%__Volume Aberta'] = df_media['Volume Aberta'].values / df_media['Volume'].values
+        df_media = df_media.drop(columns=['Volume Aberta','Volume'])
         df_media = pd.pivot_table(df_media, values='%__Volume Aberta', index=aberturas, columns='Etapa').reset_index(inplace=False)
         df_media = df_media[aberturas+etapas]
 
