@@ -33,22 +33,19 @@ def projeta_por_media(df,
     avg = np.sum(serie_0)/np.sum(serie_aberta)
 
   else:
+
     serie = df[endogenous].astype('float').values
 
     if len(serie) >= qtd_semanas_media:
       serie = serie[-qtd_semanas_media:]
-
+      
     avg = np.mean(serie)
 
-                        
-  '''
-  serie = df[endogenous].astype('float').values
-
-  if len(serie) >= qtd_semanas_media:
-    serie = serie[-qtd_semanas_media:]
-
-  avg = np.mean(serie)
-  '''
+    # Precisamos gerar um número irrisório de volume caso o histórico venha zerado
+    # para conseguir gerar um baseline:
+    if endogenous == 'Volume' and (len(serie) < qtd_semanas_media or avg == 0):
+      avg = 0.00000123
+    
                         
   forecast = np.zeros(shape=(int(qtd_semanas_projetadas)))
   forecast[:] = avg
