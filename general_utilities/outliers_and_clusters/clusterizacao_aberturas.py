@@ -74,8 +74,6 @@ def clusterizacao_aberturas(df_completo,  # data_frame formatado completo
           # vamos calcular a conversão coincident do período maior:
 
           # Definindo e ordenando corretamente as etapas do funi:
-          etapas = df_filtrado_maior['Etapa'].unique()
-          etapas = [x in etapas if '2' in x] # removemos a última etapa que não é uma conversão
           etapas_conversao,etapas_volume,etapas_extra,mensagem_local,erro_local = check_etapas_do_funil(lista_etapas_conversao = etapas, # lista com todas as etapas de conversão definidas pelo usuário no painel de controle
                                                                                                         lista_topos_de_funil = topos,  # lista com os ToF's definida pelo usuário no painel de controle
                                                                                                         df_on_top_ratio = pd.DataFrame(),
