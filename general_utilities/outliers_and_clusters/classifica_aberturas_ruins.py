@@ -70,7 +70,7 @@ def classifica_aberturas_ruins(df_completo,  # data_frame formatado completo
         df_vol = df_vol.groupby(aberturas,as_index=False)['Volume'].std()
 
         # Vamos unir as bases
-        df_merged = pd.merge(df_vol,df_std,how='left',on=aberturas)
+        df_merged = pd.merge(df_sum,df_std,how='left',on=aberturas)
         df_merged = pd.merge(df_merged,df_vol,how='left',on=aberturas)
         df_merged[etapas] = df_merged[etapas].fillna(0)
 
