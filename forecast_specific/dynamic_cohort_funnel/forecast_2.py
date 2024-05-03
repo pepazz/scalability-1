@@ -526,6 +526,7 @@ def forecast_2(df_completo,      # DataFrame filtrado, somente datas e valores
     matriz_forecast_a = pd.DataFrame()
 
     # Realizamos a contenção de danos:
+    '''
     endog_projetada,mensagem,base_contencao_de_danos_local = contencao_de_danos(df = df_completo_projetado, # filtrado na etapa e abertura
                                                                           endogenous = endogenous,
                                                                           col_data = col_data,
@@ -545,7 +546,7 @@ def forecast_2(df_completo,      # DataFrame filtrado, somente datas e valores
 
     # Atualizamos as bases periféricas:
     base_contencao_de_danos = pd.concat([base_contencao_de_danos,base_contencao_de_danos_local])
-
+    '''
   # Removemos os shares projetados que não fazem sentido
   if endogenous != 's__Coincident':
     df_completo_projetado.loc[df_completo_projetado[endogenous] < 0,[endogenous]] = 0.0
