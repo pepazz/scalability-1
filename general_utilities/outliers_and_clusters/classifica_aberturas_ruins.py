@@ -38,18 +38,19 @@ def classifica_aberturas_ruins(df_completo,  # data_frame formatado completo
         #print(df_filtrado.loc[(df_filtrado['city_group'] == 'Mogi das Cruzes') & (df_filtrado['lead'] == 'IS') & (df_filtrado['mkt_channel'] == 'Indica Aí - Agents'),['week_start','Etapa','%__Volume Aberta']])
         # Vamos criar uma base com o desvio padrão da cohort aberta de todas as etapas e todas as aberturas
 
-
+        # Não queremos poluir o std das cohorts com cohorts zeradas por conta de não ter entrado nenhum volume
+        df_std = df_filtrado.loc[df_filtrado['Volume'] > 0]
         df_std = df_filtrado.groupby(aberturas+['Etapa'],as_index=False)['%__Volume Aberta'].std()
         df_std = df_std.rename(columns={'%__Volume Aberta':'%__Volume Aberta_std'})
 
         # Porém as aberturas ruins são justamente aquelas que possuem muitas semanas zeradas, reduzindo o std, apesar de saltos altos de conversão.
         # Vamos recalcular o desvio padrão considerando apenas os valores únicos de cada abertura nas semanas selecionadas.
-        df_max = df_filtrado.groupby(aberturas+['Etapa'],as_index=False)['%__Volume Aberta'].max()
-        df_max = df_max.rename(columns={'%__Volume Aberta':'%__Volume Aberta_max'})
-        df_min = df_filtrado.groupby(aberturas+['Etapa'],as_index=False)['%__Volume Aberta'].min()
-        df_min = df_min.rename(columns={'%__Volume Aberta':'%__Volume Aberta_min'})
-        df_std = pd.merge(df_std,df_max,how='left',on=aberturas+['Etapa'])
-        df_std = pd.merge(df_std,df_min,how='left',on=aberturas+['Etapa'])
+        #df_max = df_filtrado.groupby(aberturas+['Etapa'],as_index=False)['%__Volume Aberta'].max()
+        #df_max = df_max.rename(columns={'%__Volume Aberta':'%__Volume Aberta_max'})
+        #df_min = df_filtrado.groupby(aberturas+['Etapa'],as_index=False)['%__Volume Aberta'].min()
+        #df_min = df_min.rename(columns={'%__Volume Aberta':'%__Volume Aberta_min'})
+        #df_std = pd.merge(df_std,df_max,how='left',on=aberturas+['Etapa'])
+        #df_std = pd.merge(df_std,df_min,how='left',on=aberturas+['Etapa'])
         df_std['%__Volume Aberta'] = df_std['%__Volume Aberta_std'].values# * (df_std['%__Volume Aberta_max'].values - df_std['%__Volume Aberta_min'].values)
         #df_std['%__Volume Aberta'] = df_std['%__Volume Aberta_max'].values - df_std['%__Volume Aberta_min'].values
 
@@ -69,8 +70,9 @@ def classifica_aberturas_ruins(df_completo,  # data_frame formatado completo
         df_vol = df_vol.groupby(aberturas,as_index=False)['Volume'].std()
 
         # Vamos unir as bases
-        df_merged = pd.merge(df_std,df_vol,how='left',on=aberturas)
-        df_merged = pd.merge(df_merged,df_sum,how='left',on=aberturas)
+        df_merged = pd.merge(df_vol,df_std,how='left',on=aberturas)
+        df_merged = pd.merge(df_merged,df_vol,how='left',on=aberturas)
+        df_merged[etapas] = df_merged[etapas].fillna(0)
 
 
         #_______________________________________________________________________________________________
