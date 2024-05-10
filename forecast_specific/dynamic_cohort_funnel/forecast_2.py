@@ -316,6 +316,10 @@ def forecast_2(df_completo,      # DataFrame filtrado, somente datas e valores
       share_p_ca = "s__"+str(i)
 
       # Calculamos qual o peso acumulado do share das fechadas dentro da aberta naquela semana
+      if i == 0:
+        share_acumulado = historico_nao_maturado_semana["s__0"].values
+      else:
+        share_acumulado = 0
       for s in range(i):
         if s == 0:
           share_acumulado = historico_nao_maturado_semana["s__0"].values
