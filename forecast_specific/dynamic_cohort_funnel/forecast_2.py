@@ -266,7 +266,7 @@ def forecast_2(df_completo,      # DataFrame filtrado, somente datas e valores
 
   # Vamos selecionar o hisórico não maturado a partir da base completa
   df_nao_maturado_projetado = df_completo_projetado.loc[(df_completo_projetado[col_data] > data_maturacao) & (df_completo_projetado[col_data] < primeira_data_forecast)]
-  #print(data_maturacao,primeira_data_forecast)
+  df_maturado_projetado = df_completo_projetado.loc[(df_completo_projetado[col_data] <= data_maturacao) & (df_completo_projetado[col_data] >= data_maturacao - np.timedelta64(qtd_semanas_media*7,'D'))]
   # Caso a abretura mature na W0, não vai existir histórico não maturado. Nesse caso não precisamos
   # projetar o histórico não maturado e ir direto para a projeção da cohort aberta considerando o
   # histórico realizado completo:
@@ -315,7 +315,13 @@ def forecast_2(df_completo,      # DataFrame filtrado, somente datas e valores
       # Identificamos qual cohort cuja projeção do share vai ser utilizada no cálculo da cohort aberta
       share_p_ca = "s__"+str(i)
 
-
+      # Calculamos qual o peso acumulado do share das fechadas dentro da aberta naquela semana
+      for s in range(i):
+        if s == 0:
+          share_acumulado = historico_nao_maturado_semana["s__0"].values
+        else:
+          share_acumulado = share_acumulado + (1-share_acumulado)*historico_nao_maturado_semana["s__"+str(s)].values
+        
       # Selecionamos apenas a semana a ser calculada
       historico_nao_maturado_semana = df_nao_maturado_projetado.loc[df_nao_maturado_projetado['week_number'] == i+1]
 
@@ -324,6 +330,10 @@ def forecast_2(df_completo,      # DataFrame filtrado, somente datas e valores
       # Aplicamos a equação que determina a cohort aberta a partir da projeção dos shares e das cohorts
       # já maturadas:
       # CA(w) = W(w-1) / s_(w-1) + [sum(W) from W0 to W(w-2)]
+      # Melhoria: vamos ponderar a projeção da aberta pelo peso que as fechadas maturadas tem dentro dela e usar a média da cohort aberta maturada como parâmetro:
+      # CA(w) = {W(w-1) / s_(w-1) + [sum(W) from W0 to W(w-2)]}*share_acumulado + CA(média maturada)*(1-share_acumulado)
+
+      CA_media_maturada = projeta_por_media(df_maturado_projetado,'%__Volume Aberta',1,qtd_semanas_media)
 
       # Não vamos considerar o share da cohort Coincident para calcular a cohort aberta. Precisamos
       # somente da última cohort para isso
@@ -331,12 +341,13 @@ def forecast_2(df_completo,      # DataFrame filtrado, somente datas e valores
       # Caso o share da cohort seja zero, precisamos calcular com base na W0 somente
       if sum(historico_nao_maturado_semana[share_p_ca].values) == 0 and sum(historico_nao_maturado_semana["s__0"].values) != 0:
         # Calculamos a cohort aberta dessa semana
-        historico_nao_maturado_semana['%__Volume Aberta'] = historico_nao_maturado_semana["%__0"].values \
-                                                            / historico_nao_maturado_semana["s__0"].values
+        historico_nao_maturado_semana['%__Volume Aberta'] = (historico_nao_maturado_semana["%__0"].values \
+                                                            / historico_nao_maturado_semana["s__0"].values) * share_acumulado \
+                                                            + CA_media_maturada * (1-share_acumulado)
 
 
       elif sum(historico_nao_maturado_semana[share_p_ca].values) == 0 and sum(historico_nao_maturado_semana["s__0"].values) == 0:
-        historico_nao_maturado_semana['%__Volume Aberta'] = projeta_por_media(df_completo_projetado,'%__Volume Aberta',1,qtd_semanas_media)
+        historico_nao_maturado_semana['%__Volume Aberta'] = projeta_por_media(df_maturado_projetado,'%__Volume Aberta',1,qtd_semanas_media)
 
       else:
         # Calculamos a cohort aberta dessa semana
@@ -346,9 +357,8 @@ def forecast_2(df_completo,      # DataFrame filtrado, somente datas e valores
         cohort_faltante_projetada = historico_nao_maturado_semana[lista_cohorts_maturadas[-1]].values \
                                   / historico_nao_maturado_semana[share_p_ca].values
 
-        cohort_aberta_pela_w0 = historico_nao_maturado_semana["%__0"].values / historico_nao_maturado_semana["s__0"].values
-
-        historico_nao_maturado_semana['%__Volume Aberta'] = cohort_faltante_projetada + cohort_parcial_maturada
+        historico_nao_maturado_semana['%__Volume Aberta'] = (cohort_faltante_projetada + cohort_parcial_maturada) * share_acumulado \
+                                                            + CA_media_maturada * (1-share_acumulado)
 
       '''
       print('____________________calculo aberta_______________')
@@ -367,8 +377,6 @@ def forecast_2(df_completo,      # DataFrame filtrado, somente datas e valores
       # projeções muito divergentes da média:
       #---------------------------------------------------------------------------------------------
 
-      # Vamos selecionar o hisórico maturado maturado a partir da base completa
-      df_maturado_projetado = df_completo_projetado.loc[(df_completo_projetado[col_data] <= data_maturacao) & (df_completo_projetado[col_data] >= data_maturacao - np.timedelta64(qtd_semanas_media*7,'D'))]
       cohort_aberta_media = df_maturado_projetado['%__Volume Aberta'].mean()
       cohort_aberta_std = df_maturado_projetado['%__Volume Aberta'].std()
 
