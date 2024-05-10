@@ -344,9 +344,13 @@ def forecast_2(df_completo,      # DataFrame filtrado, somente datas e valores
       # Caso o share da cohort seja zero, precisamos calcular com base na W0 somente
       if sum(historico_nao_maturado_semana[share_p_ca].values) == 0 and sum(historico_nao_maturado_semana["s__0"].values) != 0:
         # Calculamos a cohort aberta dessa semana
-        historico_nao_maturado_semana['%__Volume Aberta'] = (historico_nao_maturado_semana["%__0"].values \
-                                                            / historico_nao_maturado_semana["s__0"].values) * share_acumulado \
-                                                            + CA_media_maturada * (1-share_acumulado)
+        CA_pelo_share_w0 = historico_nao_maturado_semana["%__0"].values / historico_nao_maturado_semana["s__0"].values
+        CA_ponderada = CA_pelo_share_w0 * share_acumulado + CA_media_maturada * (1-share_acumulado)
+        # Caso a cohort aberta ponderada seja menor do que a w0 já realizada, vamos pela primeira opção:
+        if CA_ponderada < historico_nao_maturado_semana["%__0"].values:
+          historico_nao_maturado_semana['%__Volume Aberta'] = CA_pelo_share_w0
+        else:
+          historico_nao_maturado_semana['%__Volume Aberta'] = CA_ponderada
 
 
       elif sum(historico_nao_maturado_semana[share_p_ca].values) == 0 and sum(historico_nao_maturado_semana["s__0"].values) == 0:
@@ -360,8 +364,13 @@ def forecast_2(df_completo,      # DataFrame filtrado, somente datas e valores
         cohort_faltante_projetada = historico_nao_maturado_semana[lista_cohorts_maturadas[-1]].values \
                                   / historico_nao_maturado_semana[share_p_ca].values
 
-        historico_nao_maturado_semana['%__Volume Aberta'] = (cohort_faltante_projetada + cohort_parcial_maturada) * share_acumulado \
-                                                            + CA_media_maturada * (1-share_acumulado)
+        CA_pelo_share = cohort_faltante_projetada + cohort_parcial_maturada
+        CA_ponderada = CA_pelo_share * share_acumulado + CA_media_maturada * (1-share_acumulado)
+        # Se a cohort aberta ponderada for menor do que as cohorts que já maturaram, vamos pela primeira opção:
+        if CA_ponderada < cohort_parcial_maturada:
+          historico_nao_maturado_semana['%__Volume Aberta'] = CA_pelo_share
+        else:
+          historico_nao_maturado_semana['%__Volume Aberta'] = CA_ponderada
 
       '''
       print('____________________calculo aberta_______________')
