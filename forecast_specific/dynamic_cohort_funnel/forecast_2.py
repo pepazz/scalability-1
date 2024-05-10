@@ -311,6 +311,8 @@ def forecast_2(df_completo,      # DataFrame filtrado, somente datas e valores
       lista_cohorts_projetadas = lista_cohorts_projetadas+["%__"+str(max_origin)]
       #lista_cohorts_projetadas = lista_cohorts_projetadas+["%__Coincident"]
 
+      # Selecionamos apenas a semana a ser calculada
+      historico_nao_maturado_semana = df_nao_maturado_projetado.loc[df_nao_maturado_projetado['week_number'] == i+1]
 
       # Identificamos qual cohort cuja projeção do share vai ser utilizada no cálculo da cohort aberta
       share_p_ca = "s__"+str(i)
@@ -325,9 +327,6 @@ def forecast_2(df_completo,      # DataFrame filtrado, somente datas e valores
           share_acumulado = historico_nao_maturado_semana["s__0"].values
         else:
           share_acumulado = share_acumulado + (1-share_acumulado)*historico_nao_maturado_semana["s__"+str(s)].values
-        
-      # Selecionamos apenas a semana a ser calculada
-      historico_nao_maturado_semana = df_nao_maturado_projetado.loc[df_nao_maturado_projetado['week_number'] == i+1]
 
       #---------------------------------------------------------------------------------------------
 
