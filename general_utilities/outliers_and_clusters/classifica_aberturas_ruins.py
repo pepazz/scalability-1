@@ -120,7 +120,7 @@ def classifica_aberturas_ruins(df_completo,  # data_frame formatado completo
         df_merged[etapas_sum+['Volume']] = np.where(df_merged[etapas_sum+['Volume']] > 0, 1, 0)
         df_merged['etapas_nao_zeradas'] = df_merged[etapas_sum+['Volume']].sum(axis=1)
         df_merged['%_etapas_outliers'] = df_merged['outlier'].values / df_merged['etapas_nao_zeradas'].values
-        df_merged['outlier'] = np.where(df_merged['%_etapas_outliers'] >= 0.99, 1, 0)
+        df_merged['outlier'] = np.where(df_merged['%_etapas_outliers'] >= 0.5, 1, 0)
         #Também vamos considerar aberturas ruins aquelas que tiverem qualquer uma das etapas comuns
         # (aquelas que independem do fluxo do topo) zeradas. Definimos como outlier quando > 50% das
         # etapas estão zeradas pois, para alguns funis e aberturas, certas etapas do funil realmente
