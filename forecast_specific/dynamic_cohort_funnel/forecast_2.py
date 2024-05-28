@@ -400,8 +400,8 @@ def forecast_2(df_completo,      # DataFrame filtrado, somente datas e valores
       if cohort_aberta_projetada_original < cohort_aberta_media-limite_delta_aberta*cohort_aberta_std:
         historico_nao_maturado_semana['%__Volume Aberta'] = cohort_aberta_media-limite_delta_aberta*cohort_aberta_std
 
-      if cohort_aberta_projetada_original > 1:
-        historico_nao_maturado_semana['%__Volume Aberta'] = 1.
+      if cohort_aberta_projetada_original > limite_proj:
+        historico_nao_maturado_semana['%__Volume Aberta'] = limite_proj
 
       if cohort_aberta_projetada_original < 0:
         historico_nao_maturado_semana['%__Volume Aberta'] = 0.
@@ -570,7 +570,7 @@ def forecast_2(df_completo,      # DataFrame filtrado, somente datas e valores
   # Removemos os shares projetados que não fazem sentido
   if endogenous != 's__Coincident':
     df_completo_projetado.loc[df_completo_projetado[endogenous] < 0,[endogenous]] = 0.0
-    df_completo_projetado.loc[df_completo_projetado[endogenous] > 1,[endogenous]] = 1
+    df_completo_projetado.loc[df_completo_projetado[endogenous] > limite_proj,[endogenous]] = limite_proj
 
 
   # Vamos adicionar os parâmetros calculados da cohort aberta aos de volume e shares:
@@ -608,7 +608,7 @@ def forecast_2(df_completo,      # DataFrame filtrado, somente datas e valores
       # Caso a conta resulte em algum número >100% ou <0, vamos remover aqui:
       valores = df_completo_projetado[cohorts_projetadas[i]].values
       valores = np.where(valores<0,0,valores)
-      valores = np.where(valores>1,1,valores)
+      valores = np.where(valores>limite_proj,limite_proj,valores)
       df_completo_projetado[cohorts_projetadas[i]] = valores
 
     # Caso seja uma abertura clusterizada, vamos forçar a existência do share de 100% da última,
@@ -624,7 +624,7 @@ def forecast_2(df_completo,      # DataFrame filtrado, somente datas e valores
       # Caso a conta resulte em algum número >100% ou <0, vamos remover aqui:
       valores = df_completo_projetado[cohorts_projetadas[i]].values
       valores = np.where(valores<0,0,valores)
-      valores = np.where(valores>1,1,valores)
+      valores = np.where(valores>limite_proj,limite_proj,valores)
       df_completo_projetado[cohorts_projetadas[i]] = valores
 
     else:
@@ -638,7 +638,7 @@ def forecast_2(df_completo,      # DataFrame filtrado, somente datas e valores
       # Caso a conta resulte em algum número >100% ou <0, vamos remover aqui:
       valores = df_completo_projetado[cohorts_projetadas[i]].values
       valores = np.where(valores<0,0,valores)
-      valores = np.where(valores>1,1,valores)
+      valores = np.where(valores>limite_proj,limite_proj,valores)
       df_completo_projetado[cohorts_projetadas[i]] = valores
 
     #print(df_completo_projetado.loc[df_completo_projetado[col_data] >= data_limite_hist, [col_data,cohorts_projetadas[i],conversoes[i],'%__Volume Aberta']])
