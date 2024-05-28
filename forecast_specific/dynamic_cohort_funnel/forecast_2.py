@@ -124,7 +124,8 @@ def forecast_2(df_completo,      # DataFrame filtrado, somente datas e valores
                                                                                                                                   limite_delta_vol = limite_delta_vol,
                                                                                                                                   limite_delta_share = limite_delta_share,
                                                                                                                                   limite_delta_aberta = limite_delta_aberta,
-                                                                                                                                fit_intercept = fit_intercept)
+                                                                                                                                fit_intercept = fit_intercept,
+                                                                                                                               limite_proj = limite_proj)
 
     # Atualizamos as bases periféricas:
     base_contencao_de_danos = pd.concat([base_contencao_de_danos,base_contencao_de_danos_local])
@@ -192,7 +193,8 @@ def forecast_2(df_completo,      # DataFrame filtrado, somente datas e valores
                                                                                                                                         limite_delta_vol = limite_delta_vol,
                                                                                                                                         limite_delta_share = limite_delta_share,
                                                                                                                                         limite_delta_aberta = limite_delta_aberta,
-                                                                                                                                      fit_intercept = fit_intercept)
+                                                                                                                                      fit_intercept = fit_intercept,
+                                                                                                                                     limite_proj = limite_proj)
 
       # Atualizamos as bases periféricas:
       base_contencao_de_danos = pd.concat([base_contencao_de_danos,base_contencao_de_danos_local])
@@ -245,7 +247,8 @@ def forecast_2(df_completo,      # DataFrame filtrado, somente datas e valores
                                                                                                                                       limite_delta_vol = limite_delta_vol,
                                                                                                                                       limite_delta_share = limite_delta_share,
                                                                                                                                       limite_delta_aberta = limite_delta_aberta,
-                                                                                                                                    fit_intercept = fit_intercept)
+                                                                                                                                    fit_intercept = fit_intercept,
+                                                                                                                                   limite_proj = limite_proj)
 
     # Atualizamos as bases periféricas:
     base_contencao_de_danos = pd.concat([base_contencao_de_danos,base_contencao_de_danos_local])
@@ -533,7 +536,8 @@ def forecast_2(df_completo,      # DataFrame filtrado, somente datas e valores
                                                                                                                                       limite_delta_vol = limite_delta_vol,
                                                                                                                                       limite_delta_share = limite_delta_share,
                                                                                                                                       limite_delta_aberta = limite_delta_aberta,
-                                                                                                                                    fit_intercept = fit_intercept)
+                                                                                                                                    fit_intercept = fit_intercept,
+                                                                                                                                   limite_proj = limite_proj)
 
 
     # Atualizamos as bases periféricas:
