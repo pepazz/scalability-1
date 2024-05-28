@@ -20,7 +20,8 @@ def contencao_de_danos(df, # filtrado na etapa e abertura
                        limite_inferior_share,
                        limite_delta_media_vol,
                        limite_delta_media_share,
-                       limite_delta_media_aberta):
+                       limite_delta_media_aberta,
+                      limite_proj = 1):
 
   mensagem = str(endogenous)
   colunas_contencao_de_danos = ['Métrica','Passagem','Mensagem','Valor Histórico Médio','Valor Projetado Médio','Valor Mínimo','Valor Máximo','Delta Máximo']
@@ -43,7 +44,7 @@ def contencao_de_danos(df, # filtrado na etapa e abertura
     if endogenous != 's__Coincident' and endogenous != '%__Coincident':
       endog_hist = np.where(endog_hist < 0,0,endog_hist)
       if endogenous != 'Volume':
-        endog_hist = np.where(endog_hist > 1,1,endog_hist)
+        endog_hist = np.where(endog_hist > limite_proj,limite_proj,endog_hist)
       endog_hist_df[endogenous] = endog_hist
 
     # Caso a projeção seja Multilinear ou Treinada, vamos fazer a projeção via média também para poder fazer as
@@ -101,8 +102,8 @@ def contencao_de_danos(df, # filtrado na etapa e abertura
         valor_minimo = 0
 
       valor_maximo = np.max(endog_hist)
-      if valor_maximo > 1 and endogenous != 'Volume':
-        valor_maximo = 1
+      if valor_maximo > limite_proj and endogenous != 'Volume':
+        valor_maximo = limite_proj
 
       valor_std = np.std(endog_hist[-qtd_semanas_media:])
       valor_medio = endog_media[0]
@@ -245,8 +246,8 @@ def contencao_de_danos(df, # filtrado na etapa e abertura
 
         # Remover valores acima de 100%
         if endogenous != 'Volume' and endogenous != 's__Coincident' and endogenous != '%__Coincident':
-          endog_projetada = np.where(endog_projetada > 1,1,endog_projetada)
-          posi_danos = np.where(endog_projetada > 1)[0]
+          endog_projetada = np.where(endog_projetada > limite_proj,limite_proj,endog_projetada)
+          posi_danos = np.where(endog_projetada > limite_proj)[0]
           if len(posi_danos) > 0:
             mensagem = mensagem+' - > 100% Removidos'
 
