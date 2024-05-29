@@ -2,6 +2,7 @@
 
 # Importando bibliotecas necessárias
 from planning_daily_partitioning import *
+from rounding_tool import *
 
 def recalcula_share_diario(ToF_diarizado, topos_de_funil):
   '''
@@ -230,6 +231,17 @@ def quebra_diaria_ToF_2(df_ToF_semanal,     # Dataframe com os volumes semanais 
     n_ToF_semanal = n_ToF_semanal.fillna(0)
 
     ToF_diarizado['data'] = pd.to_datetime(ToF_diarizado['data'], infer_datetime_format=True)
+
+    # Arredondamos os valores finais:
+    n_ToF_semanal = rounding_tool(df = n_ToF_semanal,
+                                  aberturas = ['semana']+aberturas,
+                                  col_valores = topos_de_funil,
+                                  ordem_hirarquica = ['data']+aberturas)
+
+    ToF_diarizado = rounding_tool(df = ToF_diarizado,
+                                  aberturas = ['data','semana','mês','ano','dia da semana']+aberturas,
+                                  col_valores = topos_de_funil,
+                                  ordem_hirarquica = ['data']+aberturas)
 
     print("_______________________________________")
     print("Correção dos valores mensais finalizada")
