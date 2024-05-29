@@ -124,7 +124,8 @@ def quebra_diaria_ToF_2(df_ToF_semanal,     # Dataframe com os volumes semanais 
                       nome_coluna_week_origin,
                       coluna_de_semanas,
                       topos,
-                      aberturas_das_bases):    
+                      aberturas_das_bases,
+                       round_output = False):    
 
   if len(df_ToF_mensal)>0:
 
@@ -233,15 +234,16 @@ def quebra_diaria_ToF_2(df_ToF_semanal,     # Dataframe com os volumes semanais 
     ToF_diarizado['data'] = pd.to_datetime(ToF_diarizado['data'], infer_datetime_format=True)
 
     # Arredondamos os valores finais:
-    n_ToF_semanal = rounding_tool(df = n_ToF_semanal,
-                                  aberturas = ['semana']+aberturas,
-                                  col_valores = topos_de_funil,
-                                  ordem_hirarquica = ['data']+aberturas)
-
-    ToF_diarizado = rounding_tool(df = ToF_diarizado,
-                                  aberturas = ['data','semana','mês','ano','dia da semana']+aberturas,
-                                  col_valores = topos_de_funil,
-                                  ordem_hirarquica = ['data']+aberturas)
+    if round_output:
+      n_ToF_semanal = rounding_tool(df = n_ToF_semanal,
+                                    aberturas = ['semana']+aberturas,
+                                    col_valores = topos_de_funil,
+                                    ordem_hirarquica = ['data']+aberturas_das_bases)
+  
+      ToF_diarizado = rounding_tool(df = ToF_diarizado,
+                                    aberturas = ['data','semana','mês','ano','dia da semana']+aberturas,
+                                    col_valores = topos_de_funil,
+                                    ordem_hirarquica = ['data']+aberturas_das_bases)
 
     print("_______________________________________")
     print("Correção dos valores mensais finalizada")
