@@ -116,6 +116,7 @@ def building_blocks(inputs_df,
     cb_cohort = list(output_cohort_baseline.columns.values)
     etapas_cohort = cb_cohort[cb_cohort.index(nome_coluna_week_origin)+1:]
     chaves_cohort = cb_cohort[:cb_cohort.index(nome_coluna_week_origin)+1]
+    aberturas = cb_cohort[1:cb_cohort.index(nome_coluna_week_origin)]
 
     cb_coincident = list(output_coincident_baseline.columns.values)
     posi_primeira_etapa = len(chaves_cohort)-1
@@ -245,12 +246,12 @@ def building_blocks(inputs_df,
     output_cohort_final_final = rounding_tool(df = output_cohort_final_final,
                                               aberturas = [chaves_cohort[0]]+['building block cohort','building block tof']+chaves_cohort[1:],
                                               col_valores = etapas_cohort,
-                                              ordem_hirarquica = chaves_cohort[1:])
+                                              ordem_hirarquica = aberturas)
 
     output_coincident_final_final = rounding_tool(df = output_coincident_final_final,
                                               aberturas = [chaves_coincident[0]]+['building block cohort','building block tof']+chaves_coincident[1:],
                                               col_valores = etapas_coincident,
-                                              ordem_hirarquica = chaves_coincident[1:])
+                                              ordem_hirarquica = aberturas)
     
   print()
   print(colored(str(qtd_tof)+' funis de baseline ToF calculado e '+str(qtd_p)+' funis de projeto calculados.','g'))
