@@ -8,6 +8,7 @@ from IPython.display import clear_output
 from redutor_de_base import *
 from ajusta_teto_cohort import *
 from colored import colored
+from rounding_tool import *
 
 
 
@@ -19,7 +20,8 @@ def building_blocks(inputs_df,
                     base_df_impacto_feriados,
                     dict_grupos,
                     nome_coluna_week_origin,
-                    coluna_de_semanas):
+                    coluna_de_semanas,
+                   round_output = False):
 
 
   # Define a lista de BB's ToF
@@ -237,7 +239,19 @@ def building_blocks(inputs_df,
   # Reorganizando a ordem das colunas:
   output_cohort_final_final = output_cohort_final_final[[chaves_cohort[0]]+['building block cohort','building block tof']+chaves_cohort[1:]+etapas_cohort]
   output_coincident_final_final = output_coincident_final_final[[chaves_coincident[0]]+['building block cohort','building block tof']+chaves_coincident[1:]+etapas_coincident]
-  
+
+  # Arredondando output final
+  if round_output:
+    output_cohort_final_final = rounding_tool(df = output_cohort_final_final,
+                                              aberturas = [chaves_cohort[0]]+['building block cohort','building block tof']+chaves_cohort[1:],
+                                              col_valores = etapas_cohort,
+                                              ordem_hirarquica = chaves_cohort[1:])
+
+    output_coincident_final_final = rounding_tool(df = output_coincident_final_final,
+                                              aberturas = [chaves_coincident[0]]+['building block cohort','building block tof']+chaves_coincident[1:],
+                                              col_valores = etapas_coincident,
+                                              ordem_hirarquica = chaves_coincident[1:])
+    
   print()
   print(colored(str(qtd_tof)+' funis de baseline ToF calculado e '+str(qtd_p)+' funis de projeto calculados.','g'))
   return output_cohort_final_final,output_coincident_final_final,etapas_coincident,etapas_cohort
