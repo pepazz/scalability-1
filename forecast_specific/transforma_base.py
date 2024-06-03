@@ -44,8 +44,7 @@ def transforma_base(df_conversoes,
   conversoes_int.remove('Coincident')
   max_origin = np.max(np.array(conversoes_int,dtype=int))
   conversoes = list(map(str, list(range(max_origin+1))))
-  if 'Coincident' in conversoes_int:
-    conversoes = conversoes+['Coincident']
+  conversoes = conversoes+['Coincident']
 
   # Definir automaticamente a coluna de região:
   # @ aqui melhorar
