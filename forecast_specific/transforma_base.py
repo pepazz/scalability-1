@@ -41,8 +41,7 @@ def transforma_base(df_conversoes,
   conversoes = list(pd.unique(df_conversoes['conversion'].values)) # Quais conversões cohort existem na base
   conversoes.remove('Não Convertido') # Vamos remover da lista de conversões o "Não Convertido"
   conversoes_int = conversoes.copy()
-  if 'Coincident' in conversoes_int:
-    conversoes_int.remove('Coincident')
+  conversoes_int.remove('Coincident')
   max_origin = np.max(np.array(conversoes_int,dtype=int))
   conversoes = list(map(str, list(range(max_origin+1))))
   if 'Coincident' in conversoes_int:
@@ -184,8 +183,7 @@ def transforma_base(df_conversoes,
   # Calculamos os shares relativos das cohorts %
   conversoes_n = conversoes.copy() # Criamos uma lista somente com as conversões numéricas
   conversoes_n.remove('Volume Aberta')
-  if 'Coincident' in conversoes_n:
-    conversoes_n.remove('Coincident')
+  conversoes_n.remove('Coincident')
   conversoes_n = [int(i) for i in conversoes_n] # Transformamos em inteiro para conseguir ordenar
   conversoes_n = np.sort(conversoes_n) # Ordenamos as cohorts fechadas (vai ficar clara a importância disso mais tarde)
 
