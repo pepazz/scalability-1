@@ -184,7 +184,8 @@ def transforma_base(df_conversoes,
   # Calculamos os shares relativos das cohorts %
   conversoes_n = conversoes.copy() # Criamos uma lista somente com as conversões numéricas
   conversoes_n.remove('Volume Aberta')
-  conversoes_n.remove('Coincident')
+  if 'Coincident' in conversoes_n:
+    conversoes_n.remove('Coincident')
   conversoes_n = [int(i) for i in conversoes_n] # Transformamos em inteiro para conseguir ordenar
   conversoes_n = np.sort(conversoes_n) # Ordenamos as cohorts fechadas (vai ficar clara a importância disso mais tarde)
 
