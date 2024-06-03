@@ -69,6 +69,7 @@ def contencao_de_danos(df, # filtrado na etapa e abertura
       if len(endog_media) == 0 and tipo_de_forecast != 'Average':
         if qtd_semanas_projetadas > 0:
           endog_projetada = np.zeros(qtd_semanas_projetadas)
+          endog_media = [0]
         else:
           endog_projetada = []
       elif len(endog_media) != 0 and tipo_de_forecast != 'Average':
