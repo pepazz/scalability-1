@@ -41,10 +41,12 @@ def transforma_base(df_conversoes,
   conversoes = list(pd.unique(df_conversoes['conversion'].values)) # Quais conversões cohort existem na base
   conversoes.remove('Não Convertido') # Vamos remover da lista de conversões o "Não Convertido"
   conversoes_int = conversoes.copy()
-  conversoes_int.remove('Coincident')
+  if 'Coincident' in conversoes_int:
+    conversoes_int.remove('Coincident')
   max_origin = np.max(np.array(conversoes_int,dtype=int))
   conversoes = list(map(str, list(range(max_origin+1))))
-  conversoes = conversoes+['Coincident']
+  if 'Coincident' in conversoes_int:
+    conversoes = conversoes+['Coincident']
 
   # Definir automaticamente a coluna de região:
   # @ aqui melhorar
