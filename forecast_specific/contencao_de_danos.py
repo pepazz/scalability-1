@@ -81,7 +81,9 @@ def contencao_de_danos(df, # filtrado na etapa e abertura
           endog_projetada = np.zeros(qtd_semanas_projetadas)
         else:
           endog_projetada = []
-
+      
+      if len(endog_media) == 0:
+        endog_media = [0]
       values_concat = pd.DataFrame([[endogenous,passagem+1,mensagem.split(' - ')[-1],endog_media[0],valor_medio_projetado,limite_minimo,limite_maximo,limite_delta_max]],columns=colunas_contencao_de_danos,index=[1])
       base_contencao_de_danos = pd.concat([base_contencao_de_danos,values_concat])
 
