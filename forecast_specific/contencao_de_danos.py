@@ -72,6 +72,8 @@ def contencao_de_danos(df, # filtrado na etapa e abertura
           endog_media = [0]
         else:
           endog_projetada = []
+      elif len(endog_media) == 0:
+        endog_media = [0]
       elif len(endog_media) != 0 and tipo_de_forecast != 'Average':
         endog_projetada = endog_media
       else:
