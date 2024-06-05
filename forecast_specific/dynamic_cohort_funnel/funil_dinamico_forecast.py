@@ -325,10 +325,8 @@ def funil_dinamico_forecast(df_completo,      # DataFrame completo do histórico
         df_funil_etapa = formata_base_para_funil(df = forecast_df,
                                                 max_origin = max_origin,
                                                 etapa = e)
-        '''
-        print("2######################")
-        print(df_funil_etapa.loc[df_funil_etapa['Week Origin'] == '1'])
-        '''
+        print("funil_dinamico_forecast---------------------------------------------")
+        print(df_funil_etapa)
 
         # Adicionamos as conversões em % projetadas à base df_funil.
         # Caso a etapa projetada (que aqui não é mais a primeira) também tenha a projeção do volume
@@ -453,6 +451,7 @@ def funil_dinamico_forecast(df_completo,      # DataFrame completo do histórico
         df_funil[etapa_anterior_vol] = df_funil[etapa_anterior_vol+'_x'].values
         df_funil = df_funil.drop(columns=[etapa_anterior_vol+'_x',etapa_anterior_vol+'_y'])
       except:
+        print("!!!!!!!!!!!!!!!!!!funil_dinamico_forecast------Erro---------------------------------------")
         df_funil = df_funil
 
 
@@ -462,7 +461,8 @@ def funil_dinamico_forecast(df_completo,      # DataFrame completo do histórico
                                     chaves,
                                     max_origin) # @função_auxiliar
 
-
+      print("funil_dinamico_forecast----progressão-----------------------------------------")
+      print(df_funil)
 
       # Vamos remover possíveis valores negativos:
       df_funil.loc[df_funil[e.split('2')[1]] < 0,[e.split('2')[1]]] = 0
@@ -500,7 +500,8 @@ def funil_dinamico_forecast(df_completo,      # DataFrame completo do histórico
                                    etapas_vol = etapas_vol,
                                    chaves = chaves,
                                    col_data = col_data)
-
+  print("funil_dinamico_forecast----------formatação-----------------------------------")
+  print(df_funil)
   # Vamos remover possíveis valores negativos:
   for e in etapas_conv:
     df_funil.loc[(df_funil['Week Origin'] != 'Coincident') & (df_funil[e] < 0),[e] ] = 0
