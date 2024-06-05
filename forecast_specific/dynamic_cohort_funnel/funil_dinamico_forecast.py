@@ -296,7 +296,8 @@ def funil_dinamico_forecast(df_completo,      # DataFrame completo do histórico
       matriz_forecast = pd.concat([matriz_forecast,matriz_forecast_f])
       base_outliers = pd.concat([base_outliers,base_outliers_local])
       base_contencao_de_danos = pd.concat([base_contencao_de_danos,base_contencao_de_danos_local])
-
+      print("funil_dinamico_forecast---------------------------------------------")
+      print(forecast_df)
 
 
       #print(out_parametros.columns.values)
