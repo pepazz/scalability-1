@@ -318,14 +318,15 @@ def funil_dinamico_forecast(df_completo,      # DataFrame completo do histórico
         data_max = np.max(df_funil[col_data].values) # Usada para aplicar inputs mais tarde
         df_funil = df_funil.loc[df_funil[col_data] >= data_min]
 
-
+        print("funil_dinamico_forecast--------formata_base_para_funil-------------------------------------")
+        print(df_funil_etapa)
 
 
       else:
         df_funil_etapa = formata_base_para_funil(df = forecast_df,
                                                 max_origin = max_origin,
                                                 etapa = e)
-        print("funil_dinamico_forecast---------------------------------------------")
+        print("funil_dinamico_forecast---------formata_base_para_funil------------------------------------")
         print(df_funil_etapa)
 
         # Adicionamos as conversões em % projetadas à base df_funil.
@@ -452,6 +453,8 @@ def funil_dinamico_forecast(df_completo,      # DataFrame completo do histórico
         df_funil = df_funil.drop(columns=[etapa_anterior_vol+'_x',etapa_anterior_vol+'_y'])
       except:
         print("!!!!!!!!!!!!!!!!!!funil_dinamico_forecast------Erro---------------------------------------")
+        print(df_funil.head(3))
+        print(df_funil_etapa.head(3))
         df_funil = df_funil
 
 
