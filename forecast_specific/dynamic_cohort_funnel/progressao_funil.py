@@ -38,13 +38,10 @@ def progressao_funil(base_merged, # DataFrame total gerado pela função auxilia
 
   # Calculamos o volume da cohort multiplicando a coluna da conversão cohort pela coluna do volume da
   # etapa anterior
-  print('progressão_funil_detalhe------------------------------------------------')
-  print(base_merged)
 
   base_merged[etapa_coh_vol] = base_merged[etapa_coh].astype('float')*\
                                base_merged[etapa_vol].astype('float')
-  print('progressão_funil_detalhe------------------------------------------------')
-  print(base_merged)
+
   #print(base_merged.loc[base_merged['Week Origin'] == 'Coincident',['week_start',etapa_coh,etapa_vol,etapa_coh_vol]])
 
   # definimos a base que vai somar o volume coincident excluíndo a última cohort, pois para recompor
@@ -56,8 +53,7 @@ def progressao_funil(base_merged, # DataFrame total gerado pela função auxilia
     
   # agrupamos e somamos a coluna de vol cohort para obter o volume coincident da próxima etapa
   agg_vol_novo = agg_vol_novo.groupby(chaves, as_index=False)[[etapa_coh_vol]].sum()
-  print('progressão_funil_detalhe-agg_vol_novo-----------------------------------------------')
-  print(agg_vol_novo)
+
   # Mudamos o nome da coluna das datas, pois estas são as datas finais e não consideramos mais que
   # estão deslocadas. Também redefinimos o nome da coluna com o volume cohort para o nome
   # provisório da próxima etapa do funil. Utilizamos um nome provisório ("P_+etapa") para não
@@ -69,13 +65,8 @@ def progressao_funil(base_merged, # DataFrame total gerado pela função auxilia
   cb_agg = list(agg_vol_novo.columns.values)[:-1]
 
   # unimos a base geral com a base de volume coincident
-  print('progressão_funil_detalhe------------------------------------------------')
-  print(base_merged)
-  print("........................................")
-  print(agg_vol_novo)
-  print("2.......................................")
   base_merged = pd.merge(base_merged,agg_vol_novo,how='left',on=cb_agg)
-  print(base_merged)
+
 
   #print(base_merged.loc[(base_merged['Week Origin'] == 'Coincident'),['week_start',etapa_coh,etapa_vol,etapa_coh_vol,"p_"+proxima_etapa_vol]])
   #print(base_merged.loc[base_merged['week_start'] == '2021-11-15',['Week Origin',etapa_coh,etapa_vol,etapa_coh_vol,"p_"+proxima_etapa_vol]])
@@ -90,8 +81,7 @@ def progressao_funil(base_merged, # DataFrame total gerado pela função auxilia
   # Caso contrário, mudamos o nome provisório para o nome da etapa definitivo
   else:
     base_merged = base_merged.rename(columns = {"p_"+proxima_etapa_vol: proxima_etapa_vol})
-  print("3.......................................")
-  print(base_merged)
+
   # Aqui verificamos se existe um split de fluxos no volume da etapa recém calculado
   if etapas_split[0][0] != "sem split":
     # caso exista, utilizamos uma função auxiliar que já calcula o volume resultante do split de fluxos
@@ -100,8 +90,6 @@ def progressao_funil(base_merged, # DataFrame total gerado pela função auxilia
       print('     --> Realizado split de volume da etapa ',proxima_etapa_vol)
       base_merged[proxima_etapa_vol] = vol_split
   
-  print("4.......................................")
-  print(base_merged)
 
   return base_merged # <-- retorna o mesmo DataFrame total, mas acrescido do volume da cohort e o volume
                      #     coincident da etapa seguinte
