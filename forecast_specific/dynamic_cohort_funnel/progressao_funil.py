@@ -67,7 +67,7 @@ def progressao_funil(base_merged, # DataFrame total gerado pela função auxilia
   print(base_merged.head(3))
   print("........................................")
   print(agg_vol_novo)
-  print("........................................")
+  print("2.......................................")
   base_merged = pd.merge(base_merged,agg_vol_novo,how='left',on=cb_agg)
   print(base_merged)
 
@@ -84,8 +84,8 @@ def progressao_funil(base_merged, # DataFrame total gerado pela função auxilia
   # Caso contrário, mudamos o nome provisório para o nome da etapa definitivo
   else:
     base_merged = base_merged.rename(columns = {"p_"+proxima_etapa_vol: proxima_etapa_vol})
-
-
+  print("3.......................................")
+  print(base_merged)
   # Aqui verificamos se existe um split de fluxos no volume da etapa recém calculado
   if etapas_split[0][0] != "sem split":
     # caso exista, utilizamos uma função auxiliar que já calcula o volume resultante do split de fluxos
@@ -93,7 +93,9 @@ def progressao_funil(base_merged, # DataFrame total gerado pela função auxilia
     if vol_split[0] != "sem split":
       print('     --> Realizado split de volume da etapa ',proxima_etapa_vol)
       base_merged[proxima_etapa_vol] = vol_split
-
+  
+  print("4.......................................")
+  print(base_merged)
 
   return base_merged # <-- retorna o mesmo DataFrame total, mas acrescido do volume da cohort e o volume
                      #     coincident da etapa seguinte
