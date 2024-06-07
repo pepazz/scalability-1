@@ -49,7 +49,8 @@ def progressao_funil(base_merged, # DataFrame total gerado pela função auxilia
 
   # definimos a base que vai somar o volume coincident excluíndo a última cohort, pois para recompor
   # a coincident utilizamos no lugar da maior cohort a cohort de ajuste
-  agg_vol_novo = base_merged.loc[base_merged['Week Origin'] != str(max_origin)]
+  if max_origin > 0:                     
+    agg_vol_novo = base_merged.loc[base_merged['Week Origin'] != str(max_origin)]
 
 
   # agrupamos e somamos a coluna de vol cohort para obter o volume coincident da próxima etapa
