@@ -450,16 +450,14 @@ def funil_dinamico_forecast(df_completo,      # DataFrame completo do histórico
         #print(df_funil_etapa.head(3))
         df_funil = df_funil
 
-      print("funil_dinamico_forecast----------------------------------------1")
-      print(df_funil)
+
       df_funil = progressao_funil(df_funil,
                                     e,
                                     etapas_split,
                                     chaves,
                                     max_origin) # @função_auxiliar
 
-      print("funil_dinamico_forecast----------------------------------------2")
-      print(df_funil)
+
       # Vamos remover possíveis valores negativos:
       df_funil.loc[df_funil[e.split('2')[1]] < 0,[e.split('2')[1]]] = 0
 
@@ -496,8 +494,7 @@ def funil_dinamico_forecast(df_completo,      # DataFrame completo do histórico
                                    etapas_vol = etapas_vol,
                                    chaves = chaves,
                                    col_data = col_data)
-  print("funil_dinamico_forecast-----formatacao_output_forecast-----------------------------------2")
-  print(df_funil)
+
   # Vamos remover possíveis valores negativos:
   for e in etapas_conv:
     df_funil.loc[(df_funil['Week Origin'] != 'Coincident') & (df_funil['Week Origin'] != 'Não Convertido') & (df_funil[e] < 0),[e] ] = 0
@@ -513,8 +510,7 @@ def funil_dinamico_forecast(df_completo,      # DataFrame completo do histórico
     out_parametros = out_parametros[['Etapa']+aberturas+['Maturação','Endógena','Exógena','slope','intercept','error']]
     out_parametros['slope'] = out_parametros['slope'].astype(float)
     out_parametros = out_parametros.loc[out_parametros['slope'] != 0]
-  print("funil_dinamico_forecast----------------------------------------3")
-  print(df_funil)
+
   return df_funil,etapas_vol,etapas_conv,out_parametros,funil_cru,matriz_forecast,base_outliers,base_contencao_de_danos
 
 #---------------------------------------------------------------------------------------------------
