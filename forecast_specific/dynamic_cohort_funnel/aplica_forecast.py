@@ -232,7 +232,8 @@ def aplica_forecast(df_completo,      # DataFrame completo filtrado na etapa
 
       # Realizamos a projeção de todas as variáveis da abertura (Volumes de topo, shares de cohorts, cohort aberta e cohorts fechadas)
       #print(df_completo_abertura[[col_data,'Volume Aberta','%__Volume Aberta','1','s__1','%__1']])
-
+      print("aplica_forecast---------------------------------------")
+      print(df_completo_abertura)
       df_completo_abertura,out_parametros_f,matriz_forecast_f,base_outliers_local,base_contencao_de_danos_local = forecast_2(df_completo = df_completo_abertura,      # DataFrame filtrado, somente datas e valores
                                                                                                                             df_parametros = df_parametros_abertura,
                                                                                                                             df_pareto_aberturas = df_pareto_aberturas_abertura,
@@ -263,7 +264,8 @@ def aplica_forecast(df_completo,      # DataFrame completo filtrado na etapa
                                                                                                                               limite_delta_aberta = limite_delta_aberta,
                                                                                                                               limite_proj = limite_proj,
                                                                                                                              fit_intercept = fit_intercept)
-
+      print("aplica_forecast---------------------------------------")
+      print(df_completo_abertura)
       # Salvamos os outliers encontrados numa base:
       base_outliers = pd.concat([base_outliers,base_outliers_local])
 
