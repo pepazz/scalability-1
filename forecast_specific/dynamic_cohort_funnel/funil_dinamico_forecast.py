@@ -450,7 +450,8 @@ def funil_dinamico_forecast(df_completo,      # DataFrame completo do histórico
         #print(df_funil_etapa.head(3))
         df_funil = df_funil
 
-
+      print("funil_dinamico_forecast-----------------------------------------")
+      print(df_funil)
       df_funil = progressao_funil(df_funil,
                                     e,
                                     etapas_split,
