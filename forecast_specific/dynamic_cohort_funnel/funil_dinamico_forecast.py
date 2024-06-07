@@ -496,7 +496,8 @@ def funil_dinamico_forecast(df_completo,      # DataFrame completo do histórico
                                    etapas_vol = etapas_vol,
                                    chaves = chaves,
                                    col_data = col_data)
-
+  print("funil_dinamico_forecast-----formatacao_output_forecast-----------------------------------2")
+  print(df_funil)
   # Vamos remover possíveis valores negativos:
   for e in etapas_conv:
     df_funil.loc[(df_funil['Week Origin'] != 'Coincident') & (df_funil[e] < 0),[e] ] = 0
