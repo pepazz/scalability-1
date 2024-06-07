@@ -172,7 +172,7 @@ def forecast_2(df_completo,      # DataFrame filtrado, somente datas e valores
     # Realizamos a projeção
     if tipo_de_projecao != 'Cluster':
       print("forecast_2----Auxiliar_Forecast---%0--------------------0")
-      print(df_completo_projetado)
+      print(df_completo_projetado[['week_start','Volume','Volume Aberta','0','%__Volume Aberta','%__0']])
       df_completo_projetado,out_parametros_c,matriz_forecast_c,base_outliers_local,base_contencao_de_danos_local =  Auxiliar_Forecast(df_completo = df_completo_projetado, # DF filtrado somente a abertura e Endog, ordenado com a data mais antiga no topo
                                                                                                                                       df_inputs_exogenas = df_inputs_exogenas,
                                                                                                                                       df_parametros = df_parametros,
@@ -199,7 +199,7 @@ def forecast_2(df_completo,      # DataFrame filtrado, somente datas e valores
                                                                                                                                       fit_intercept = fit_intercept,
                                                                                                                                      limite_proj = limite_proj)
       print("forecast_2----Auxiliar_Forecast---%0--------------------1")
-      print(df_completo_projetado)
+      print(df_completo_projetado[['week_start','Volume','Volume Aberta','0','%__Volume Aberta','%__0']])
       
       # Atualizamos as bases periféricas:
       base_contencao_de_danos = pd.concat([base_contencao_de_danos,base_contencao_de_danos_local])
@@ -519,7 +519,7 @@ def forecast_2(df_completo,      # DataFrame filtrado, somente datas e valores
   # Realizamos a projeção
   if tipo_de_projecao != 'Cluster':
     print("forecast_2----Auxiliar_Forecast---'%__Volume Aberta'--------------------0")
-    print(df_completo_projetado)
+    print(df_completo_projetado[['week_start','Volume','Volume Aberta','0','%__Volume Aberta','%__0']])
     df_completo_projetado,out_parametros_a,matriz_forecast_a,base_outliers_local,base_contencao_de_danos_local =  Auxiliar_Forecast(df_completo = df_completo_projetado, # DF filtrado somente a abertura e Endog, ordenado com a data mais antiga no topo
                                                                                                                                     df_inputs_exogenas = df_inputs_exogenas,
                                                                                                                                     df_parametros = df_parametros,
@@ -547,7 +547,7 @@ def forecast_2(df_completo,      # DataFrame filtrado, somente datas e valores
                                                                                                                                    limite_proj = limite_proj)
 
     print("forecast_2----Auxiliar_Forecast---'%__Volume Aberta'--------------------1")
-    print(df_completo_projetado)
+    print(df_completo_projetado[['week_start','Volume','Volume Aberta','0','%__Volume Aberta','%__0']])
     # Atualizamos as bases periféricas:
     base_contencao_de_danos = pd.concat([base_contencao_de_danos,base_contencao_de_danos_local])
     base_outliers = pd.concat([base_outliers,base_outliers_local])
