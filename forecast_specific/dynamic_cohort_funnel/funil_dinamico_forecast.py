@@ -454,7 +454,7 @@ def funil_dinamico_forecast(df_completo,      # DataFrame completo do histórico
       except:
         print("!!!!!!!!!!!!!!!!!!funil_dinamico_forecast------Erro---------------------------------------")
         print(df_funil.head(3))
-        print(df_funil_etapa.head(3))
+        #print(df_funil_etapa.head(3))
         df_funil = df_funil
 
 
