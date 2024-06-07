@@ -319,7 +319,7 @@ def funil_dinamico_forecast(df_completo,      # DataFrame completo do histórico
         df_funil = df_funil.loc[df_funil[col_data] >= data_min]
 
         print("funil_dinamico_forecast--------formata_base_para_funil-------------------------------------")
-        print(df_funil_etapa)
+        print(df_funil)
 
 
       else:
