@@ -2601,9 +2601,9 @@ def check_datas_base_share_diario(df_parametro,
   df_parametro_filtrado = df_parametro[(df_parametro[coluna_semanas] >= data_inicio) & (df_parametro[coluna_semanas] <= data_fim)]
 
 
-  #Check de qtd de semanas. Se forem 2 ou menos não rodar.
+  #Check de qtd de semanas. Se forem 7 ou menos não rodar.
   if len(df_parametro_filtrado[coluna_semanas].unique()) < 8:
-    mensagem = mensagem+colored("\nA quantidade de semanas na base definida é menor que três.\nEscolha um mínimo de três semanas para que o share tenha um melhor espaço amostral.\n", 'red')
+    mensagem = mensagem+colored("\nA quantidade de semanas na base definida é menor que três.\nEscolha um mínimo de oito semanas para que o share tenha um melhor espaço amostral.\n", 'red')
     erro = erro+1
 
 
