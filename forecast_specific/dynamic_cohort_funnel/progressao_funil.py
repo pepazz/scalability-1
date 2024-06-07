@@ -63,7 +63,13 @@ def progressao_funil(base_merged, # DataFrame total gerado pela função auxilia
   cb_agg = list(agg_vol_novo.columns.values)[:-1]
 
   # unimos a base geral com a base de volume coincident
+  print('progressão_funil_detalhe------------------------------------------------')
+  print(base_merged.head(3))
+  print("........................................")
+  print(agg_vol_novo)
+  print("........................................")
   base_merged = pd.merge(base_merged,agg_vol_novo,how='left',on=cb_agg)
+  print(base_merged)
 
   #print(base_merged.loc[(base_merged['Week Origin'] == 'Coincident'),['week_start',etapa_coh,etapa_vol,etapa_coh_vol,"p_"+proxima_etapa_vol]])
   #print(base_merged.loc[base_merged['week_start'] == '2021-11-15',['Week Origin',etapa_coh,etapa_vol,etapa_coh_vol,"p_"+proxima_etapa_vol]])
