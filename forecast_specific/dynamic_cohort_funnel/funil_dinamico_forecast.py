@@ -296,8 +296,6 @@ def funil_dinamico_forecast(df_completo,      # DataFrame completo do histórico
       matriz_forecast = pd.concat([matriz_forecast,matriz_forecast_f])
       base_outliers = pd.concat([base_outliers,base_outliers_local])
       base_contencao_de_danos = pd.concat([base_contencao_de_danos,base_contencao_de_danos_local])
-      print("funil_dinamico_forecast---------------------------------------------")
-      print(forecast_df)
 
 
       #print(out_parametros.columns.values)
@@ -318,16 +316,13 @@ def funil_dinamico_forecast(df_completo,      # DataFrame completo do histórico
         data_max = np.max(df_funil[col_data].values) # Usada para aplicar inputs mais tarde
         df_funil = df_funil.loc[df_funil[col_data] >= data_min]
 
-        print("funil_dinamico_forecast--------formata_base_para_funil-------------------------------------")
-        print(df_funil)
 
 
       else:
         df_funil_etapa = formata_base_para_funil(df = forecast_df,
                                                 max_origin = max_origin,
                                                 etapa = e)
-        print("funil_dinamico_forecast---------formata_base_para_funil------------------------------------")
-        print(df_funil_etapa)
+
 
         # Adicionamos as conversões em % projetadas à base df_funil.
         # Caso a etapa projetada (que aqui não é mais a primeira) também tenha a projeção do volume
@@ -452,8 +447,6 @@ def funil_dinamico_forecast(df_completo,      # DataFrame completo do histórico
         df_funil[etapa_anterior_vol] = df_funil[etapa_anterior_vol+'_x'].values
         df_funil = df_funil.drop(columns=[etapa_anterior_vol+'_x',etapa_anterior_vol+'_y'])
       except:
-        print("!!!!!!!!!!!!!!!!!!funil_dinamico_forecast------Erro---------------------------------------")
-        print(df_funil.head(3))
         #print(df_funil_etapa.head(3))
         df_funil = df_funil
 
@@ -464,8 +457,6 @@ def funil_dinamico_forecast(df_completo,      # DataFrame completo do histórico
                                     chaves,
                                     max_origin) # @função_auxiliar
 
-      print("funil_dinamico_forecast----progressão-----------------------------------------")
-      print(df_funil)
 
       # Vamos remover possíveis valores negativos:
       df_funil.loc[df_funil[e.split('2')[1]] < 0,[e.split('2')[1]]] = 0
@@ -503,8 +494,7 @@ def funil_dinamico_forecast(df_completo,      # DataFrame completo do histórico
                                    etapas_vol = etapas_vol,
                                    chaves = chaves,
                                    col_data = col_data)
-  print("funil_dinamico_forecast----------formatação-----------------------------------")
-  print(df_funil)
+
   # Vamos remover possíveis valores negativos:
   for e in etapas_conv:
     df_funil.loc[(df_funil['Week Origin'] != 'Coincident') & (df_funil[e] < 0),[e] ] = 0
