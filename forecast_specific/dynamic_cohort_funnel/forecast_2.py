@@ -73,7 +73,8 @@ def forecast_2(df_completo,      # DataFrame filtrado, somente datas e valores
   base_contencao_de_danos = pd.DataFrame()
   base_outliers = pd.DataFrame()
 
-
+  print("forecast_2-----------------------------")
+  print(limite_proj)
   #-------------------------------------------------------------------------------------------------
 
   # Abaixo vamos projetar o volume de ToF e também os shares das cohorts fechadas.
