@@ -171,6 +171,8 @@ def forecast_2(df_completo,      # DataFrame filtrado, somente datas e valores
 
     # Realizamos a projeção
     if tipo_de_projecao != 'Cluster':
+      print("forecast_2----Auxiliar_Forecast---%0--------------------0")
+      print(df_completo_projetado)
       df_completo_projetado,out_parametros_c,matriz_forecast_c,base_outliers_local,base_contencao_de_danos_local =  Auxiliar_Forecast(df_completo = df_completo_projetado, # DF filtrado somente a abertura e Endog, ordenado com a data mais antiga no topo
                                                                                                                                       df_inputs_exogenas = df_inputs_exogenas,
                                                                                                                                       df_parametros = df_parametros,
@@ -196,7 +198,9 @@ def forecast_2(df_completo,      # DataFrame filtrado, somente datas e valores
                                                                                                                                         limite_delta_aberta = limite_delta_aberta,
                                                                                                                                       fit_intercept = fit_intercept,
                                                                                                                                      limite_proj = limite_proj)
-
+      print("forecast_2----Auxiliar_Forecast---%0--------------------1")
+      print(df_completo_projetado)
+      
       # Atualizamos as bases periféricas:
       base_contencao_de_danos = pd.concat([base_contencao_de_danos,base_contencao_de_danos_local])
       base_outliers = pd.concat([base_outliers,base_outliers_local])
@@ -514,6 +518,8 @@ def forecast_2(df_completo,      # DataFrame filtrado, somente datas e valores
 
   # Realizamos a projeção
   if tipo_de_projecao != 'Cluster':
+    print("forecast_2----Auxiliar_Forecast---'%__Volume Aberta'--------------------0")
+    print(df_completo_projetado)
     df_completo_projetado,out_parametros_a,matriz_forecast_a,base_outliers_local,base_contencao_de_danos_local =  Auxiliar_Forecast(df_completo = df_completo_projetado, # DF filtrado somente a abertura e Endog, ordenado com a data mais antiga no topo
                                                                                                                                     df_inputs_exogenas = df_inputs_exogenas,
                                                                                                                                     df_parametros = df_parametros,
@@ -540,7 +546,8 @@ def forecast_2(df_completo,      # DataFrame filtrado, somente datas e valores
                                                                                                                                     fit_intercept = fit_intercept,
                                                                                                                                    limite_proj = limite_proj)
 
-
+    print("forecast_2----Auxiliar_Forecast---'%__Volume Aberta'--------------------1")
+    print(df_completo_projetado)
     # Atualizamos as bases periféricas:
     base_contencao_de_danos = pd.concat([base_contencao_de_danos,base_contencao_de_danos_local])
     base_outliers = pd.concat([base_outliers,base_outliers_local])
@@ -655,7 +662,8 @@ def forecast_2(df_completo,      # DataFrame filtrado, somente datas e valores
       (df_completo_projetado.loc[df_completo_projetado[col_data] >= primeira_data_forecast, ['%__Volume Aberta']].values-\
       np.transpose(np.array([df_completo_projetado.loc[df_completo_projetado[col_data] >= primeira_data_forecast, cohorts_projetadas[0:i-1]].sum(axis=1).values])))
     '''
-
+  print("forecast_2----output--------------------0")
+  print(df_completo_projetado)
   #if tipo_de_projecao == 'Cluster':
     #print(df_completo_projetado[['Etapa','Volume','%__Volume Aberta','0']])
   return df_completo_projetado,out_parametros,matriz_forecast,base_outliers,base_contencao_de_danos
