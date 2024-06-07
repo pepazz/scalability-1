@@ -334,7 +334,7 @@ def contencao_de_danos(df, # filtrado na etapa e abertura
         # Substituir cohorts que são sempre 100% (FSS)
         if endogenous == '%__Volume Aberta' or endogenous == 's__0':
 
-          if np.average(endog_hist_sem_zero) > 0.99:
+          if np.average(endog_hist_sem_zero) > 0.99 and np.average(endog_hist_sem_zero) < 1.01:
             endog_projetada[:] = 1
 
           elif valor_std == 0:
