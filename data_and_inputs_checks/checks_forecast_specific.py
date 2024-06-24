@@ -18,7 +18,7 @@ def check_inputs_exogenas(df_inputs,
   # Checando o conteúdo das colunas:
 
   shares_permitidos = ['Share W'+str(s) for s in range(max_origin)]
-  lags_permitidos = [str(l) for l in range(max_lag)+1]
+  lags_permitidos = [str(l) for l in range(max_lag+1)]
   meses = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez']
 
   colunas = ['etapa','endógena','ação','exógena','lag ou diff','slope sanity check']
