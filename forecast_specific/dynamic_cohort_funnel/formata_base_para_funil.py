@@ -1,4 +1,6 @@
 #@title Def formata_base_para_funil
+import pandas as pd
+
 '''
 formata a base de forecast que vem no seguinte formato:
 

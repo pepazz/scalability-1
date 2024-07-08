@@ -31,7 +31,8 @@ def check_etapas_do_funil(lista_etapas_conversao, # lista com todas as etapas de
 
   etapas_conv = []
   etapas_vol = []
-  etapas_extra = []
+  etapas_extra = []                          
+
 
   # Removemos os valores duplicados das etapas e ToF's
   #-------------------------------------------------------------------------------------------------
@@ -365,6 +366,7 @@ def check_colunas(df,                    # DataFrame
                   aberturas,             # Lista com as aberturas das bases.
                   colunas_obrigatorias,  # lista com as colunas obrigatórias e a ordem
                   retorna_col_valores,   # booleano que determina se a função vai retornar as colunas de valores
+                  mantem_formatacao_original,
                   dict_renames,          # dicionário com o de/para de colunas numéricas
                   coluna_de_conversoes,
                   colunas_datas,
@@ -486,7 +488,7 @@ def check_colunas(df,                    # DataFrame
       colunas = df.columns.values
       colunas_faltantes = list(set(colunas_o) - set(colunas))
 
-
+      
       # Caso a aplicação do dicionário ainda assim resultou em colunas faltantes, vamos tentar encontrar
       # as colunas de valores pelo nome mais parecido no dicionário:
       if len(colunas_faltantes) > 0:
@@ -529,7 +531,7 @@ def check_colunas(df,                    # DataFrame
           
       colunas = df.columns.values
       colunas_faltantes = list(set(colunas_o) - set(colunas))
-
+      
 
       # Caso a coluna faltante seja a coluna de conversões, vamos tentar encontrá-la pelo conteúdo:
       if len(colunas_faltantes) > 0 and (coluna_de_conversoes in colunas_faltantes or coluna_de_conversoes.lower() in colunas_faltantes):
@@ -662,6 +664,7 @@ def check_valores(df,                    # DataFrame já deve ter checado a exis
                   check_valores_vazios,  # Boleano que, caso seja verdadeiro, verifica se existem blocos de valores vazios nas colunas
                   nome_do_arquivo,
                  mantem_formatacao_original = False):
+
   
 
   # Definições iniciais
@@ -675,7 +678,7 @@ def check_valores(df,                    # DataFrame já deve ter checado a exis
   # Vamos transformar as colunas de valores em caracteres minusculos:
   if not mantem_formatacao_original:
     colunas_de_valores = [e.lower() for e in colunas_de_valores]
-    
+
   # Primeiro, vamos trasnformar as colunas de valores em texto:
   df[colunas_de_valores] = df[colunas_de_valores].astype(str)
 
@@ -734,7 +737,7 @@ def check_valores(df,                    # DataFrame já deve ter checado a exis
     # Para cada coluna, separamos os valores que contém vírgula. Depois, separamos dentre estes
     # os que contém ponto também.
     virgulas = df[df[coluna].str.contains(',')][coluna]
-    virgulas = virgulas.str.replace('.','#') # substituímos os pontos por cerquilha, pois o código não funcionou procurando os pontos diretamente
+    virgulas = virgulas.str.replace('.','#',regex=True) # substituímos os pontos por cerquilha, pois o código não funcionou procurando os pontos diretamente
     pontos_e_virgulas = virgulas[virgulas.str.contains('#')]
 
     # Checar se a formatação está correta:
@@ -762,7 +765,7 @@ def check_valores(df,                    # DataFrame já deve ter checado a exis
     if erro == 0:
 
       # Vamos substituir vírgulas por pontos
-      df[coluna] = df[coluna].str.replace(',','')
+      df[coluna] = df[coluna].str.replace(',','',regex=True)
 
       # Vamos substituir os vazios por zero
       df.loc[df[coluna] == '',[coluna]] = '0.0'
@@ -804,6 +807,8 @@ def check_chaves(lista_df,                   # lista de DataFrames já devem ter
                  aberturas_compartilhadas,   # lista com as aberturas que devem estar presentes em todas as bases da lista de dataframes
                  aberturas_especificas,      # lista com as aberturas que não precisam estar presentes em todas as bases
                  lista_comparacao_parcial,   # lista de booleanos indicando quais bases serão checadas se contém todas as aberturas de todas as bases ou se contém aberturas que outras bases não tem
+                 lista_comparacao_a_mais,
+                 tipo_de_tof,
                  chaves_ignoradas,           # lista de chaves a serem ignoradas se encontradas, como chaves globais "Todos" por exemplo
                  nome_do_arquivo,
                  agrupar_duplicados,
@@ -825,6 +830,7 @@ def check_chaves(lista_df,                   # lista de DataFrames já devem ter
   lista_df_atualizada = []
   lista_comparacao_parcial_atualizada = []
   lista_comparacao_a_mais_atualizada = []
+
 
   # Primeiro, vamos verificar se não existem aberturas duplicadas:
   #-------------------------------------------------------------------------------------------------
@@ -894,7 +900,7 @@ def check_chaves(lista_df,                   # lista de DataFrames já devem ter
       lista_comparacao_parcial_atualizada = lista_comparacao_parcial_atualizada + [lista_comparacao_parcial[c]]
       if len(lista_comparacao_a_mais) > 0:
         lista_comparacao_a_mais_atualizada = lista_comparacao_a_mais_atualizada + [lista_comparacao_a_mais[c]]
-        
+
     c += 1
   
 
@@ -964,7 +970,6 @@ def check_chaves(lista_df,                   # lista de DataFrames já devem ter
           mensagem = mensagem + '\n\nAs chaves '+colored(str(chaves_2_1),'red')+' da abertura '+colored(col,'red')+' da base '+colored(nome_df_2,'yellow')+' do arquivo ' + colored(nome_do_arquivo_2,'blue') +  ' não estão presentes na base '+colored(nome_df_1,'yellow')+' do arquivo ' + colored(nome_do_arquivo_1,'blue') 
           erro = erro+1
 
-
     # Vamos exluir as aberturas que contenham uma chave a ser ignorada:
     for c in chaves_ignoradas:
       for coluna in aberturas_compartilhadas:
@@ -980,7 +985,10 @@ def check_chaves(lista_df,                   # lista de DataFrames já devem ter
     aberturas_nao_existentes_2 = merge.loc[merge['aux_y'].isnull()][aberturas_compartilhadas]
 
 
-      # Verificamos as combinações de chaves entre as bases:
+
+
+    # Verificamos as combinações de chaves entre as bases:
+
     if len(lista_comparacao_a_mais_atualizada) > 0:
       if len(aberturas_nao_existentes_1) > 0 and not lista_comparacao_parcial_atualizada[indice_1] and not lista_comparacao_a_mais_atualizada[indice_2]:
         mensagem = mensagem + '\n\nAs seguintes combinações de aberturas da base '+colored(nome_df_2,'yellow')+' do arquivo ' + colored(nome_do_arquivo_2,'blue') + ' não estão presentes na base '+colored(nome_df_1,'yellow')+' do arquivo ' + colored(nome_do_arquivo_1,'blue') +  ': \n' + tabulate(aberturas_nao_existentes_1, headers='keys', tablefmt='psql')
@@ -994,7 +1002,7 @@ def check_chaves(lista_df,                   # lista de DataFrames já devem ter
         erro = erro+1
       if len(aberturas_nao_existentes_2) > 0 and not lista_comparacao_parcial_atualizada[indice_2]:
         mensagem = mensagem + '\n\nAs seguintes combinações de aberturas da base '+colored(nome_df_1,'yellow')+' do arquivo ' + colored(nome_do_arquivo_1,'blue') +  ' não estão presentes na base '+colored(nome_df_2,'yellow')+' do arquivo ' + colored(nome_do_arquivo_2,'blue') +  ': \n' + tabulate(aberturas_nao_existentes_2, headers='keys', tablefmt='psql')
-        erro = erro+1   
+        erro = erro+1      
 
       
   # Retorna:
@@ -2003,6 +2011,7 @@ def check_geral(lista_de_bases,                 # Lista de bases que vamos verif
       else:
         mantem_formatacao_original = lista_mantem_formatacao_original[b]
         
+
       lista_de_bases[b],colunas_de_valores,mensagem_local,erro_local = check_colunas(df = lista_de_bases[b],     # DataFrame
                                                                                      lista_df = lista_de_bases,
                                                                                      aberturas = aberturas_das_bases,                                                                                    
@@ -2013,7 +2022,7 @@ def check_geral(lista_de_bases,                 # Lista de bases que vamos verif
                                                                                     coluna_de_conversoes = coluna_de_conversoes,
                                                                                     colunas_datas = lista_lista_colunas_datas[b],
                                                                                     nome_do_arquivo = Nome_do_arquivo_sheets[b])
-      
+
       if lista_do_retorno_de_valores[b]:
         lista_colunas_de_valores[b] = colunas_de_valores
       
@@ -2136,7 +2145,6 @@ def check_geral(lista_de_bases,                 # Lista de bases que vamos verif
   if not flag_erro_colunas: # nao conseguimos verificar as datas se a coluna de datas não existir na base
 
 
-
     # Para cada base na lista de bases
     for b in range(len(lista_de_bases)):
 
@@ -2225,7 +2233,7 @@ def check_transforma_base_demanda(base_df,
     col_valores_x = [x + "_x" for x in col_valores]
     col_valores_y = [x + "_y" for x in col_valores]
 
-    base_merged[col_valores] = base_merged[col_valores].replace('',0)
+    base_merged[col_valores] = base_merged[col_valores].replace('',0,regex=True)
 
     base_merged[col_valores] = base_merged[col_valores].astype(float)
 
@@ -2315,9 +2323,9 @@ def check_building_blocks(base_tof_semanal,
   # Formatando o conteúdo das colunas de Building Blocks ToF:
   if erro_bb == 0:
 
-    base_tof_semanal['building block tof'] = base_tof_semanal['building block tof'].str.replace(lista_baselines[0],'baseline')
-    base_tof_mensal['building block tof'] = base_tof_mensal['building block tof'].str.replace(lista_baselines[0],'baseline')
-    base_inputs['building block tof'] = base_inputs['building block tof'].str.replace(lista_baselines[0],'baseline')
+    base_tof_semanal['building block tof'] = base_tof_semanal['building block tof'].str.replace(lista_baselines[0],'baseline',regex=True)
+    base_tof_mensal['building block tof'] = base_tof_mensal['building block tof'].str.replace(lista_baselines[0],'baseline',regex=True)
+    base_inputs['building block tof'] = base_inputs['building block tof'].str.replace(lista_baselines[0],'baseline',regex=True)
 
   return base_tof_semanal,base_tof_mensal,base_inputs,mensagem_bb,erro_bb
   
