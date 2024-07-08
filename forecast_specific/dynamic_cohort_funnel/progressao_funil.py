@@ -46,9 +46,11 @@ def progressao_funil(base_merged, # DataFrame total gerado pela função auxilia
 
   # definimos a base que vai somar o volume coincident excluíndo a última cohort, pois para recompor
   # a coincident utilizamos no lugar da maior cohort a cohort de ajuste
-  agg_vol_novo = base_merged.loc[base_merged['Week Origin'] != str(max_origin)]
-
-
+  if max_origin > 0:                     
+    agg_vol_novo = base_merged.loc[base_merged['Week Origin'] != str(max_origin)]
+  else:
+    agg_vol_novo = base_merged.copy()
+    
   # agrupamos e somamos a coluna de vol cohort para obter o volume coincident da próxima etapa
   agg_vol_novo = agg_vol_novo.groupby(chaves, as_index=False)[[etapa_coh_vol]].sum()
 
@@ -65,6 +67,7 @@ def progressao_funil(base_merged, # DataFrame total gerado pela função auxilia
   # unimos a base geral com a base de volume coincident
   base_merged = pd.merge(base_merged,agg_vol_novo,how='left',on=cb_agg)
 
+
   #print(base_merged.loc[(base_merged['Week Origin'] == 'Coincident'),['week_start',etapa_coh,etapa_vol,etapa_coh_vol,"p_"+proxima_etapa_vol]])
   #print(base_merged.loc[base_merged['week_start'] == '2021-11-15',['Week Origin',etapa_coh,etapa_vol,etapa_coh_vol,"p_"+proxima_etapa_vol]])
 
@@ -79,7 +82,6 @@ def progressao_funil(base_merged, # DataFrame total gerado pela função auxilia
   else:
     base_merged = base_merged.rename(columns = {"p_"+proxima_etapa_vol: proxima_etapa_vol})
 
-
   # Aqui verificamos se existe um split de fluxos no volume da etapa recém calculado
   if etapas_split[0][0] != "sem split":
     # caso exista, utilizamos uma função auxiliar que já calcula o volume resultante do split de fluxos
@@ -87,7 +89,7 @@ def progressao_funil(base_merged, # DataFrame total gerado pela função auxilia
     if vol_split[0] != "sem split":
       print('     --> Realizado split de volume da etapa ',proxima_etapa_vol)
       base_merged[proxima_etapa_vol] = vol_split
-
+  
 
   return base_merged # <-- retorna o mesmo DataFrame total, mas acrescido do volume da cohort e o volume
                      #     coincident da etapa seguinte

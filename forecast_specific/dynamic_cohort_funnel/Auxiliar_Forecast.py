@@ -59,7 +59,8 @@ def Auxiliar_Forecast(df_completo, # DF filtrado somente a abertura e Endog, ord
                        limite_delta_vol,
                        limite_delta_share,
                        limite_delta_aberta,
-                       fit_intercept):
+                       fit_intercept,
+                     limite_proj = 1):
 
   df_completo_projetado = df_completo.copy()
 
@@ -223,6 +224,7 @@ def Auxiliar_Forecast(df_completo, # DF filtrado somente a abertura e Endog, ord
 
 
       # Realizamos a projeção multilinear
+
       df_completo_projetado,out_parametros,matriz_forecast,base_outliers =  multilinear(df_completo = df_completo_projetado, # DF filtrado somente a abertura e Endog, ordenado com a data mais antiga no topo
                                                                                               col_data = col_data,
                                                                                               data_corte = data_corte,  # DateTime indicando onde acaba o historico
@@ -276,7 +278,8 @@ def Auxiliar_Forecast(df_completo, # DF filtrado somente a abertura e Endog, ord
                                                                         limite_inferior_share = limite_share,
                                                                         limite_delta_media_vol = limite_delta_vol,
                                                                         limite_delta_media_share = limite_delta_share,
-                                                                        limite_delta_media_aberta = limite_delta_aberta)
+                                                                        limite_delta_media_aberta = limite_delta_aberta,
+                                                                       limite_proj = limite_proj)
 
   # Preenchemos a base transformada com a projeção corrigida
   df_completo_projetado.loc[df_completo_projetado[col_data] >= primeira_data,[endogenous]] = endog_projetada

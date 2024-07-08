@@ -298,7 +298,6 @@ def funil_dinamico_forecast(df_completo,      # DataFrame completo do histórico
       base_contencao_de_danos = pd.concat([base_contencao_de_danos,base_contencao_de_danos_local])
 
 
-
       #print(out_parametros.columns.values)
       # Antes de aplicar a projeção das cohorts, precisamos transformar o formato do forecast_df
       # no formato do df_funil. Caso essa seja a primerira etapa do funil, vamos transformar
@@ -319,15 +318,11 @@ def funil_dinamico_forecast(df_completo,      # DataFrame completo do histórico
 
 
 
-
       else:
         df_funil_etapa = formata_base_para_funil(df = forecast_df,
                                                 max_origin = max_origin,
                                                 etapa = e)
-        '''
-        print("2######################")
-        print(df_funil_etapa.loc[df_funil_etapa['Week Origin'] == '1'])
-        '''
+
 
         # Adicionamos as conversões em % projetadas à base df_funil.
         # Caso a etapa projetada (que aqui não é mais a primeira) também tenha a projeção do volume
@@ -452,6 +447,7 @@ def funil_dinamico_forecast(df_completo,      # DataFrame completo do histórico
         df_funil[etapa_anterior_vol] = df_funil[etapa_anterior_vol+'_x'].values
         df_funil = df_funil.drop(columns=[etapa_anterior_vol+'_x',etapa_anterior_vol+'_y'])
       except:
+        #print(df_funil_etapa.head(3))
         df_funil = df_funil
 
 
@@ -460,7 +456,6 @@ def funil_dinamico_forecast(df_completo,      # DataFrame completo do histórico
                                     etapas_split,
                                     chaves,
                                     max_origin) # @função_auxiliar
-
 
 
       # Vamos remover possíveis valores negativos:
@@ -502,7 +497,7 @@ def funil_dinamico_forecast(df_completo,      # DataFrame completo do histórico
 
   # Vamos remover possíveis valores negativos:
   for e in etapas_conv:
-    df_funil.loc[(df_funil['Week Origin'] != 'Coincident') & (df_funil[e] < 0),[e] ] = 0
+    df_funil.loc[(df_funil['Week Origin'] != 'Coincident') & (df_funil['Week Origin'] != 'Não Convertido') & (df_funil[e] < 0),[e] ] = 0
 
   clear___output(flag_clear) # Comentar para manutenção
   print(colored("Funil Dinâmico Finalizado",'green'))
