@@ -10,7 +10,8 @@ import itertools
 from itertools import compress
 import datetime
 from datetime import datetime 
-
+import warnings
+warnings.simplefilter('ignore', FutureWarning)
 
 def check_etapas_do_funil(lista_etapas_conversao, # lista com todas as etapas de conversão definidas pelo usuário no painel de controle
                           lista_topos_de_funil,   # lista com os ToF's definida pelo usuário no painel de controle
@@ -367,7 +368,8 @@ def check_colunas(df,                    # DataFrame
                   dict_renames,          # dicionário com o de/para de colunas numéricas
                   coluna_de_conversoes,
                   colunas_datas,
-                  nome_do_arquivo):  
+                  nome_do_arquivo,
+                 mantem_formatacao_original = False):  
   
   # Definições iniciais
   #-------------------------------------------------------------------------------------------------
@@ -405,8 +407,9 @@ def check_colunas(df,                    # DataFrame
   if erro == 0: # caso não tenha colunas repetidas
 
     # Vamos deixar todos os nomes das colunas em letras minúsculas:
-    colunas = [c.lower() for c in colunas]
-    colunas_o = [c.lower() for c in colunas_o]
+    if not mantem_formatacao_original:
+      colunas = [c.lower() for c in colunas]
+      colunas_o = [c.lower() for c in colunas_o]
 
     # Renomeamos as colunas da base para ficar com tudo minúsculo
     df = df.rename(columns=dict(zip(df.columns.values, colunas)))
@@ -457,7 +460,6 @@ def check_colunas(df,                    # DataFrame
             # Não queremos substituir colunas onde estão faltando mais da metade das chaves
             # da base modelo:
             if numero_faltante < len(conteudo_modelo)/2:
-
               df = df.rename(columns={coluna_compativel:col_faltante})
               colunas = list(df.columns.values)
               colunas_substituidas = colunas_substituidas + [col_faltante]
@@ -641,7 +643,6 @@ def check_colunas(df,                    # DataFrame
     elif erro == 0:
       df = df[colunas_o]
 
-
   df.name = nome_da_base
   #print(df.head(3))
 
@@ -659,7 +660,8 @@ def check_colunas(df,                    # DataFrame
 def check_valores(df,                    # DataFrame já deve ter checado a existencia das colunas de valores
                   colunas_de_valores,    # lista com as colunas que contém valores
                   check_valores_vazios,  # Boleano que, caso seja verdadeiro, verifica se existem blocos de valores vazios nas colunas
-                  nome_do_arquivo):
+                  nome_do_arquivo,
+                 mantem_formatacao_original = False):
   
 
   # Definições iniciais
@@ -671,8 +673,9 @@ def check_valores(df,                    # DataFrame já deve ter checado a exis
   nome_da_base = df.name
 
   # Vamos transformar as colunas de valores em caracteres minusculos:
-  colunas_de_valores = [e.lower() for e in colunas_de_valores]
-
+  if not mantem_formatacao_original:
+    colunas_de_valores = [e.lower() for e in colunas_de_valores]
+    
   # Primeiro, vamos trasnformar as colunas de valores em texto:
   df[colunas_de_valores] = df[colunas_de_valores].astype(str)
 
@@ -803,7 +806,9 @@ def check_chaves(lista_df,                   # lista de DataFrames já devem ter
                  lista_comparacao_parcial,   # lista de booleanos indicando quais bases serão checadas se contém todas as aberturas de todas as bases ou se contém aberturas que outras bases não tem
                  chaves_ignoradas,           # lista de chaves a serem ignoradas se encontradas, como chaves globais "Todos" por exemplo
                  nome_do_arquivo,
-                 agrupar_duplicados):     
+                 agrupar_duplicados,
+                 lista_comparacao_a_mais = [],
+                 tipo_de_tof = 'Sem Tipo'):     
   
 
   # Definições iniciais
@@ -819,7 +824,7 @@ def check_chaves(lista_df,                   # lista de DataFrames já devem ter
 
   lista_df_atualizada = []
   lista_comparacao_parcial_atualizada = []
-
+  lista_comparacao_a_mais_atualizada = []
 
   # Primeiro, vamos verificar se não existem aberturas duplicadas:
   #-------------------------------------------------------------------------------------------------
@@ -887,7 +892,9 @@ def check_chaves(lista_df,                   # lista de DataFrames já devem ter
       df.name = nome
       lista_df_atualizada = lista_df_atualizada+[df]
       lista_comparacao_parcial_atualizada = lista_comparacao_parcial_atualizada + [lista_comparacao_parcial[c]]
-
+      if len(lista_comparacao_a_mais) > 0:
+        lista_comparacao_a_mais_atualizada = lista_comparacao_a_mais_atualizada + [lista_comparacao_a_mais[c]]
+        
     c += 1
   
 
@@ -903,6 +910,10 @@ def check_chaves(lista_df,                   # lista de DataFrames já devem ter
   # Vamos considerar apenas as comparações de bases com a base modelo. A base modelo será a
   # primeira base da lista de bases, que no caso do planning é a base de ToF mensal. Não vamos nos importar
   # com a compatibilidade das aberturas entre as outras bases. Vamos comparar as bases apenas com a base modelo:
+  indice_base_modelo = 0
+  if tipo_de_tof == 'Input Externo' and len(lista_df) > 3:
+    if len(lista_df[2])>0:
+      indice_base_modelo = 2
   combinacoes = [x for x in combinacoes if 0 in list(x)]
 
   # Para cada combinação de índices:
@@ -936,13 +947,22 @@ def check_chaves(lista_df,                   # lista de DataFrames já devem ter
       chaves_2_1 = list(set(chaves_unicas_2) - set(chaves_unicas_1))
 
 
-      if len(chaves_1_2) > 0 and not lista_comparacao_parcial_atualizada[indice_2]:
-        mensagem = mensagem + '\n\nAs chaves '+colored(str(chaves_1_2),'red')+' da abertura '+colored(col,'red')+' da base '+colored(nome_df_1,'yellow')+' do arquivo ' + colored(nome_do_arquivo_1,'blue') + ' não estão presentes na base '+colored(nome_df_2,'yellow')+' do arquivo ' + colored(nome_do_arquivo_2,'blue')
-        erro = erro+1
-
-      if len(chaves_2_1) > 0 and not lista_comparacao_parcial_atualizada[indice_1]:
-        mensagem = mensagem + '\n\nAs chaves '+colored(str(chaves_2_1),'red')+' da abertura '+colored(col,'red')+' da base '+colored(nome_df_2,'yellow')+' do arquivo ' + colored(nome_do_arquivo_2,'blue') +  ' não estão presentes na base '+colored(nome_df_1,'yellow')+' do arquivo ' + colored(nome_do_arquivo_1,'blue') 
-        erro = erro+1
+      if len(lista_comparacao_a_mais_atualizada) > 0:
+        if len(chaves_1_2) > 0 and not lista_comparacao_parcial_atualizada[indice_2] and not lista_comparacao_a_mais_atualizada[indice_1]:
+          mensagem = mensagem + '\n\nAs chaves '+colored(str(chaves_1_2),'red')+' da abertura '+colored(col,'red')+' da base '+colored(nome_df_1,'yellow')+' do arquivo ' + colored(nome_do_arquivo_1,'blue') + ' não estão presentes na base '+colored(nome_df_2,'yellow')+' do arquivo ' + colored(nome_do_arquivo_2,'blue')
+          erro = erro+1
+  
+        if len(chaves_2_1) > 0 and not lista_comparacao_parcial_atualizada[indice_1] and not lista_comparacao_a_mais_atualizada[indice_2]:
+          mensagem = mensagem + '\n\nAs chaves '+colored(str(chaves_2_1),'red')+' da abertura '+colored(col,'red')+' da base '+colored(nome_df_2,'yellow')+' do arquivo ' + colored(nome_do_arquivo_2,'blue') +  ' não estão presentes na base '+colored(nome_df_1,'yellow')+' do arquivo ' + colored(nome_do_arquivo_1,'blue') 
+          erro = erro+1
+      else:
+        if len(chaves_1_2) > 0 and not lista_comparacao_parcial_atualizada[indice_2]:
+          mensagem = mensagem + '\n\nAs chaves '+colored(str(chaves_1_2),'red')+' da abertura '+colored(col,'red')+' da base '+colored(nome_df_1,'yellow')+' do arquivo ' + colored(nome_do_arquivo_1,'blue') + ' não estão presentes na base '+colored(nome_df_2,'yellow')+' do arquivo ' + colored(nome_do_arquivo_2,'blue')
+          erro = erro+1
+  
+        if len(chaves_2_1) > 0 and not lista_comparacao_parcial_atualizada[indice_1]:
+          mensagem = mensagem + '\n\nAs chaves '+colored(str(chaves_2_1),'red')+' da abertura '+colored(col,'red')+' da base '+colored(nome_df_2,'yellow')+' do arquivo ' + colored(nome_do_arquivo_2,'blue') +  ' não estão presentes na base '+colored(nome_df_1,'yellow')+' do arquivo ' + colored(nome_do_arquivo_1,'blue') 
+          erro = erro+1
 
 
     # Vamos exluir as aberturas que contenham uma chave a ser ignorada:
@@ -960,15 +980,21 @@ def check_chaves(lista_df,                   # lista de DataFrames já devem ter
     aberturas_nao_existentes_2 = merge.loc[merge['aux_y'].isnull()][aberturas_compartilhadas]
 
 
-    
-
-    # Verificamos as combinações de chaves entre as bases:
-    if len(aberturas_nao_existentes_1) > 0 and not lista_comparacao_parcial_atualizada[indice_1]:
-      mensagem = mensagem + '\n\nAs seguintes combinações de aberturas da base '+colored(nome_df_2,'yellow')+' do arquivo ' + colored(nome_do_arquivo_2,'blue') + ' não estão presentes na base '+colored(nome_df_1,'yellow')+' do arquivo ' + colored(nome_do_arquivo_1,'blue') +  ': \n' + tabulate(aberturas_nao_existentes_1, headers='keys', tablefmt='psql')
-      erro = erro+1
-    if len(aberturas_nao_existentes_2) > 0 and not lista_comparacao_parcial_atualizada[indice_2]:
-      mensagem = mensagem + '\n\nAs seguintes combinações de aberturas da base '+colored(nome_df_1,'yellow')+' do arquivo ' + colored(nome_do_arquivo_1,'blue') +  ' não estão presentes na base '+colored(nome_df_2,'yellow')+' do arquivo ' + colored(nome_do_arquivo_2,'blue') +  ': \n' + tabulate(aberturas_nao_existentes_2, headers='keys', tablefmt='psql')
-      erro = erro+1
+      # Verificamos as combinações de chaves entre as bases:
+    if len(lista_comparacao_a_mais_atualizada) > 0:
+      if len(aberturas_nao_existentes_1) > 0 and not lista_comparacao_parcial_atualizada[indice_1] and not lista_comparacao_a_mais_atualizada[indice_2]:
+        mensagem = mensagem + '\n\nAs seguintes combinações de aberturas da base '+colored(nome_df_2,'yellow')+' do arquivo ' + colored(nome_do_arquivo_2,'blue') + ' não estão presentes na base '+colored(nome_df_1,'yellow')+' do arquivo ' + colored(nome_do_arquivo_1,'blue') +  ': \n' + tabulate(aberturas_nao_existentes_1, headers='keys', tablefmt='psql')
+        erro = erro+1
+      if len(aberturas_nao_existentes_2) > 0 and not lista_comparacao_parcial_atualizada[indice_2] and not lista_comparacao_a_mais_atualizada[indice_1]:
+        mensagem = mensagem + '\n\nAs seguintes combinações de aberturas da base '+colored(nome_df_1,'yellow')+' do arquivo ' + colored(nome_do_arquivo_1,'blue') +  ' não estão presentes na base '+colored(nome_df_2,'yellow')+' do arquivo ' + colored(nome_do_arquivo_2,'blue') +  ': \n' + tabulate(aberturas_nao_existentes_2, headers='keys', tablefmt='psql')
+        erro = erro+1
+    else:
+      if len(aberturas_nao_existentes_1) > 0 and not lista_comparacao_parcial_atualizada[indice_1]:
+        mensagem = mensagem + '\n\nAs seguintes combinações de aberturas da base '+colored(nome_df_2,'yellow')+' do arquivo ' + colored(nome_do_arquivo_2,'blue') + ' não estão presentes na base '+colored(nome_df_1,'yellow')+' do arquivo ' + colored(nome_do_arquivo_1,'blue') +  ': \n' + tabulate(aberturas_nao_existentes_1, headers='keys', tablefmt='psql')
+        erro = erro+1
+      if len(aberturas_nao_existentes_2) > 0 and not lista_comparacao_parcial_atualizada[indice_2]:
+        mensagem = mensagem + '\n\nAs seguintes combinações de aberturas da base '+colored(nome_df_1,'yellow')+' do arquivo ' + colored(nome_do_arquivo_1,'blue') +  ' não estão presentes na base '+colored(nome_df_2,'yellow')+' do arquivo ' + colored(nome_do_arquivo_2,'blue') +  ': \n' + tabulate(aberturas_nao_existentes_2, headers='keys', tablefmt='psql')
+        erro = erro+1   
 
       
   # Retorna:
@@ -1950,7 +1976,10 @@ def check_geral(lista_de_bases,                 # Lista de bases que vamos verif
                 aberturas_das_bases,            # Lista com as aberturas comuns às bases, definidas no painel de controle
                 coluna_de_conversoes,
                 Nome_do_arquivo_sheets,
-                dict_renames):
+                dict_renames,
+                lista_mantem_formatacao_original = [],
+                lista_comparacao_a_mais = [],
+                tipo_de_tof = ''):
   
 
   contador_de_erros = 0
@@ -1968,13 +1997,19 @@ def check_geral(lista_de_bases,                 # Lista de bases que vamos verif
   for b in range(len(lista_de_bases)):
 
     if len(lista_de_bases[b]) > 0:
-           
+
+      if len(lista_mantem_formatacao_original) == 0:
+        mantem_formatacao_original = False
+      else:
+        mantem_formatacao_original = lista_mantem_formatacao_original[b]
+        
       lista_de_bases[b],colunas_de_valores,mensagem_local,erro_local = check_colunas(df = lista_de_bases[b],     # DataFrame
                                                                                      lista_df = lista_de_bases,
                                                                                      aberturas = aberturas_das_bases,                                                                                    
                                                                                     colunas_obrigatorias = lista_de_colunas_obrigatorias[b],  # lista com as colunas obrigatórias e a ordem
                                                                                     retorna_col_valores = lista_do_retorno_de_valores[b],                 # booleano que determina se a função vai retornar as colunas de valores
-                                                                                    dict_renames = dict_renames,
+                                                                                    mantem_formatacao_original = mantem_formatacao_original,
+                                                                                     dict_renames = dict_renames,
                                                                                     coluna_de_conversoes = coluna_de_conversoes,
                                                                                     colunas_datas = lista_lista_colunas_datas[b],
                                                                                     nome_do_arquivo = Nome_do_arquivo_sheets[b])
@@ -2010,7 +2045,8 @@ def check_geral(lista_de_bases,                 # Lista de bases que vamos verif
         lista_de_bases[b], mensagem_local, erro_local = check_valores(df = lista_de_bases[b],                   # DataFrame já deve ter checado a existencia das colunas de valores
                                                                         colunas_de_valores = lista_colunas_de_valores[b],    # lista com as colunas que contém valores
                                                                         check_valores_vazios = lista_check_vazios[b],                # Boleano que, caso seja verdadeiro, verifica se existem blocos de valores vazios nas colunas
-                                                                        nome_do_arquivo = Nome_do_arquivo_sheets[b])
+                                                                        mantem_formatacao_original = mantem_formatacao_original,
+                                                                      nome_do_arquivo = Nome_do_arquivo_sheets[b])
 
 
         contador_de_erros = contador_de_erros+erro_local
@@ -2066,12 +2102,16 @@ def check_geral(lista_de_bases,                 # Lista de bases que vamos verif
     lista_de_bases_chaves = list(compress(lista_de_bases, lista_de_bases_checar_chaves))
     lista_comparacao_parcial = list(compress(lista_comparacao_parcial, lista_de_bases_checar_chaves))
     lista_nomes_arquivos_chaves = list(compress(Nome_do_arquivo_sheets, lista_de_bases_checar_chaves))
+    if len(lista_comparacao_a_mais) > 0:
+      lista_comparacao_a_mais = list(compress(lista_comparacao_a_mais, lista_de_bases_checar_chaves))
 
     lista_de_bases_chaves, mensagem_local, erro_local = check_chaves(lista_df = lista_de_bases_chaves,                   # lista de DataFrames já devem ter as colunas de valores formatadas
                                                                     aberturas_compartilhadas = aberturas_das_bases,   # lista com as aberturas que devem estar presentes em todas as bases da lista de dataframes
                                                                     aberturas_especificas = aberturas_especificas,      # lista com as aberturas que não precisam estar presentes em todas as bases
                                                                     lista_comparacao_parcial = lista_comparacao_parcial,   # lista de booleanos indicando quais bases serão checadas se contém todas as aberturas de todas as bases ou se contém aberturas que outras bases não tem
+                                                                    lista_comparacao_a_mais = lista_comparacao_a_mais,
                                                                     chaves_ignoradas = chaves_ignoradas,           # lista de chaves a serem ignoradas se encontradas, como chaves globais "Todos" por exemplo                                                                 
+                                                                    tipo_de_tof = tipo_de_tof,
                                                                     nome_do_arquivo = lista_nomes_arquivos_chaves,
                                                                     agrupar_duplicados = True)
 
