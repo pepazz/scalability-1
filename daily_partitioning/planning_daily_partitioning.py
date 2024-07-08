@@ -321,8 +321,12 @@ def quebra_diaria(volumes_semanais,  # DataFrame com os volumes semanais coincid
   base_diaria['data'] = pd.to_datetime(base_diaria['data'], errors='coerce')
   if 'região' in base_diaria.columns.values:
     base_diaria = pd.merge(base_diaria,base_feriados,how='left',on=['data','região']).fillna(1)
+  elif 'city_group' in base_diaria.columns.values:
+    base_diaria = pd.merge(base_diaria,base_feriados,how='left',left_on=['data','city_group'],right_on=['data','região']).fillna(1)
   else:
-    base_diaria = pd.merge(base_diaria,base_feriados,how='left',on=['data']).fillna(1)
+    base_diaria = pd.merge(base_diaria,base_feriados,how='left',left_on=['data']).fillna(1)
+    values = list(set(base_diaria.columns.values) - set(aberturas_das_bases + ['semana','data','dia da semana','mês', 'ano','região']))
+    base_diaria = base_diaria.gorupby(aberturas_das_bases + ['semana','data','dia da semana','mês', 'ano','região'],as_index=False)[values].mean()
     
   #base_diaria[etapas_impactos] = base_diaria[etapas_impactos].fillna(1)
   #base_diaria.dropna(axis=0, how='any', inplace=True)

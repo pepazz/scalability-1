@@ -33,6 +33,7 @@ def check_etapas_do_funil(lista_etapas_conversao, # lista com todas as etapas de
   etapas_vol = []
   etapas_extra = []                          
 
+
   # Removemos os valores duplicados das etapas e ToF's
   #-------------------------------------------------------------------------------------------------
   etapas = list(dict.fromkeys(etapas)) # remove duplicadas
@@ -369,7 +370,8 @@ def check_colunas(df,                    # DataFrame
                   dict_renames,          # dicionário com o de/para de colunas numéricas
                   coluna_de_conversoes,
                   colunas_datas,
-                  nome_do_arquivo):  
+                  nome_do_arquivo,
+                 mantem_formatacao_original = False):  
   
   # Definições iniciais
   #-------------------------------------------------------------------------------------------------
@@ -660,8 +662,9 @@ def check_colunas(df,                    # DataFrame
 def check_valores(df,                    # DataFrame já deve ter checado a existencia das colunas de valores
                   colunas_de_valores,    # lista com as colunas que contém valores
                   check_valores_vazios,  # Boleano que, caso seja verdadeiro, verifica se existem blocos de valores vazios nas colunas
-                  mantem_formatacao_original,
-                  nome_do_arquivo):
+                  nome_do_arquivo,
+                 mantem_formatacao_original = False):
+
   
 
   # Definições iniciais
@@ -808,7 +811,9 @@ def check_chaves(lista_df,                   # lista de DataFrames já devem ter
                  tipo_de_tof,
                  chaves_ignoradas,           # lista de chaves a serem ignoradas se encontradas, como chaves globais "Todos" por exemplo
                  nome_do_arquivo,
-                 agrupar_duplicados):     
+                 agrupar_duplicados,
+                 lista_comparacao_a_mais = [],
+                 tipo_de_tof = 'Sem Tipo'):     
   
 
   # Definições iniciais
@@ -947,6 +952,7 @@ def check_chaves(lista_df,                   # lista de DataFrames já devem ter
       chaves_1_2 = list(set(chaves_unicas_1) - set(chaves_unicas_2))
       chaves_2_1 = list(set(chaves_unicas_2) - set(chaves_unicas_1))
 
+
       if len(lista_comparacao_a_mais_atualizada) > 0:
         if len(chaves_1_2) > 0 and not lista_comparacao_parcial_atualizada[indice_2] and not lista_comparacao_a_mais_atualizada[indice_1]:
           mensagem = mensagem + '\n\nAs chaves '+colored(str(chaves_1_2),'red')+' da abertura '+colored(col,'red')+' da base '+colored(nome_df_1,'yellow')+' do arquivo ' + colored(nome_do_arquivo_1,'blue') + ' não estão presentes na base '+colored(nome_df_2,'yellow')+' do arquivo ' + colored(nome_do_arquivo_2,'blue')
@@ -963,7 +969,7 @@ def check_chaves(lista_df,                   # lista de DataFrames já devem ter
         if len(chaves_2_1) > 0 and not lista_comparacao_parcial_atualizada[indice_1]:
           mensagem = mensagem + '\n\nAs chaves '+colored(str(chaves_2_1),'red')+' da abertura '+colored(col,'red')+' da base '+colored(nome_df_2,'yellow')+' do arquivo ' + colored(nome_do_arquivo_2,'blue') +  ' não estão presentes na base '+colored(nome_df_1,'yellow')+' do arquivo ' + colored(nome_do_arquivo_1,'blue') 
           erro = erro+1
-          
+
     # Vamos exluir as aberturas que contenham uma chave a ser ignorada:
     for c in chaves_ignoradas:
       for coluna in aberturas_compartilhadas:
@@ -979,9 +985,10 @@ def check_chaves(lista_df,                   # lista de DataFrames já devem ter
     aberturas_nao_existentes_2 = merge.loc[merge['aux_y'].isnull()][aberturas_compartilhadas]
 
 
-    
+
 
     # Verificamos as combinações de chaves entre as bases:
+
     if len(lista_comparacao_a_mais_atualizada) > 0:
       if len(aberturas_nao_existentes_1) > 0 and not lista_comparacao_parcial_atualizada[indice_1] and not lista_comparacao_a_mais_atualizada[indice_2]:
         mensagem = mensagem + '\n\nAs seguintes combinações de aberturas da base '+colored(nome_df_2,'yellow')+' do arquivo ' + colored(nome_do_arquivo_2,'blue') + ' não estão presentes na base '+colored(nome_df_1,'yellow')+' do arquivo ' + colored(nome_do_arquivo_1,'blue') +  ': \n' + tabulate(aberturas_nao_existentes_1, headers='keys', tablefmt='psql')
@@ -996,6 +1003,7 @@ def check_chaves(lista_df,                   # lista de DataFrames já devem ter
       if len(aberturas_nao_existentes_2) > 0 and not lista_comparacao_parcial_atualizada[indice_2]:
         mensagem = mensagem + '\n\nAs seguintes combinações de aberturas da base '+colored(nome_df_1,'yellow')+' do arquivo ' + colored(nome_do_arquivo_1,'blue') +  ' não estão presentes na base '+colored(nome_df_2,'yellow')+' do arquivo ' + colored(nome_do_arquivo_2,'blue') +  ': \n' + tabulate(aberturas_nao_existentes_2, headers='keys', tablefmt='psql')
         erro = erro+1      
+
       
   # Retorna:
   # lista de DataFrames 
@@ -1977,7 +1985,7 @@ def check_geral(lista_de_bases,                 # Lista de bases que vamos verif
                 coluna_de_conversoes,
                 Nome_do_arquivo_sheets,
                 dict_renames,
-                lista_mantem_formatacao_original = True,
+                lista_mantem_formatacao_original = [],
                 lista_comparacao_a_mais = [],
                 tipo_de_tof = ''):
   
@@ -1998,13 +2006,19 @@ def check_geral(lista_de_bases,                 # Lista de bases que vamos verif
 
     if len(lista_de_bases[b]) > 0:
 
+      if len(lista_mantem_formatacao_original) == 0:
+        mantem_formatacao_original = False
+      else:
+        mantem_formatacao_original = lista_mantem_formatacao_original[b]
+        
+
       lista_de_bases[b],colunas_de_valores,mensagem_local,erro_local = check_colunas(df = lista_de_bases[b],     # DataFrame
                                                                                      lista_df = lista_de_bases,
                                                                                      aberturas = aberturas_das_bases,                                                                                    
                                                                                     colunas_obrigatorias = lista_de_colunas_obrigatorias[b],  # lista com as colunas obrigatórias e a ordem
                                                                                     retorna_col_valores = lista_do_retorno_de_valores[b],                 # booleano que determina se a função vai retornar as colunas de valores
-                                                                                    mantem_formatacao_original = lista_mantem_formatacao_original[b],
-                                                                                    dict_renames = dict_renames,
+                                                                                    mantem_formatacao_original = mantem_formatacao_original,
+                                                                                     dict_renames = dict_renames,
                                                                                     coluna_de_conversoes = coluna_de_conversoes,
                                                                                     colunas_datas = lista_lista_colunas_datas[b],
                                                                                     nome_do_arquivo = Nome_do_arquivo_sheets[b])
@@ -2040,7 +2054,7 @@ def check_geral(lista_de_bases,                 # Lista de bases que vamos verif
         lista_de_bases[b], mensagem_local, erro_local = check_valores(df = lista_de_bases[b],                   # DataFrame já deve ter checado a existencia das colunas de valores
                                                                         colunas_de_valores = lista_colunas_de_valores[b],    # lista com as colunas que contém valores
                                                                         check_valores_vazios = lista_check_vazios[b],                # Boleano que, caso seja verdadeiro, verifica se existem blocos de valores vazios nas colunas
-                                                                        mantem_formatacao_original = lista_mantem_formatacao_original[b],
+                                                                        mantem_formatacao_original = mantem_formatacao_original,
                                                                       nome_do_arquivo = Nome_do_arquivo_sheets[b])
 
 
@@ -2635,9 +2649,9 @@ def check_datas_base_share_diario(df_parametro,
   df_parametro_filtrado = df_parametro[(df_parametro[coluna_semanas] >= data_inicio) & (df_parametro[coluna_semanas] <= data_fim)]
 
 
-  #Check de qtd de semanas. Se forem 2 ou menos não rodar.
-  if len(df_parametro_filtrado[coluna_semanas].unique()) < 2:
-    mensagem = mensagem+colored("\nA quantidade de semanas na base definida é menor que três.\nEscolha um mínimo de três semanas para que o share tenha um melhor espaço amostral.\n", 'red')
+  #Check de qtd de semanas. Se forem 7 ou menos não rodar.
+  if len(df_parametro_filtrado[coluna_semanas].unique()) < 8:
+    mensagem = mensagem+colored("\nA quantidade de semanas na base definida é menor que três.\nEscolha um mínimo de oito semanas para que o share tenha um melhor espaço amostral.\n", 'red')
     erro = erro+1
 
 

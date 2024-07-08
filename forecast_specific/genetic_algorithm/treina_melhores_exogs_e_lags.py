@@ -259,8 +259,6 @@ def treina_melhores_exogs_e_lags(df_completo,      # DataFrame completo
           # Caso o histórico exista, mas ainda assim tiver poucos pontos não realizamos a otimização
           if len(df_completo_abertura.loc[df_completo_abertura[col_data] <= data_maturacao]) > qtd_semanas_media:
 
-
-
             # Realizamos a projeção de todas as variáveis da abertura (Volumes de topo, shares de cohorts, cohort aberta e cohorts fechadas)
             out_parametros_a = aplica_teste(df_completo = df_completo_abertura,      # DataFrame filtrado na etapa e abertura
                                             df_inputs_exogenas = df_inputs_exogenas,

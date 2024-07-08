@@ -222,6 +222,7 @@ def clusterizacao_aberturas(df_completo,  # data_frame formatado completo
               df_merged_secundario_final = pd.concat(lista_merged_secundario_final)
   
             else:
+
               df_merged_secundario_final = df_merged_secundario
               #df_merged_secundario_final['clusters_terciarios'] = df_merged_secundario_final['clusters_terciarios'].astype(int)
               df_merged_secundario_final['clusters_terciarios'] = ''

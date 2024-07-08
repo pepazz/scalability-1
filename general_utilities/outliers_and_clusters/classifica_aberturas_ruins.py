@@ -30,6 +30,7 @@ def classifica_aberturas_ruins(df_completo,  # data_frame formatado completo
       # Valos filtrar a base completa somente nas datas de interesse:
       df_filtrado = df_completo.copy()
       df_filtrado = df_filtrado.loc[(df_filtrado[col_data] <= ultima_data_hist-pd.Timedelta(max_origin*7, unit='D')) & (df_filtrado[col_data] >= ultima_data_hist-pd.Timedelta((max_origin+qtd_semanas_media)*7, unit='D'))]
+
       if len(df_filtrado[col_data].unique()) < 2:
         print(colored("Não existem pontos de histórico suficientes para realizar classificação de aberturas ruins.","red"))
         df_merged = pd.DataFrame()

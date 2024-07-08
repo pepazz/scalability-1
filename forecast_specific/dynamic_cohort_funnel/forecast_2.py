@@ -617,11 +617,18 @@ def forecast_2(df_completo,      # DataFrame filtrado, somente datas e valores
       valores = np.where(valores<0,0,valores)
       valores = np.where(valores>limite_proj,limite_proj,valores)
       df_completo_projetado[cohorts_projetadas[i]] = valores
+      
+    # Caso seja uma abertura clusterizada, vamos forçar a existência do share de 100% da última,
+    # assim garantimos que a cohort aberta vai ser a definida pelo cluster, já que os shares
+    # das fechadas são médias que podem não bater 100% a aberta definida.
+    elif tipo_de_projecao == 'Cluster' and i == len(cohorts_projetadas)-1:
+
 
     # Caso seja uma abertura clusterizada, vamos forçar a existência do share de 100% da última,
     # assim garantimos que a cohort aberta vai ser a definida pelo cluster, já que os shares
     # das fechadas são médias que podem não bater 100% a aberta definida.
     elif tipo_de_projecao == 'Cluster' and i == len(cohorts_projetadas)-1:
+
 
       df_completo_projetado.loc[df_completo_projetado[col_data] > data_limite_hist, [cohorts_projetadas[i]]] =\
       1*\
@@ -632,6 +639,7 @@ def forecast_2(df_completo,      # DataFrame filtrado, somente datas e valores
       valores = df_completo_projetado[cohorts_projetadas[i]].values
       valores = np.where(valores<0,0,valores)
       valores = np.where(valores>limite_proj,limite_proj,valores)
+
       df_completo_projetado[cohorts_projetadas[i]] = valores
 
     else:
