@@ -366,7 +366,6 @@ def check_colunas(df,                    # DataFrame
                   aberturas,             # Lista com as aberturas das bases.
                   colunas_obrigatorias,  # lista com as colunas obrigatórias e a ordem
                   retorna_col_valores,   # booleano que determina se a função vai retornar as colunas de valores
-                  mantem_formatacao_original,
                   dict_renames,          # dicionário com o de/para de colunas numéricas
                   coluna_de_conversoes,
                   colunas_datas,
