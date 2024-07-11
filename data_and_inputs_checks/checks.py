@@ -806,7 +806,6 @@ def check_chaves(lista_df,                   # lista de DataFrames já devem ter
                  aberturas_compartilhadas,   # lista com as aberturas que devem estar presentes em todas as bases da lista de dataframes
                  aberturas_especificas,      # lista com as aberturas que não precisam estar presentes em todas as bases
                  lista_comparacao_parcial,   # lista de booleanos indicando quais bases serão checadas se contém todas as aberturas de todas as bases ou se contém aberturas que outras bases não tem
-                 tipo_de_tof,
                  chaves_ignoradas,           # lista de chaves a serem ignoradas se encontradas, como chaves globais "Todos" por exemplo
                  nome_do_arquivo,
                  agrupar_duplicados,
