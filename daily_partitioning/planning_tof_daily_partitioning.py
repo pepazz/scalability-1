@@ -233,6 +233,8 @@ def quebra_diaria_ToF_2(df_ToF_semanal,     # Dataframe com os volumes semanais 
 
     ToF_diarizado['data'] = pd.to_datetime(ToF_diarizado['data'], infer_datetime_format=True)
 
+    ToF_diarizado = ToF_diarizado[['data','semana','mês','ano','dia da semana']+aberturas+topos_de_funil]
+
     # Arredondamos os valores finais:
     if round_output:
       n_ToF_semanal = rounding_tool(df = n_ToF_semanal,
