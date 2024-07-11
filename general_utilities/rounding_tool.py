@@ -29,8 +29,6 @@ def rounding_tool(df,          # DataFrame a ser arredondado
   df_rounded = df_rounded.rename(columns=dict(zip(col_valores, col_round)))
 
   # Unimos a base original e a base arredondada
-  print(aberturas)
-  print(df_rounded.columns.values)
   df_rounded = pd.merge(df_rounded,df,how='left',on=aberturas)
 
   '''
