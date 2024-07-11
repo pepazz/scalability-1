@@ -80,10 +80,8 @@ def rounding_tool(df,          # DataFrame a ser arredondado
 
         # Ordemaos a base pelas aberturas e pelo valor que iremos arredondar, de forma a facilitar
         # uma distribuição proporcional dos deltas
-        print("----------------------------------------------------")
-        print(df_rounded.columns.values)
         df_rounded = df_rounded.sort_values(by=aberturas+[val], ascending=False)
-        print(df_rounded.columns.values)
+
         # Criamos colunas auxilires para alocar os deltas corretamente
         df_rounded_count = df_rounded.groupby(chaves,as_index=False)['aux'].sum()
         df_rounded_count = df_rounded_count.rename(columns={'aux':'count'})
