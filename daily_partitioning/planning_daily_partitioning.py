@@ -623,7 +623,7 @@ def quebra_diaria(volumes_semanais,  # DataFrame com os volumes semanais coincid
 
   # Arredondar output final
   if round_output:
-    base_diaria = rounding_tool(df = base_diaria[['ano','mês', 'dia da semana','data','semana']+building_blocks+aberturas_das_bases],
+    base_diaria = rounding_tool(df = base_diaria,
                                 aberturas = ['ano','mês', 'dia da semana','data','semana']+building_blocks+aberturas_das_bases,
                                 col_valores = etapas,
                                 ordem_hirarquica = ['data']+aberturas_das_bases)
