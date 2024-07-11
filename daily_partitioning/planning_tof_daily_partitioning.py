@@ -236,7 +236,7 @@ def quebra_diaria_ToF_2(df_ToF_semanal,     # Dataframe com os volumes semanais 
     # Arredondamos os valores finais:
     if round_output:
       n_ToF_semanal = rounding_tool(df = n_ToF_semanal,
-                                    aberturas = ['semana']+aberturas,
+                                    aberturas = ['week start']+aberturas,
                                     col_valores = topos_de_funil,
                                     ordem_hirarquica = ['data']+aberturas_das_bases)
   
