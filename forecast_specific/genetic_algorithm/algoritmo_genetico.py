@@ -104,7 +104,8 @@ def algoritmo_genetico(df_completo, # DF filtrado somente etapa e abertura e end
     overfitting_vs_underfitting_fitness = overfitting_vs_underfitting
     df_sanity_check_fitness = df_sanity_check
     fit_intercept_fitness = fit_intercept
-
+    print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+    print(vetor_exogs_fitness)
 
     saturacao = "saturate_" + str(int(num_generations/10))
 
