@@ -93,7 +93,7 @@ def fitness_func_qualidade_do_modelo(ga_instance,
         sanity_check_merged['sanity check'] = sanity_check_merged['sanity check'].fillna(1)
         sanity_check_merged = sanity_check_merged.loc[sanity_check_merged['sanity check'] == 0]
         if len(sanity_check_merged) > 0:
-          fitness = -10000
+          fitness = -20000
 
       if fitness > -10000:
 
@@ -103,7 +103,7 @@ def fitness_func_qualidade_do_modelo(ga_instance,
         n_series = len(exogs_fitness)
         fitness = 2*np.log(r2_ajustado) - overfitting_vs_underfitting_fitness * n_series
         if np.isnan(fitness):
-          fitness = -10000
+          fitness = -30000
 
       #fitness = 1 - (1-model.score(X_train, y_train))*(len(y_train)-1)/(len(y_train)-X_train.shape[1]-1)
 
