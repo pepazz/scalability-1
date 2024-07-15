@@ -31,7 +31,10 @@ def fitness_func_qualidade_do_modelo(ga_instance,
     posi_series = np.where(np.array(solution[1:]) != 0)[0]
     exogs_fitness = list(vetor_exogs_fitness[posi_series])
     fitness = 0
-
+    print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ fitness_func")
+    print(solution)
+    print(posi_series)
+    print(exogs_fitness)                                    
     # Pode acontecer do cromossomo retornar nenhuma série exógena. Nesse caso o modelo vai
     # retornar um erro. Para evitar esse problema, checamos se as bases não estão vazias
     # antes de treinar o modelo. Se estiverem, retornamos "fitness" = 0:
