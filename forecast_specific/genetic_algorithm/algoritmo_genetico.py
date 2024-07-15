@@ -164,8 +164,13 @@ def algoritmo_genetico(df_completo, # DF filtrado somente etapa e abertura e end
 
 
     # Caso a melhor solução tenha sido a de fitness == -10000, significa que o modelo falhou:
-    if solution_fitness == -10000:
-      print("\n!!!!!!!!!!!!!!!!!!! Model Fail !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    if solution_fitness <= -10000:
+      if solution_fitness == -10000:  
+              print("\n!!!!!!!!!!!!!!!!!!! Model Fail - len(exogs) !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+      if solution_fitness == -20000:  
+              print("\n!!!!!!!!!!!!!!!!!!! Model Fail - sanity check !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")      
+      if solution_fitness == -30000:  
+              print("\n!!!!!!!!!!!!!!!!!!! Model Fail - fitness = nan !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")      
       solution = []
       endog_trans = []
       for l in range(1,pcf_lag+1):
