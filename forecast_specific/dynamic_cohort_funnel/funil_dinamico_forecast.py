@@ -255,8 +255,6 @@ def funil_dinamico_forecast(df_completo,      # DataFrame completo do histórico
         df_completo_etapa_futuro = pd.merge(df_completo_etapa_futuro,df_funil_volume,how='left',on=chaves)
 
         # Somamos os valores de volumes no df_completo_etapa:
-        print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
-        print(df_completo_etapa_futuro.columns.values)
         df_completo_etapa.loc[df_completo_etapa[col_data] >= primeira_data_forecast,['Volume']] = df_completo_etapa.loc[df_completo_etapa[col_data] >= primeira_data_forecast]['Volume'].values + df_completo_etapa_futuro[etapa_vol].values
 
 
