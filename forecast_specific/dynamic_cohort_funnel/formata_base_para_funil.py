@@ -19,8 +19,7 @@ def formata_base_para_funil(df,           # DataFrame completo com a etapa filtr
                             etapa):
 
   cb_df = list(df.columns.values)
-  print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
-  print(cb_df)
+
   # Vamos definir as chaves que serão as mesmas em ambas as bases
   chaves = cb_df[:cb_df.index('Etapa')]
 
@@ -44,8 +43,7 @@ def formata_base_para_funil(df,           # DataFrame completo com a etapa filtr
   df_transformada_1 = df[chaves+['Volume']+conversoes_p]
 
   # Vamos renomear as colunas de conversão:
-  print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
-  print(df_transformada_1.columns.values)
+
   df_transformada_1.columns = chaves+['Volume']+conversoes_n
 
   # Vamos dar um 'melt' nas colunas de conversões e transformar uma coluna só de 'Week Origin':
