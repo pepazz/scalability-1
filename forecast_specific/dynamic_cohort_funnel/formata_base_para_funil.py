@@ -25,11 +25,13 @@ def formata_base_para_funil(df,           # DataFrame completo com a etapa filtr
   chaves = cb_df[:cb_df.index('Etapa')]
 
   # Vamos definir as conversões cohort da base: 0	1	2	3	4	5	Coincident
-  conversoes_n = cb_df[cb_df.index('0'):cb_df.index('%__0')]
-
+  #conversoes_n = cb_df[cb_df.index('0'):cb_df.index('%__0')]
+  conversoes_n = [str(x) for x in range(max_origin+1)]+['Coincident']
+                             
   # Vamos definir as conversões cohort da base: %__0	%__5	%__1	%__2	%__3	%__4	%__Coincident
-  conversoes_p = cb_df[cb_df.index('%__0'):cb_df.index('%__Volume Aberta')]
-
+  #conversoes_p = cb_df[cb_df.index('%__0'):cb_df.index('%__Volume Aberta')]
+  conversoes_p = ['%__'+x for x in conversoes_n]
+                             
   # A base final vai ter que conter 1 coluna com os volumes coincident, 1 coluna com os volumes
   # da cohort e outra com as cohorts em %. Assim, vamos começar criando a base com volume coincident
   # e conversões em % e depois criamos uma base no mesmo formato com as conversões em volume e
