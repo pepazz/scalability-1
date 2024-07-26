@@ -366,13 +366,15 @@ def forecast_2(df_completo,      # DataFrame filtrado, somente datas e valores
 
         cohort_parcial_maturada = np.sum(historico_nao_maturado_semana[lista_cohorts_maturadas[:-1]].values)
 
+        cohort_total = np.sum(historico_nao_maturado_semana[lista_cohorts_maturadas].values)
+
         cohort_faltante_projetada = historico_nao_maturado_semana[lista_cohorts_maturadas[-1]].values \
                                   / historico_nao_maturado_semana[share_p_ca].values
 
         CA_pelo_share = cohort_faltante_projetada + cohort_parcial_maturada
         CA_ponderada = CA_pelo_share * share_acumulado + CA_media_maturada * (1-share_acumulado)
         # Se a cohort aberta ponderada for menor do que as cohorts que já maturaram, vamos pela primeira opção:
-        if CA_ponderada < cohort_parcial_maturada:
+        if CA_ponderada < cohort_total:
           historico_nao_maturado_semana['%__Volume Aberta'] = CA_pelo_share
         else:
           historico_nao_maturado_semana['%__Volume Aberta'] = CA_ponderada
