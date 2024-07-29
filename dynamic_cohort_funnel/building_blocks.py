@@ -251,14 +251,14 @@ def building_blocks(inputs_df,
 
   #-------------------------------------------------------------------------------------------------
   # Precizamos agora, remover os tof's baselines que foram somados aos tof's negativos, pois eles não são aplicados:
-  if len(list_tof_negativos) > 0:
+  if tof_negativo:
 
     # Vamos separar os tof's negativos do output final:
-    output_cohort_tof_negativo = output_cohort_final_final.loc[output_cohort_final_final['building block tof'].isin(list_tof_negativos)]
-    output_cohort_final_final = output_cohort_final_final.loc[~output_cohort_final_final['building block tof'].isin(list_tof_negativos)]
+    output_cohort_tof_negativo = output_cohort_final_final.loc[output_cohort_final_final['building block tof'].isin(list_tof_negativo)]
+    output_cohort_final_final = output_cohort_final_final.loc[~output_cohort_final_final['building block tof'].isin(list_tof_negativo)]
 
-    output_coincident_tof_negativo = output_coincident_final_final.loc[output_coincident_final_final['building block tof'].isin(list_tof_negativos)]
-    output_coincident_final_final = output_coincident_final_final.loc[~output_coincident_final_final['building block tof'].isin(list_tof_negativos)]
+    output_coincident_tof_negativo = output_coincident_final_final.loc[output_coincident_final_final['building block tof'].isin(list_tof_negativo)]
+    output_coincident_final_final = output_coincident_final_final.loc[~output_coincident_final_final['building block tof'].isin(list_tof_negativo)]
 
     # Vamos separar todos os projetos aplicados no tof baseline:
     output_cohort_baseline = output_cohort_final_final.loc[output_cohort_final_final['building block tof'] == 'Baseline']
