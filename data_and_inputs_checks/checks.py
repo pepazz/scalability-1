@@ -1411,7 +1411,43 @@ def check_valores_negativos(dataframe, lista_colunas_numericas):
   mensagem = ''
 
   lista_colunas_numericas = [e.lower() for e in lista_colunas_numericas]
+  lista_aberturas = list(set(dataframe.columns.values)-set(lista_colunas_numericas))
 
+  '''
+  No caso super específico da base de ToF do planning, podem existir valores negativos nos Building Blocks.
+  Só não pode haver valor negativo no BB baseline ou no agrupamento do BB com o baseline.
+  Por isso, se houver a coluna "Building Block ToF" na base, vamos fazer um agrupamento na base teste.
+  '''
+  if 'Building Block ToF' in dataframe_teste.columns.values:
+    if 'Baseline' in dataframe_teste['Building Block ToF'].unique():
+      dataframe_teste_baseline = dataframe_teste.loc[dataframe_teste['Building Block ToF'] == 'Baseline']
+      # Verificamos valores negativos no baseline:
+        for coluna in lista_colunas_numericas:
+          aux = dataframe_teste_baseline[dataframe_teste[coluna] < 0]
+          if len(aux.index) > 0:
+            mensagem = f'\n\n Existem valores negativos nas linhas de "Baseline" na coluna \033[1;33m"{coluna}"\033[0;0;0m na base \033[1;33m"{dataframe.name}"\033[0;0;0m. Por favor verifique os dados inputados'
+            contagem_de_erros += 1
+      
+      # Agora, se houver valores negativos em outros BB's, vamos checar o agrupamento de cada um deles com o baseline para garantir que o total não é negativo:
+      keys = list(set(lista_aberturas)-set(['Building Block ToF']))
+      for coluna in lista_colunas_numericas:
+        aux = dataframe_teste[dataframe_teste[coluna] < 0]
+        if len(aux.index) > 0:
+          bb_negativos = aux['Building Block ToF'].unique()
+          for bb in bb_negativos:
+            df_baseline_com_bb = pd.concat([dataframe_teste_baseline,dataframe_teste.loc[baseline_teste['Building Block ToF'] == bb]])
+            df_baseline_com_bb = df_baseline_com_bb.groupby(keys,as_index=False)[coluna].sum()
+            aux_bb = df_baseline_com_bb[df_baseline_com_bb[coluna]<0]
+            if len(aux_bb.index) > 0:
+              mensagem = f'\n\n A soma do Building Block ToF "\033[1;33m"{bb}"\033[0;0;0m" com o "Baseline" na coluna \033[1;33m"{coluna}"\033[0;0;0m na base \033[1;33m"{dataframe.name}"\033[0;0;0m contém valores negativos. Por favor verifique os dados inputados'
+              contagem_de_erros += 1
+              
+    else:
+      coluna = 'Building Block ToF'
+      mensagem = f'\n\n Não existem linhas de "Baseline" na coluna \033[1;33m"{coluna}"\033[0;0;0m na base \033[1;33m"{dataframe.name}"\033[0;0;0m. Por favor verifique os dados inputados'
+      contagem_de_erros += 1
+
+      
   # Verifica se a base é uma base de baseline de cohorts, que pode conter valores negativos na conversão de ajuste "Coincident":
   coluna_coincident = []
   for col in list(dataframe_teste.columns.values):
