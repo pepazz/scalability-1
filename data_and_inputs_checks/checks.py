@@ -1440,7 +1440,7 @@ def check_valores_negativos(dataframe, lista_colunas_numericas):
         if len(aux.index) > 0:
           bb_negativos = aux[col_bb].unique()
           for bb in bb_negativos:
-            df_baseline_com_bb = pd.concat([dataframe_teste_baseline,dataframe_teste.loc[baseline_teste[col_bb] == bb]])
+            df_baseline_com_bb = pd.concat([dataframe_teste_baseline,dataframe_teste.loc[dataframe_teste[col_bb] == bb]])
             df_baseline_com_bb = df_baseline_com_bb.groupby(keys,as_index=False)[coluna].sum()
             aux_bb = df_baseline_com_bb[df_baseline_com_bb[coluna]<0]
             if len(aux_bb.index) > 0:
