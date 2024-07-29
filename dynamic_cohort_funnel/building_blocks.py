@@ -99,6 +99,8 @@ def building_blocks(inputs_df,
       list_tof_negativo = list_tof_negativo + [tof]
       ToF_semanal_tof = pd.concat([ToF_semanal_tof,ToF_semanal.loc[ToF_semanal['building block tof'] == 'Baseline']])
       ToF_semanal_tof = ToF_semanal_tof.groupby(aberturas,as_index=False)[topos].sum()
+      print("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
+      print(ToF_semanal_tof.head(3))
 
     else:
       ToF_semanal_tof = ToF_semanal_tof.drop(columns=['building block tof'])
