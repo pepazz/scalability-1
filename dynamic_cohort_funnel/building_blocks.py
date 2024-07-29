@@ -260,7 +260,7 @@ def building_blocks(inputs_df,
     output_coincident_tof_negativo = output_coincident_final_final.loc[output_coincident_final_final['building block tof'].isin(list_tof_negativo)]
     output_coincident_final_final = output_coincident_final_final.loc[~output_coincident_final_final['building block tof'].isin(list_tof_negativo)]
     print("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
-    print(output_coincident_tof_negativo.groupby(([coluna_de_semanas],as_index=False)[etapas_coincident].sum()
+    print(output_coincident_tof_negativo.groupby([coluna_de_semanas],as_index=False)[etapas_coincident].sum())
 
     # Vamos separar todos os projetos aplicados no tof baseline:
     output_cohort_baseline = output_cohort_final_final.loc[output_cohort_final_final['building block tof'] == 'Baseline']
