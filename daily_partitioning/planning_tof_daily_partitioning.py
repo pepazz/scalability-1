@@ -224,7 +224,7 @@ def quebra_diaria_ToF_2(df_ToF_semanal,     # Dataframe com os volumes semanais 
       print('Valores negativos substituídos por zero: o total mensal não irá bater')
 
       # Removendo valores negativos
-      ToF_diarizado[topos_de_funil] = ToF_diarizado[topos_de_funil].clip(lower=0)
+      #ToF_diarizado[topos_de_funil] = ToF_diarizado[topos_de_funil].clip(lower=0)
     
 
     # Redefinindo ToF semanal após a redistribuição
