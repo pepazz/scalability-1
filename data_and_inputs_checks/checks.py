@@ -1447,33 +1447,35 @@ def check_valores_negativos(dataframe, lista_colunas_numericas):
       mensagem = f'\n\n Não existem linhas de "Baseline" na coluna \033[1;33m"{coluna}"\033[0;0;0m na base \033[1;33m"{dataframe.name}"\033[0;0;0m. Por favor verifique os dados inputados'
       contagem_de_erros += 1
 
-      
-  # Verifica se a base é uma base de baseline de cohorts, que pode conter valores negativos na conversão de ajuste "Coincident":
-  coluna_coincident = []
-  for col in list(dataframe_teste.columns.values):
-    try:
-      if dataframe_teste[col].str.contains('Coincident').any():
-        coluna_coincident = coluna_coincident + [col]
-    except:
-      pass
+
+  # Se não for uma base de ToF, seguimos com o check normal:
+  else:
+    # Verifica se a base é uma base de baseline de cohorts, que pode conter valores negativos na conversão de ajuste "Coincident":
+    coluna_coincident = []
+    for col in list(dataframe_teste.columns.values):
+      try:
+        if dataframe_teste[col].str.contains('Coincident').any():
+          coluna_coincident = coluna_coincident + [col]
+      except:
+        pass
+    
+    # Verifica se existe somente 1 coluna com a conversão coincident:
+    if len(coluna_coincident) > 1:
+      mensagem = f'\n\n Existe mais de uma coluna com conversões de ajuste na base \033[1;33m"{dataframe.name}"\033[0;0;0m. Por favor verifique os dados inputados'
+      contagem_de_erros += 1    
+      coluna_coincident[0]
+    # Caso exista a coluna de conversão coincident, não checar se os valores são negativos
+    elif len(coluna_coincident) == 1:
+      coluna_coincident = coluna_coincident[0]
+      dataframe_teste = dataframe_teste.loc[dataframe_teste[coluna_coincident] != 'Coincident']
   
-  # Verifica se existe somente 1 coluna com a conversão coincident:
-  if len(coluna_coincident) > 1:
-    mensagem = f'\n\n Existe mais de uma coluna com conversões de ajuste na base \033[1;33m"{dataframe.name}"\033[0;0;0m. Por favor verifique os dados inputados'
-    contagem_de_erros += 1    
-    coluna_coincident[0]
-  # Caso exista a coluna de conversão coincident, não checar se os valores são negativos
-  elif len(coluna_coincident) == 1:
-    coluna_coincident = coluna_coincident[0]
-    dataframe_teste = dataframe_teste.loc[dataframe_teste[coluna_coincident] != 'Coincident']
-
-
-
-  for coluna in lista_colunas_numericas:
-    aux = dataframe_teste[dataframe_teste[coluna] < 0]
-    if len(aux.index) > 0:
-      mensagem = f'\n\n Existem valores negativos na coluna \033[1;33m"{coluna}"\033[0;0;0m na base \033[1;33m"{dataframe.name}"\033[0;0;0m. Por favor verifique os dados inputados'
-      contagem_de_erros += 1
+  
+  
+    for coluna in lista_colunas_numericas:
+      aux = dataframe_teste[dataframe_teste[coluna] < 0]
+      if len(aux.index) > 0:
+        mensagem = f'\n\n Existem valores negativos na coluna \033[1;33m"{coluna}"\033[0;0;0m na base \033[1;33m"{dataframe.name}"\033[0;0;0m. Por favor verifique os dados inputados'
+        contagem_de_erros += 1
   
   return contagem_de_erros, mensagem
 
