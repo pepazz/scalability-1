@@ -1444,7 +1444,7 @@ def check_valores_negativos(dataframe, lista_colunas_numericas):
             df_baseline_com_bb = df_baseline_com_bb.groupby(keys,as_index=False)[coluna].sum()
             aux_bb = df_baseline_com_bb[df_baseline_com_bb[coluna]<0]
             if len(aux_bb.index) > 0:
-              mensagem = f'\n\n A soma do Building Block ToF "\033[1;33m"{bb}"\033[0;0;0m" com o "Baseline" na coluna \033[1;33m"{coluna}"\033[0;0;0m na base \033[1;33m"{dataframe.name}"\033[0;0;0m contém valores negativos. Por favor verifique os dados inputados'
+              mensagem = f'\n\n A soma do Building Block ToF \033[1;33m"{bb}"\033[0;0;0m com o "Baseline" na coluna \033[1;33m"{coluna}"\033[0;0;0m na base \033[1;33m"{dataframe.name}"\033[0;0;0m contém valores negativos. Por favor verifique os dados inputados'
               contagem_de_erros += 1
               
     else:
