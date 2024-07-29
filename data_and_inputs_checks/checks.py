@@ -1422,11 +1422,11 @@ def check_valores_negativos(dataframe, lista_colunas_numericas):
     if 'Baseline' in dataframe_teste['Building Block ToF'].unique():
       dataframe_teste_baseline = dataframe_teste.loc[dataframe_teste['Building Block ToF'] == 'Baseline']
       # Verificamos valores negativos no baseline:
-        for coluna in lista_colunas_numericas:
-          aux = dataframe_teste_baseline[dataframe_teste[coluna] < 0]
-          if len(aux.index) > 0:
-            mensagem = f'\n\n Existem valores negativos nas linhas de "Baseline" na coluna \033[1;33m"{coluna}"\033[0;0;0m na base \033[1;33m"{dataframe.name}"\033[0;0;0m. Por favor verifique os dados inputados'
-            contagem_de_erros += 1
+      for coluna in lista_colunas_numericas:
+        aux = dataframe_teste_baseline[dataframe_teste[coluna] < 0]
+        if len(aux.index) > 0:
+          mensagem = f'\n\n Existem valores negativos nas linhas de "Baseline" na coluna \033[1;33m"{coluna}"\033[0;0;0m na base \033[1;33m"{dataframe.name}"\033[0;0;0m. Por favor verifique os dados inputados'
+          contagem_de_erros += 1
       
       # Agora, se houver valores negativos em outros BB's, vamos checar o agrupamento de cada um deles com o baseline para garantir que o total não é negativo:
       keys = list(set(lista_aberturas)-set(['Building Block ToF']))
