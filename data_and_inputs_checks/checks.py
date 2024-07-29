@@ -1418,9 +1418,14 @@ def check_valores_negativos(dataframe, lista_colunas_numericas):
   Só não pode haver valor negativo no BB baseline ou no agrupamento do BB com o baseline.
   Por isso, se houver a coluna "Building Block ToF" na base, vamos fazer um agrupamento na base teste.
   '''
-  if 'Building Block ToF' in dataframe_teste.columns.values:
-    if 'Baseline' in dataframe_teste['Building Block ToF'].unique():
-      dataframe_teste_baseline = dataframe_teste.loc[dataframe_teste['Building Block ToF'] == 'Baseline']
+  if 'Building Block ToF' in dataframe_teste.columns.values or 'building block tof' in dataframe_teste.columns.values:
+    if 'Building Block ToF' in dataframe_teste.columns.values:
+      col_bb = 'Building Block ToF'
+    else:
+      col_bb = 'building block tof'
+      
+    if 'Baseline' in dataframe_teste[col_bb].unique():
+      dataframe_teste_baseline = dataframe_teste.loc[dataframe_teste[col_bb] == 'Baseline']
       # Verificamos valores negativos no baseline:
       for coluna in lista_colunas_numericas:
         aux = dataframe_teste_baseline[dataframe_teste[coluna] < 0]
@@ -1429,13 +1434,13 @@ def check_valores_negativos(dataframe, lista_colunas_numericas):
           contagem_de_erros += 1
       
       # Agora, se houver valores negativos em outros BB's, vamos checar o agrupamento de cada um deles com o baseline para garantir que o total não é negativo:
-      keys = list(set(lista_aberturas)-set(['Building Block ToF']))
+      keys = list(set(lista_aberturas)-set([col_bb]))
       for coluna in lista_colunas_numericas:
         aux = dataframe_teste[dataframe_teste[coluna] < 0]
         if len(aux.index) > 0:
-          bb_negativos = aux['Building Block ToF'].unique()
+          bb_negativos = aux[col_bb].unique()
           for bb in bb_negativos:
-            df_baseline_com_bb = pd.concat([dataframe_teste_baseline,dataframe_teste.loc[baseline_teste['Building Block ToF'] == bb]])
+            df_baseline_com_bb = pd.concat([dataframe_teste_baseline,dataframe_teste.loc[baseline_teste[col_bb] == bb]])
             df_baseline_com_bb = df_baseline_com_bb.groupby(keys,as_index=False)[coluna].sum()
             aux_bb = df_baseline_com_bb[df_baseline_com_bb[coluna]<0]
             if len(aux_bb.index) > 0:
