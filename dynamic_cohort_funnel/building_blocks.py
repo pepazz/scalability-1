@@ -73,7 +73,7 @@ def building_blocks(inputs_df,
   qtd_tof = 0
   for tof in lista_bb_tof:
 
-    clear_output(wait=True)
+    #clear_output(wait=True)
     print_string = 'Calculando Funil Baseline do ToF: '+colored(tof,'y')
     empty_string = " "*(50-len(print_string))
     print(60*" ",end='\r')
