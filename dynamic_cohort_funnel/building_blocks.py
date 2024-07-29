@@ -23,6 +23,11 @@ def building_blocks(inputs_df,
                     coluna_de_semanas,
                    round_output = False):
 
+  # Definições iniciais a partir do baseline:
+  col_conv = [x for x in baseline_cohort.columns.values if '2' in x]
+  aberturas = list(set(baseline_cohort.columns.values)-set(col_conv+[nome_coluna_week_origin]))
+  col_vol = [x.split('2')[0] for x in col_conv] + [col_conv[-1].split('2')[-1]]
+  topos = [x for x in col_vol if x in ToF_semanal.columns.values]
 
   # Define a lista de BB's ToF
   lista_bb_tof = list(ToF_semanal['building block tof'].unique())
@@ -81,11 +86,26 @@ def building_blocks(inputs_df,
     baseline_df_tof = baseline_df.loc[baseline_df['building block tof'] == tof]
     ToF_semanal_tof = ToF_semanal.loc[ToF_semanal['building block tof'] == tof]
 
+    # Caso seja um ToF negativo, devemos somar este tof ao tof baseline e registrar seu nome,
+    # pois no final, para cada tof negativo calculado, precisamos subtrair o tof baseline que foi adicionado
+    # para cada projeto.
+    tof_negativo = False
+    list_tof_negativo = []
+    for topo in topos:
+      if len(ToF_semanal_tof.loc[ToF_semanal_tof[topo] < 0]) > 0:
+        tof_negativo = True
+
+    if tof_negativo:
+      list_tof_negativo = list_tof_negativo + [tof]
+      ToF_semanal_tof = pd.concat([ToF_semanal_tof,ToF_semanal.loc[ToF_semanal['building block tof'] == 'Baseline']])
+      ToF_semanal_tof = ToF_semanal_tof.groupby(aberturas,as_index=False)[topos].sum()
+
+    else:
+      ToF_semanal_tof = ToF_semanal_tof.drop(columns=['building block tof'])
     # Removemos as colunas de BB ToF das bases para conseguir rodar o funil
     baseline_df_tof = baseline_df_tof.drop(columns=['building block tof'])
     baseline_df_tof = baseline_df_tof.drop(columns=['building block cohort'])
 
-    ToF_semanal_tof = ToF_semanal_tof.drop(columns=['building block tof'])
 
 
     # Geramos o baseline de conversões
@@ -227,6 +247,38 @@ def building_blocks(inputs_df,
 
     output_cohort_final_final = pd.concat([output_cohort_final_final,output_cohort_final])
     output_coincident_final_final = pd.concat([output_coincident_final_final,output_coincident_final])
+
+  #-------------------------------------------------------------------------------------------------
+  # Precizamos agora, remover os tof's baselines que foram somados aos tof's negativos, pois eles não são aplicados:
+  if len(list_tof_negativos) > 0:
+
+    # Vamos separar os tof's negativos do output final:
+    output_cohort_tof_negativo = output_cohort_final_final.loc[output_cohort_final_final['building block tof'].isin(list_tof_negativos)]
+    output_cohort_final_final = output_cohort_final_final.loc[~output_cohort_final_final['building block tof'].isin(list_tof_negativos)]
+
+    output_coincident_tof_negativo = output_coincident_final_final.loc[output_coincident_final_final['building block tof'].isin(list_tof_negativos)]
+    output_coincident_final_final = output_coincident_final_final.loc[~output_coincident_final_final['building block tof'].isin(list_tof_negativos)]
+
+    # Vamos separar todos os projetos aplicados no tof baseline:
+    output_cohort_baseline = output_cohort_final_final.loc[output_cohort_final_final['building block tof'] == 'Baseline']
+    output_coincident_baseline = output_coincident_final_final.loc[output_coincident_final_final['building block tof'] == 'Baseline']
+
+    output_cohort_baseline = output_cohort_baseline.drop(columns=['building block tof'])
+    output_coincident_baseline = output_coincident_baseline.drop(columns=['building block tof'])
+
+    # Criar a diferença entre tof negativo e tof baseline:
+    output_cohort_tof_negativo = pd.merge(output_cohort_tof_negativo,output_cohort_baseline,how='left',on=chaves_cohort+['building block cohort'])
+    output_cohort_tof_negativo[etapas_cohort] = output_cohort_tof_negativo[etapas_cohort_y].astype(float).values - output_cohort_tof_negativo[etapas_cohort_x].astype(float).values
+
+    output_coincident_tof_negativo = pd.merge(output_coincident_tof_negativo,output_coincident_baseline,how='left',on=chaves_coincident+['building block cohort'])
+    output_coincident_tof_negativo[etapas_coincident] = output_coincident_tof_negativo[etapas_coincident_y].astype(float).values - output_coincident_tof_negativo[etapas_coincident_x].astype(float).values
+
+    output_cohort_tof_negativo = output_cohort_tof_negativo.drop(columns=[etapas_cohort_x,etapas_cohort_y])
+    output_coincident_tof_negativo = output_coincident_tof_negativo.drop(columns=[etapas_coincident_x,etapas_coincident_y])
+
+    # Vamos unir novamente os tofs negativos aos outputs finais:
+    output_cohort_final_final = pd.concat([output_cohort_final_final,output_cohort_tof_negativo])
+    output_coincident_final_final = pd.concat([output_coincident_final_final,output_coincident_tof_negativo])
 
   #_________________________________________________________________________________________________
 
