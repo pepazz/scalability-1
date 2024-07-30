@@ -72,6 +72,7 @@ def building_blocks(inputs_df,
 
   # paracada BB ToF
   qtd_tof = 0
+  list_tof_negativo = []
   for tof in lista_bb_tof:
 
     #clear_output(wait=True)
@@ -91,7 +92,6 @@ def building_blocks(inputs_df,
     # pois no final, para cada tof negativo calculado, precisamos subtrair o tof baseline que foi adicionado
     # para cada projeto.
     tof_negativo = False
-    list_tof_negativo = []
     for topo in topos:
       if len(ToF_semanal_tof.loc[ToF_semanal_tof[topo] < 0]) > 0:
         tof_negativo = True
@@ -294,11 +294,11 @@ def building_blocks(inputs_df,
                                               col_valores = etapas_coincident)
   
   # Reorganizando a ordem das colunas:
-  output_cohort_final_final = output_cohort_final_final[[chaves_cohort[0]]+['building block cohort','building block tof']+chaves_cohort[1:]+etapas_cohort]
-  output_coincident_final_final = output_coincident_final_final[[chaves_coincident[0]]+['building block cohort','building block tof']+chaves_coincident[1:]+etapas_coincident]
+  #output_cohort_final_final = output_cohort_final_final[[chaves_cohort[0]]+['building block cohort','building block tof']+chaves_cohort[1:]+etapas_cohort]
+  #output_coincident_final_final = output_coincident_final_final[[chaves_coincident[0]]+['building block cohort','building block tof']+chaves_coincident[1:]+etapas_coincident]
 
-  #output_cohort_final_final = teste_cohort[[chaves_cohort[0]]+['building block cohort','building block tof']+chaves_cohort[1:]+etapas_cohort]
-  #output_coincident_final_final = teste_coincident[[chaves_coincident[0]]+['building block cohort','building block tof']+chaves_coincident[1:]+etapas_coincident]
+  output_cohort_final_final = teste_cohort[[chaves_cohort[0]]+['building block cohort','building block tof']+chaves_cohort[1:]+etapas_cohort]
+  output_coincident_final_final = teste_coincident[[chaves_coincident[0]]+['building block cohort','building block tof']+chaves_coincident[1:]+etapas_coincident]
 
   # Arredondando output final
   if round_output:
