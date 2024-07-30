@@ -313,4 +313,4 @@ def building_blocks(inputs_df,
     
   print()
   print(colored(str(qtd_tof)+' funis de baseline ToF calculado e '+str(qtd_p)+' funis de projeto calculados.','g'))
-  return output_cohort_final_final,output_coincident_final_final,etapas_coincident,etapas_cohort
+  return output_cohort_final_final,output_coincident_final_final,etapas_coincident,etapas_cohort,list_tof_negativo
