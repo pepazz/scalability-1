@@ -256,17 +256,16 @@ def building_blocks(inputs_df,
     # Vamos separar os tof's negativos do output final:
     output_cohort_tof_negativo = output_cohort_final_final.loc[output_cohort_final_final['building block tof'].isin(list_tof_negativo)]
     output_cohort_final_final = output_cohort_final_final.loc[~output_cohort_final_final['building block tof'].isin(list_tof_negativo)]
-
+    teste_cohort = output_cohort_tof_negativo.copy()
+    
     output_coincident_tof_negativo = output_coincident_final_final.loc[output_coincident_final_final['building block tof'].isin(list_tof_negativo)]
     output_coincident_final_final = output_coincident_final_final.loc[~output_coincident_final_final['building block tof'].isin(list_tof_negativo)]
-    print("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
-    print(output_coincident_tof_negativo.groupby([coluna_de_semanas],as_index=False)[etapas_coincident].sum())
-
+    teste_coincident = output_coincident_tof_negativo.copy()
+    
     # Vamos separar todos os projetos aplicados no tof baseline:
     output_cohort_baseline = output_cohort_final_final.loc[output_cohort_final_final['building block tof'] == 'Baseline']
     output_coincident_baseline = output_coincident_final_final.loc[output_coincident_final_final['building block tof'] == 'Baseline']
-    print(output_coincident_baseline.groupby([coluna_de_semanas],as_index=False)[etapas_coincident].sum())
-                                             
+                                        
     output_cohort_baseline = output_cohort_baseline.drop(columns=['building block tof'])
     output_coincident_baseline = output_coincident_baseline.drop(columns=['building block tof'])
 
@@ -294,8 +293,11 @@ def building_blocks(inputs_df,
                                               col_valores = etapas_coincident)
   
   # Reorganizando a ordem das colunas:
-  output_cohort_final_final = output_cohort_final_final[[chaves_cohort[0]]+['building block cohort','building block tof']+chaves_cohort[1:]+etapas_cohort]
-  output_coincident_final_final = output_coincident_final_final[[chaves_coincident[0]]+['building block cohort','building block tof']+chaves_coincident[1:]+etapas_coincident]
+  #output_cohort_final_final = output_cohort_final_final[[chaves_cohort[0]]+['building block cohort','building block tof']+chaves_cohort[1:]+etapas_cohort]
+  #output_coincident_final_final = output_coincident_final_final[[chaves_coincident[0]]+['building block cohort','building block tof']+chaves_coincident[1:]+etapas_coincident]
+
+  output_cohort_final_final = teste_cohort[[chaves_cohort[0]]+['building block cohort','building block tof']+chaves_cohort[1:]+etapas_cohort]
+  output_coincident_final_final = teste_coincident[[chaves_coincident[0]]+['building block cohort','building block tof']+chaves_coincident[1:]+etapas_coincident]
 
   # Arredondando output final
   if round_output:
