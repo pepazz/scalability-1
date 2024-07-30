@@ -277,8 +277,8 @@ def building_blocks(inputs_df,
     output_coincident_tof_negativo = pd.merge(output_coincident_tof_negativo,output_coincident_baseline,how='left',on=chaves_coincident+['building block cohort'])
     output_coincident_tof_negativo[etapas_coincident] = output_coincident_tof_negativo[etapas_coincident_y].astype(float).values - output_coincident_tof_negativo[etapas_coincident_x].astype(float).values
 
-    output_cohort_tof_negativo = output_cohort_tof_negativo.drop(columns=[etapas_cohort_x,etapas_cohort_y])
-    output_coincident_tof_negativo = output_coincident_tof_negativo.drop(columns=[etapas_coincident_x,etapas_coincident_y])
+    output_cohort_tof_negativo = output_cohort_tof_negativo.drop(columns=etapas_cohort_x+etapas_cohort_y)
+    output_coincident_tof_negativo = output_coincident_tof_negativo.drop(columns=etapas_coincident_x+etapas_coincident_y)
 
     # Vamos unir novamente os tofs negativos aos outputs finais:
     output_cohort_final_final = pd.concat([output_cohort_final_final,output_cohort_tof_negativo])
