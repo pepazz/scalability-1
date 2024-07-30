@@ -25,6 +25,7 @@ def building_blocks(inputs_df,
 
   # Definições iniciais a partir do baseline:
   col_conv = [x for x in baseline_cohort.columns.values if '2' in x]
+  col_conv = [x for x in col_conv if x.split('2')[0] in ToF_semanal.columns.values]
   aberturas = list(set(baseline_cohort.columns.values)-set(col_conv+[nome_coluna_week_origin]))
   col_vol = [x.split('2')[0] for x in col_conv] + [col_conv[-1].split('2')[-1]]
   topos = [x for x in col_vol if x in ToF_semanal.columns.values]
@@ -293,11 +294,11 @@ def building_blocks(inputs_df,
                                               col_valores = etapas_coincident)
   
   # Reorganizando a ordem das colunas:
-  output_cohort_final_final = output_cohort_final_final[[chaves_cohort[0]]+['building block cohort','building block tof']+chaves_cohort[1:]+etapas_cohort]
-  output_coincident_final_final = output_coincident_final_final[[chaves_coincident[0]]+['building block cohort','building block tof']+chaves_coincident[1:]+etapas_coincident]
+  #output_cohort_final_final = output_cohort_final_final[[chaves_cohort[0]]+['building block cohort','building block tof']+chaves_cohort[1:]+etapas_cohort]
+  #output_coincident_final_final = output_coincident_final_final[[chaves_coincident[0]]+['building block cohort','building block tof']+chaves_coincident[1:]+etapas_coincident]
 
-  #output_cohort_final_final = teste_cohort[[chaves_cohort[0]]+['building block cohort','building block tof']+chaves_cohort[1:]+etapas_cohort]
-  #output_coincident_final_final = teste_coincident[[chaves_coincident[0]]+['building block cohort','building block tof']+chaves_coincident[1:]+etapas_coincident]
+  output_cohort_final_final = teste_cohort[[chaves_cohort[0]]+['building block cohort','building block tof']+chaves_cohort[1:]+etapas_cohort]
+  output_coincident_final_final = teste_coincident[[chaves_coincident[0]]+['building block cohort','building block tof']+chaves_coincident[1:]+etapas_coincident]
 
   # Arredondando output final
   if round_output:
