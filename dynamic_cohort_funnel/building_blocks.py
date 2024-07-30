@@ -251,9 +251,7 @@ def building_blocks(inputs_df,
 
   #-------------------------------------------------------------------------------------------------
   # Precizamos agora, remover os tof's baselines que foram somados aos tof's negativos, pois eles não são aplicados:
-  teste_cohort = pd.DataFrame()
-  teste_coincident = pd.DataFrame()
-  if tof_negativo:
+  if len(list_tof_negativo)>0:
 
     # Vamos separar os tof's negativos do output final:
     output_cohort_tof_negativo = output_cohort_final_final.loc[output_cohort_final_final['building block tof'].isin(list_tof_negativo)]
