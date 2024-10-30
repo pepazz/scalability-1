@@ -1,0 +1,22 @@
+def formata_base(base, cols_value, cols_date, rename_rules):
+    # Rename columns in the DataFrame 'base' according to the 'rename_rules' dictionary
+    base.rename(columns=rename_rules, inplace=True)
+
+    # If 'cols_value' is not empty, process each column in 'cols_value'
+    if cols_value != []:
+        for col in cols_value:
+            # Replace empty strings with 0 in the specified column
+            base.loc[(base[col] == ''), [col]] = 0
+            # Remove commas from the column values (useful for converting string numbers)
+            base[col] = base[col].str.replace(',', '')
+            # Convert the column to float type
+            base[col] = base[col].astype('float')
+            # Fill any NaN values with 0
+            base[col] = base[col].fillna(0)
+
+    # If 'cols_date' is not empty, convert each column in 'cols_date' to datetime
+    if cols_date != []:
+        base[cols_date] = base[cols_date].apply(pd.to_datetime)
+
+    # Return the modified DataFrame
+    return base
